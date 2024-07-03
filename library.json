@@ -32,7 +32,7 @@
     "dependencies": {
         "bblanchon/ArduinoJson": "^7.0.2",
         "me-no-dev/ESP Async WebServer" : "^1.2.4",
-        "https://github.com/npeter/SLog" : "^0.0.0"    
+        "https://github.com/npeter/SLog" : "^1.0.0"    
     },
     "build": {
         "libCompatMode": "soft"
