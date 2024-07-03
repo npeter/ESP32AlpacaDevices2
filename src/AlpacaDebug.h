@@ -125,11 +125,11 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
             int len = strlen(s);                                                                                                                                                                      \
             snprintf(&s[len], sizeof(s) - len, " - %s='%s", request->argName(i).c_str(), request->arg(i).c_str());                                                                                    \
         }                                                                                                                                                                                             \
-        SLOG_NOTICE_PRINTF("%s\n", s);                                                                                                                                                                       \
+        SLOG_INFO_PRINTF("%s\n", s);                                                                                                                                                                       \
     }
 
 #define DBG_RESPOND_VALUE \
-    SLOG_NOTICE_PRINTF("Alpaca RSP %d %s\n", (int32_t)rsp_status.http_status, response);
+    SLOG_INFO_PRINTF("Alpaca RSP %d %s\n", (int32_t)rsp_status.http_status, response);
 
 #define DBG_END gDbg = false;
 
