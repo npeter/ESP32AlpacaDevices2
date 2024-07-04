@@ -547,9 +547,10 @@ void AlpacaServer::_readJson(JsonObject &root)
     _port_udp = root["UDP_port"] | _port_udp;
     _syslog_host = root["SYSLOG_host"] | _syslog_host;
     _log_level = root["LOG_level"] | SLOG_DEBUG;
+    _serial_log = (root["SERIAL_log"] | 1) == 0 ? false : true;
 
-    SLOG_PRINTF(SLOG_INFO, "... END _mng_server_name=%s _port_tcp=%d _port_udp=%d _syslog_host=%s _log_level=%d\n",
-                _mng_server_name.c_str(), _port_tcp, _port_udp, _syslog_host.c_str(), _log_level);
+    SLOG_PRINTF(SLOG_INFO, "... END _mng_server_name=%s _port_tcp=%d _port_udp=%d _syslog_host=%s _log_level=%d _serial_log=%s\n",
+                _mng_server_name.c_str(), _port_tcp, _port_udp, _syslog_host.c_str(), _log_level, _serial_log==true?"true":"false");
 }
 
 void AlpacaServer::_writeJson(JsonObject &root)
@@ -562,6 +563,8 @@ void AlpacaServer::_writeJson(JsonObject &root)
     root["UDP_port"] = _port_udp;
     root["SYSLOG_host"] = _syslog_host;
     root["LOG_level"] = _log_level;
+    root["SERIAL_log"] = _serial_log ? 1 : 0;
+    
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }
 

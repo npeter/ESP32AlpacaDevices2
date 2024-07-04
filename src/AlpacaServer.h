@@ -99,6 +99,7 @@ private:
     // Logging see SLog
     String _syslog_host = "0.0.0.0";
     uint16_t _log_level = SLOG_DEBUG;
+    bool _serial_log = true; // false/true: disable/enable logging after boot
 
     AsyncWebServer *_server_tcp;
     AsyncUDP _server_udp;
@@ -159,6 +160,7 @@ public:
     const char *GetUID() { return _uid; }
     const String GetSyslogHost() { return _syslog_host; };
     const uint16_t GetLogLvl() { return _log_level; };
+    const bool GetSerialLog() { return _serial_log; };
     const bool GetResetRequest() { return _reset_request; };
 
     // only for testing
