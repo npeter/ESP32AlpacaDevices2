@@ -5,7 +5,7 @@
     "keywords": "ascom, alpaca, esp32, covercalibrator, observingcondition, switch",
     "repository": {
         "type": "git",
-        "url": "https://github.com/npeter/ESP32AlpacaDevices.git"
+        "url": "https://github.com/npeter/ESP32AlpacaDevices2.git"
     },
     "authors": {
         "name": "Peter Neeser",
