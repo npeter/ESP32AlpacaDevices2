@@ -33,7 +33,7 @@
             "bblanchon/ArduinoJson": "^7.0.2",
             "me-no-dev/ESP Async WebServer": "^1.2.4",
             "SLog": "https://github.com/npeter/SLog",
-            "AsyncElegantOTA": "https:/github.com/npeter/AsyncElegantOTA"        
+            "AsyncElegantOTA": "https://github.com/npeter/AsyncElegantOTA"        
     },
             
     "build": {
