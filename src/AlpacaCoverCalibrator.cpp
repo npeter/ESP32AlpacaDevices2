@@ -19,9 +19,9 @@ AlpacaCoverCalibrator::AlpacaCoverCalibrator()
     strlcpy(_driver_info, ALPACA_COVER_CALIBRATOR_DRIVER_INFO, sizeof(_driver_info));
     strlcpy(_driver_version, ALPACA_COVER_CALIBRATOR_DRIVER_VERSION, sizeof(_driver_version));
     _device_interface_version = ALPACA_COVER_CALIBRATOR_INTERFACE_VERSION;
-    
+
     _brightness = 0;
-} 
+}
 
 void AlpacaCoverCalibrator::Begin()
 {
@@ -47,6 +47,7 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
 void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 {
     DBG_CC_GET_BRIGHTNESS
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, GetBrightness());
     DBG_END
@@ -55,6 +56,7 @@ void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 void AlpacaCoverCalibrator::_alpacaGetCalibratorState(AsyncWebServerRequest *request)
 {
     DBG_CC_GET_CALIBRATOR_STATE
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)GetCalibratorState());
     DBG_END
@@ -63,6 +65,7 @@ void AlpacaCoverCalibrator::_alpacaGetCalibratorState(AsyncWebServerRequest *req
 void AlpacaCoverCalibrator::_alpacaGetCoverState(AsyncWebServerRequest *request)
 {
     DBG_CC_GET_COVER_STATE
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)GetCoverState());
     DBG_END
@@ -71,6 +74,7 @@ void AlpacaCoverCalibrator::_alpacaGetCoverState(AsyncWebServerRequest *request)
 void AlpacaCoverCalibrator::_alpacaGetMaxBrightness(AsyncWebServerRequest *request)
 {
     DBG_CC_GET_MAX_BRIGHTNESS
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, GetMaxBrightness());
     DBG_END
@@ -79,6 +83,7 @@ void AlpacaCoverCalibrator::_alpacaGetMaxBrightness(AsyncWebServerRequest *reque
 void AlpacaCoverCalibrator::_alpacaPutCalibratorOff(AsyncWebServerRequest *request)
 {
     DBG_CC_PUT_CALIBRATOR_OFF
+    _service_counter++;
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
@@ -103,6 +108,7 @@ void AlpacaCoverCalibrator::_alpacaPutCalibratorOff(AsyncWebServerRequest *reque
 void AlpacaCoverCalibrator::_alpacaPutCalibratorOn(AsyncWebServerRequest *request)
 {
     DBG_CC_PUT_CALIBRATOR_ON
+    _service_counter++;
     uint32_t client_idx = 0;
     int32_t brightness = -1;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -131,6 +137,7 @@ void AlpacaCoverCalibrator::_alpacaPutCalibratorOn(AsyncWebServerRequest *reques
 void AlpacaCoverCalibrator::_alpacaPutCloseCover(AsyncWebServerRequest *request)
 {
     DBG_CC_PUT_CLOSE_COVER
+    _service_counter++;
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
@@ -152,6 +159,7 @@ void AlpacaCoverCalibrator::_alpacaPutCloseCover(AsyncWebServerRequest *request)
 void AlpacaCoverCalibrator::_alpacaPutHaltCover(AsyncWebServerRequest *request)
 {
     DBG_CC_PUT_HALT_COVER
+    _service_counter++;
     uint32_t client_idx = 0;
     int32_t brightness = -1;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -173,6 +181,7 @@ void AlpacaCoverCalibrator::_alpacaPutHaltCover(AsyncWebServerRequest *request)
 void AlpacaCoverCalibrator::_alpacaPutOpenCover(AsyncWebServerRequest *request)
 {
     DBG_CC_PUT_OPEN_COVER
+    _service_counter++;
     uint32_t client_idx = 0;
     int32_t brightness = -1;
     _alpaca_server->RspStatusClear(_rsp_status);

@@ -97,7 +97,9 @@ void AlpacaDevice::SetDeviceNumber(int8_t device_number)
 // alpaca commands
 void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
 {
+
     DBG_DEVICE_PUT_ACTION_REQ
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
     _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "putaction");
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
@@ -106,6 +108,7 @@ void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_BLIND
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
     _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandblind");
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
@@ -114,6 +117,7 @@ void AlpacaDevice::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_BOOL
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
     _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandbool");
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
@@ -122,6 +126,7 @@ void AlpacaDevice::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaPutCommandString(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_STRING
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
     _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandstring");
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
@@ -130,6 +135,7 @@ void AlpacaDevice::AlpacaPutCommandString(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaPutConnected(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_CONNECTED
+    _service_counter++;
     uint32_t client_idx = 0;
     uint32_t client_id = 0;
     uint32_t client_transaction_id = 0;
@@ -169,8 +175,9 @@ void AlpacaDevice::AlpacaPutConnected(AsyncWebServerRequest *request)
                     if (_clients[i].client_id == 0) // connect
                     {
                         client_idx = i;
-                        //_isconnected = true;
                         connect_ok = true;
+                        if (GetNumberOfConnectedClients() == 1)
+                            _service_counter = 0;
                         break;
                     }
                 }
@@ -238,6 +245,7 @@ void AlpacaDevice::AlpacaPutConnected(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetConnected(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_CONNECTED
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, client_idx > 0);
     DBG_END
@@ -245,6 +253,7 @@ void AlpacaDevice::AlpacaGetConnected(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetDescription(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_DESCRIPTION
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_description, JsonValue_t::kAsJsonStringValue);
     DBG_END
@@ -252,6 +261,7 @@ void AlpacaDevice::AlpacaGetDescription(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetDriverInfo(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_DRIVER_INFO
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_info, JsonValue_t::kAsJsonStringValue);
     DBG_END
@@ -259,6 +269,7 @@ void AlpacaDevice::AlpacaGetDriverInfo(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetDriverVersion(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_DRIVER_VERSION
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_version, JsonValue_t::kAsJsonStringValue);
     DBG_END
@@ -266,6 +277,7 @@ void AlpacaDevice::AlpacaGetDriverVersion(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetInterfaceVersion(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_INTERFACE_VERSION
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_interface_version);
     DBG_END
@@ -273,6 +285,7 @@ void AlpacaDevice::AlpacaGetInterfaceVersion(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetName(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_NAME
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, GetDeviceName(), JsonValue_t::kAsJsonStringValue);
     DBG_END
@@ -280,6 +293,7 @@ void AlpacaDevice::AlpacaGetName(AsyncWebServerRequest *request)
 void AlpacaDevice::AlpacaGetSupportedActions(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_SUPPORTED_ACTIONS
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _supported_actions, JsonValue_t::kAsJsonStringValue);
     DBG_END
@@ -287,7 +301,7 @@ void AlpacaDevice::AlpacaGetSupportedActions(AsyncWebServerRequest *request)
 
 void AlpacaDevice::AlpacaReadJson(JsonObject &root)
 {
-    DBG_JSON_PRINTFJ(SLOG_NOTICE,root, "BEGIN (root=<%s>) ...\n", _ser_json_);
+    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN (root=<%s>) ...\n", _ser_json_);
     const char *name = root["General"]["Name"];
     if (name)
         strlcpy(_device_name, name, sizeof(_device_name));
@@ -307,7 +321,7 @@ void AlpacaDevice::AlpacaWriteJson(JsonObject &root)
     obj_general["Name"] = GetDeviceName();
     obj_general["Description"] = _device_description;
     obj_general["UID"] = _device_uid;
-    DBG_JSON_PRINTFJ(SLOG_NOTICE,root, "... END root=<%s>\n", _ser_json_);
+    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }
 
 void AlpacaDevice::_getJsondata(AsyncWebServerRequest *request)

@@ -32,6 +32,8 @@ protected:
     AlpacaClient_t _clients[kAlpacaMaxClients + 1]; // manage clients; [0] - unconnected client; [1,...] connected client
     AlpacaRspStatus_t _rsp_status;
 
+    uint32_t _service_counter = 0;
+
     // bool _isconnected = false;
 
     void Begin();
@@ -72,4 +74,5 @@ public:
     virtual void AlpacaReadJson(JsonObject &root);
     virtual void AlpacaWriteJson(JsonObject &root);
     const uint32_t GetNumberOfConnectedClients();
+    const uint32_t GetServiceCounter() { return _service_counter; };
 };
