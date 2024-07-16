@@ -32,15 +32,9 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
 
     // add command to supported methods if devicemethod is true
     if (devicemethod)
-    {
+    { // json array value: <["command-1", "command-2", ... "command-n"]>
         int len = strlen(_supported_actions);
-        _supported_actions[len - 1] = '\0';
-        if (len > 2)
-            strcat(_supported_actions, ", \""); // TODO
-        else
-            strcat(_supported_actions, "\"");
-        strcat(_supported_actions, command);
-        strcat(_supported_actions, "\"]");
+        snprintf(&(_supported_actions[len - 1]), sizeof(_supported_actions) - len - 1, "%s%s\"]", (len > 2) ? ", " : "", command);
     }
 }
 
