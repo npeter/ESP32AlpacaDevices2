@@ -29,21 +29,13 @@
             ]
         }
     ],
-    "dependencies": [
-        {
-            "name": "bblanchon/ArduinoJson@^7.0.2"
-        },
-        {
-            "name": "me-no-dev/ESP Async WebServer@^1.2.4"
-        },
-        {
-            "name": "external-repo",
-            "version": "https://github.com/npeter/SLog"
-        },
-        {
-            "name": "npeter/AsyncElegantOTA@^2.2.9"
-        }
-    ],
+    "dependencies": {
+            "nbblanchon/ArduinoJson": "^7.0.2",
+            "me-no-dev/ESP Async WebServer": "^1.2.4",
+            "SLog": "https://github.com/npeter/SLog",
+            "npeter/AsyncElegantOTA": "^2.2.9"        
+    },
+            
     "build": {
         "libCompatMode": "soft"
     }
