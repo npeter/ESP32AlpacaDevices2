@@ -31,7 +31,7 @@
     ],
     "dependencies": [
         {
-            "bblanchon/ArduinoJson": "^7.0.2"
+            "name": "bblanchon/ArduinoJson@^7.0.2"
         },
         {
             "name": "me-no-dev/ESP Async WebServer@^1.2.4"
