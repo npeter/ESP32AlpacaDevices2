@@ -39,6 +39,9 @@
         {
             "name": "external-repo",
             "version": "https://github.com/npeter/SLog"
+        },
+        {
+            "name": "npeter/AsyncElegantOTA@^2.2.9"
         }
     ],
     "build": {
