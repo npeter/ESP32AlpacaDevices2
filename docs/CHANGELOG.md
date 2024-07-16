@@ -7,3 +7,4 @@
 - 1.0.2.b 2024-07-16 Dependency AsyncElegantOTA moved to npeter
 - 1.0.2.c 2024-07-16 Service counter added; Cleared by first connected client
 - 1.0.2.d 2024-07-16 refactoring _supported_action
+- 1.0.2.e 2024-07-16 AlpacaGetSupportedActions - json resp kAsPlainStringValue

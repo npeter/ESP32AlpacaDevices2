@@ -289,7 +289,7 @@ void AlpacaDevice::AlpacaGetSupportedActions(AsyncWebServerRequest *request)
     DBG_DEVICE_GET_SUPPORTED_ACTIONS
     _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _supported_actions, JsonValue_t::kAsJsonStringValue);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _supported_actions, JsonValue_t::kAsPlainStringValue);
     DBG_END
 };
 
