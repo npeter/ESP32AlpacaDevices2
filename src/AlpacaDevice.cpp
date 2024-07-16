@@ -176,7 +176,7 @@ void AlpacaDevice::AlpacaPutConnected(AsyncWebServerRequest *request)
                     {
                         client_idx = i;
                         connect_ok = true;
-                        if (GetNumberOfConnectedClients() == 1)
+                        if (GetNumberOfConnectedClients() == 0) // if the first client attached
                             _service_counter = 0;
                         break;
                     }

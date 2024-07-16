@@ -5,4 +5,4 @@
 ## 1.0.2 2024-07-03 in work
 - 1.0.2.a 2024-07-03 DBG_REQ enabled
 - 1.0.2.b 2024-07-16 Dependency AsyncElegantOTA moved to npeter
-- 1.0.2.c 2024-07-16 Service counter added
+- 1.0.2.c 2024-07-16 Service counter added; Cleared by first connected client

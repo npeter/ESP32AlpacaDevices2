@@ -27,6 +27,7 @@ My primary motivation was:
 - Support ASCOM auto discovery
 - Optimized for ESP32
 - Improved robustness, error handling and debugging
+- Device service counter for diagnosis
 - Published as library
 
 - Multi ASCOM devices on one ESP32
