@@ -34,7 +34,7 @@
             "bblanchon/ArduinoJson": "^7.0.2"
         },
         {
-            "me-no-dev/ESP Async WebServer": "^1.2.4"
+            "name": "me-no-dev/ESP Async WebServer@^1.2.4"
         },
         {
             "name": "external-repo",
