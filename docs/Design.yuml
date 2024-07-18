@@ -1,0 +1,11 @@
+// {type:class}
+[main]++1-1[AlpacaServer]
+[AlpacaServer]++1-addDevice() 0..[AlpacaDevice]
+[AlpacaDevice]^[AlpacaSwitch]
+[AlpacaDevice]^[AlpacaObservingConditions]
+[AlpacaDevice]^[AlpacaCoverCalibrator]
+[AlpacaDevice]^[AlpacaFocuser]
+[AlpacaSwitch]^[Switch]
+[AlpacaCoverCalibrator]^[CoverCalibrator]
+[AlpacaObservingConditions]^[ObservingConditions]
+[AlpacaFocuser]^[Focuser]
