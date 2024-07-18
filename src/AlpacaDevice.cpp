@@ -30,12 +30,12 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
     // register handler for generated URI
     _alpaca_server->getServerTCP()->on(url, type, fn);
 
-    // add command to supported methods if devicemethod is true
-    if (devicemethod)
-    { // json array value: <["command-1", "command-2", ... "command-n"]>
-        int len = strlen(_supported_actions);
-        snprintf(&(_supported_actions[len - 1]), sizeof(_supported_actions) - len - 1, "%s%s\"]", (len > 2) ? ", " : "", command);
-    }
+    // // add command to supported methods if devicemethod is true
+    // if (devicemethod)
+    // { // json array value: <["command-1", "command-2", ... "command-n"]>
+    //     int len = strlen(_supported_actions);
+    //     snprintf(&(_supported_actions[len - 1]), sizeof(_supported_actions) - len - 1, "%s%s\"]", (len > 2) ? ", " : "", command);
+    // }
 }
 
 void AlpacaDevice::_setSetupPage()
@@ -60,6 +60,13 @@ void AlpacaDevice::_setSetupPage()
     // serve static setup page
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/setup.html\n", _device_url);
     _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html");
+}
+
+void AlpacaDevice::_addAction(const char *const action)
+{   // json array value-> <["acion-1", "acion-2", ... "action-n"]>
+    int len = strlen(_supported_actions);
+    // remove ']' and add <"action"]> or <,"action"]>
+    snprintf(&_supported_actions[len-1], sizeof(_supported_actions) - len-1, "%s\"%s\"]", len > 2 ? ", " : "", action);
 }
 
 void AlpacaDevice::RegisterCallbacks()
@@ -99,6 +106,40 @@ void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
+// void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
+// {
+
+//     DBG_DEVICE_PUT_ACTION_REQ
+//     _service_counter++;
+//     uint32_t client_idx = 0;
+//     char action[128] = {0};
+//     char parameters[128] = {0};
+
+//     _alpaca_server->RspStatusClear(_rsp_status);
+
+//     try
+//     {
+//         if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+//             throw(&_rsp_status);
+
+//         if (_alpaca_server->GetParam(request, "Command", action, sizeof(action), Spelling_t::kStrict) == false)
+//             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+
+//         if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
+//             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+
+//         if ( !PutAction(action, parameters) ) {
+//             // TODO
+//         }
+//     }
+//     catch (AlpacaRspStatus_t *rspStatus)
+//     { // empty
+//     }
+
+//     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+//     DBG_END
+// };
+
 void AlpacaDevice::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_BLIND

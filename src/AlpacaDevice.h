@@ -42,7 +42,7 @@ protected:
     void _getJsondata(AsyncWebServerRequest *request);
     void _putJsondata(AsyncWebServerRequest *request);
     void createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[], bool deviceMethod = true);
-
+    void _addAction(const char* const action);
     // alpaca commands
     virtual void AlpacaPutAction(AsyncWebServerRequest *request);
     virtual void AlpacaPutCommandBlind(AsyncWebServerRequest *request);

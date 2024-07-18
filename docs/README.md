@@ -45,7 +45,7 @@ My primary motivation was:
     - Switch.h, Switch.cpp
     - In future Focuser.h, Focuser.cpp
 - Configuration via dynamicaly created webpages as developed by (https://github.com/elenhinan/ESPAscomAlpacaServer)
-<img src="https://github.com/npeter/ESP32AlpacaDevices/blob/main/doc/Setup.png" width="600">
+<img src="https://github.com/npeter/ESP32AlpacaDevices2/docs/Setup.png" width="600">
 <br><br>
 
 ## Remarks
@@ -68,7 +68,7 @@ My primary motivation was:
 - Implement all your device specific functions
 
 
-<img src="https://github.com/npeter/ESP32AlpacaDevices/blob/main/doc/Design.png" width="600">
+<img src="https://github.com/npeter/ESP32AlpacaDevices2/blob/main/doc/Design.png" width="600">
 ESP32AlpacaDevices class diagram
 <br><br>
 
