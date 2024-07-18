@@ -352,7 +352,6 @@ uint32_t AlpacaDevice::getClientIdxByClientID(uint32_t clientID)
 
 void AlpacaDevice::CheckClientConnectionTimeout()
 {
-    return; // TODO
     uint32_t sys_time_ms = millis();
     for (uint32_t u = 1; u < kAlpacaMaxClients; u++)
     {

@@ -18,7 +18,7 @@ const char esp32_alpaca_device_library_version[] = "0.0.7";
 #define ALPACA_MAX_DEVICES 4
 #define ALPACA_UDP_PORT 32227
 #define ALPACA_TCP_PORT 80
-#define ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC 60
+#define ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC 120
 
 #define ALPACA_ENABLE_OTA_UPDATE
 
