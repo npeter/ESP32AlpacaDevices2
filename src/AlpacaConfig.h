@@ -48,8 +48,11 @@ const char esp32_alpaca_device_library_version[] = "0.0.7";
 #define ALPACA_COVER_CALIBRATOR_NAME "not used"                                      // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_COVER_CALIBRATOR_DEVICE_TYPE "covercalibrator"                        // don't change
 
+// // CoverCalibrator - Optional Methods
 #define ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
-
+#define ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
+#define ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
+#define ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
 
 // CoverCalibrator - Specific Properties
 #define ALPACA_COVER_CALIBRATOR_MAX_BRIGHTNESS 1023 // init; managed by setup

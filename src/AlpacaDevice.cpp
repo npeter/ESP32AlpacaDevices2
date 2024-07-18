@@ -72,9 +72,9 @@ void AlpacaDevice::_addAction(const char *const action)
 void AlpacaDevice::RegisterCallbacks()
 {
     //this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
-    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
-    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
-    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
+    //this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
+    //this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
+    //this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
     this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected", false);
     this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected", false);
     this->createCallBack(LHF(AlpacaGetDescription), HTTP_GET, "description", false);
@@ -106,41 +106,6 @@ void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-
-
-// void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
-// {
-
-//     DBG_DEVICE_PUT_ACTION_REQ
-//     _service_counter++;
-//     uint32_t client_idx = 0;
-//     char action[128] = {0};
-//     char parameters[128] = {0};
-
-//     _alpaca_server->RspStatusClear(_rsp_status);
-
-//     try
-//     {
-//         if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-//             throw(&_rsp_status);
-
-//         if (_alpaca_server->GetParam(request, "Command", action, sizeof(action), Spelling_t::kStrict) == false)
-//             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
-
-//         if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
-//             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
-
-//         if ( !PutAction(action, parameters) ) {
-//             // TODO
-//         }
-//     }
-//     catch (AlpacaRspStatus_t *rspStatus)
-//     { // empty
-//     }
-
-//     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
-//     DBG_END
-// };
 
 void AlpacaDevice::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {

@@ -254,6 +254,14 @@ public:
         throw(&rsp_status);
     }
 
+    void ThrowRspStatusActionNotImplemented(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, const char *action, const char *parameters)
+    {
+        rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;
+        rsp_status.http_status = HttpStatus_t::kPassed;
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Action '%s' with Parameters '%s' not implemented", req->url().c_str(), action, parameters);
+        throw(&rsp_status);
+    }
+
     void ThrowRspStatusDeviceNotImplemented(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, const char *device)
     {
         rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;

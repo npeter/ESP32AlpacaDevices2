@@ -46,9 +46,20 @@ private:
   AlpacaCoverStatus_t _cover_state = AlpacaCoverStatus_t::kNotPresent;
   static const char *const k_alpaca_cover_status_str[7];
 
+  // CoverCalibratorDevice optional methods
 #ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
   void AlpacaPutAction(AsyncWebServerRequest *request);
 #endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
+  void AlpacaPutCommandBlind(AsyncWebServerRequest *request);
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
+  void AlpacaPutCommandBool(AsyncWebServerRequest *request);
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
+  void AlpacaPutCommandString(AsyncWebServerRequest *request);
+#endif
+
   void _alpacaGetBrightness(AsyncWebServerRequest *request);
   void _alpacaGetCalibratorState(AsyncWebServerRequest *request);
   void _alpacaGetCoverState(AsyncWebServerRequest *request);
@@ -64,6 +75,20 @@ private:
 #ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED  
   virtual const bool _putAction(const char *const action, const char *const parameters) = 0;
 #endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED  
+  virtual const bool _putCommandBlind(const char *const command, const char *const raw) = 0;
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED  
+  virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &command_bool) = 0;
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED  
+  virtual const bool _putCommandString(const char *const command, const char *const raw, char* string_response, size_t string_response_size) = 0;
+#endif
+
+
+
+
+
   virtual const bool _calibratorOff() = 0;
   virtual const bool _calibratorOn(int32_t brightness) = 0;
 

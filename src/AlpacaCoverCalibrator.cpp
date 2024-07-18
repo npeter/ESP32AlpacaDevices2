@@ -33,6 +33,9 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
     AlpacaDevice::RegisterCallbacks();
 
     this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
+    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
+    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
+    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
 
     this->createCallBack(LHF(_alpacaGetBrightness), HTTP_GET, "brightness", false);
     this->createCallBack(LHF(_alpacaGetCalibratorState), HTTP_GET, "calibratorstate", false);
@@ -63,15 +66,14 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
         if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
             throw(&_rsp_status);
 
-        if (_alpaca_server->GetParam(request, "Command", action, sizeof(action), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+        if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
 
         if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-        if ( !_putAction(action, parameters) ) {
-            // TODO fehlerbehandlung
-        }
+        if (!_putAction(action, parameters))
+            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, action, parameters);
     }
     catch (AlpacaRspStatus_t *rspStatus)
     { // empty
@@ -81,6 +83,118 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
     DBG_END
 };
 #endif
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
+void AlpacaCoverCalibrator::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
+{
+
+    DBG_DEVICE_PUT_ACTION_REQ
+    _service_counter++;
+    uint32_t client_idx = 0;
+    char command[128] = {0};
+    char raw[16] = {0};
+
+    _alpaca_server->RspStatusClear(_rsp_status);
+
+    try
+    {
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+
+        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+
+        if (!_putCommandBlind(command, raw))
+            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, command, raw);
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    { // empty
+    }
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    DBG_END
+};
+#endif
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
+void AlpacaCoverCalibrator::AlpacaPutCommandBool(AsyncWebServerRequest *request)
+{
+
+    DBG_DEVICE_PUT_ACTION_REQ
+    _service_counter++;
+    uint32_t client_idx = 0;
+    char command[128] = {0};
+    char raw[16] = {0};
+    bool bool_response = false;
+
+    _alpaca_server->RspStatusClear(_rsp_status);
+
+    try
+    {
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+
+        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+
+        if (!_putCommandBool(command, raw, bool_response))
+            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, command, raw);
+
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, bool_response);            
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    { 
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    }
+
+    DBG_END
+};
+#endif
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
+void AlpacaCoverCalibrator::AlpacaPutCommandString(AsyncWebServerRequest *request)
+{
+
+    DBG_DEVICE_PUT_ACTION_REQ
+    _service_counter++;
+    uint32_t client_idx = 0;
+    char command[128] = {0};
+    char raw[16] = {0};
+    char string_response[128] = { 0 };
+
+    _alpaca_server->RspStatusClear(_rsp_status);
+
+    try
+    {
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+
+        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+
+        if (!_putCommandString(command, raw, string_response, sizeof(string_response)))
+            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, command, raw);
+
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, string_response);            
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    { 
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    }
+
+    DBG_END
+};
+#endif
+
 
 void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 {
