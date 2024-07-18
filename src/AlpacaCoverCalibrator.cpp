@@ -32,6 +32,8 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
 {
     AlpacaDevice::RegisterCallbacks();
 
+    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
+
     this->createCallBack(LHF(_alpacaGetBrightness), HTTP_GET, "brightness", false);
     this->createCallBack(LHF(_alpacaGetCalibratorState), HTTP_GET, "calibratorstate", false);
     this->createCallBack(LHF(_alpacaGetCoverState), HTTP_GET, "coverstate", false);
@@ -44,6 +46,7 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutOpenCover), HTTP_PUT, "opencover", false);
 }
 
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
 void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
 {
 
@@ -77,6 +80,7 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
+#endif
 
 void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 {

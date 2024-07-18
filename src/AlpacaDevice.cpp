@@ -71,7 +71,7 @@ void AlpacaDevice::_addAction(const char *const action)
 
 void AlpacaDevice::RegisterCallbacks()
 {
-    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
+    //this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
     this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
     this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
     this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
@@ -106,6 +106,8 @@ void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
+
+
 // void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
 // {
 

@@ -46,8 +46,9 @@ private:
   AlpacaCoverStatus_t _cover_state = AlpacaCoverStatus_t::kNotPresent;
   static const char *const k_alpaca_cover_status_str[7];
 
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
   void AlpacaPutAction(AsyncWebServerRequest *request);
-
+#endif
   void _alpacaGetBrightness(AsyncWebServerRequest *request);
   void _alpacaGetCalibratorState(AsyncWebServerRequest *request);
   void _alpacaGetCoverState(AsyncWebServerRequest *request);
@@ -60,8 +61,9 @@ private:
   void _alpacaPutOpenCover(AsyncWebServerRequest *request);
 
   // instance specific methods
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED  
   virtual const bool _putAction(const char *const action, const char *const parameters) = 0;
-
+#endif
   virtual const bool _calibratorOff() = 0;
   virtual const bool _calibratorOn(int32_t brightness) = 0;
 
