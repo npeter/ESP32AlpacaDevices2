@@ -35,27 +35,33 @@ My primary motivation was:
 - Connection watch dog 
     - if no request for a certain time (ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC)
     - impliziet device specific disconnect 
-- Pass ASCOM Conform Universal validation with zero errors and issues (ConformU 2.1.0)
+- Pass ASCOM Conform Universal validation with zero errors and issues (ConformU 3.0.0)
 - Addapted for ArduinoJason V7 (https://github.com/bblanchon/ArduinoJson.git)
 
-- Test with N.I.N.A 3.0-Beta - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
+- Test with N.I.N.A 3.1 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
 - Suported ASCOM devices:
     - CoverCalibrator.h, CoverCalibrator.cpp
     - ObservingConditions.h, ObservingConditions.cpp
     - Switch.h, Switch.cpp
     - In future Focuser.h, Focuser.cpp
+- Support of ASCOM Methods: action, commandblind, commandbool, commandstring
+    - Full implementation for CoverCalibrator
 - Configuration via dynamicaly created webpages as developed by (https://github.com/elenhinan/ESPAscomAlpacaServer)
-<img src="https://github.com/npeter/ESP32AlpacaDevices2/docs/Setup.png" width="600">
+<img src="Setup.png" width="600">
 <br><br>
 
 ## Remarks
 - For this project "platformio" (https://platformio.org/) is used as development system
 <br><br>
-- Essential libraries:
-    - Library: ESPAsyncWebServer:
-        - https://github.com/mathieucarbou/ESPAsyncWebServer used
-        - ~~https://github.com/me-no-dev/ESPAsyncWebServer~~ no more supported
-    - Example: ESP_WifiManager
+- Library dependencies:
+    - ESP32AlpacaDevices:
+        - "bblanchon/ArduinoJson": "^7.0.2",
+        - "me-no-dev/ESP Async WebServer": "^1.2.4",
+        - "SLog": "https://github.com/npeter/SLog",
+        - "AsyncElegantOTA": "https://github.com/npeter/AsyncElegantOTA"   
+        Remark: https://github.com/ayushsharma82/ElegantOTA produces some chrashes inside AsyncTCP (to be investigated)
+
+    - Example: ESP_WifiManager (TODO)
 <br><br>
 - Webpage data has to be stored in the SPIFF-Filesystem of the ESP32
     - platformio/Build Filesystem image
@@ -68,7 +74,7 @@ My primary motivation was:
 - Implement all your device specific functions
 
 
-<img src="https://github.com/npeter/ESP32AlpacaDevices2/blob/main/doc/Design.png" width="600">
+<img src="Design.png" width="600">
 ESP32AlpacaDevices class diagram
 <br><br>
 
