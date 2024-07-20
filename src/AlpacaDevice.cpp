@@ -63,18 +63,18 @@ void AlpacaDevice::_setSetupPage()
 }
 
 void AlpacaDevice::_addAction(const char *const action)
-{   // json array value-> <["acion-1", "acion-2", ... "action-n"]>
+{ // json array value-> <["acion-1", "acion-2", ... "action-n"]>
     int len = strlen(_supported_actions);
     // remove ']' and add <"action"]> or <,"action"]>
-    snprintf(&_supported_actions[len-1], sizeof(_supported_actions) - len-1, "%s\"%s\"]", len > 2 ? ", " : "", action);
+    snprintf(&_supported_actions[len - 1], sizeof(_supported_actions) - len - 1, "%s\"%s\"]", len > 2 ? ", " : "", action);
 }
 
 void AlpacaDevice::RegisterCallbacks()
 {
-    //this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
-    //this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
-    //this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
-    //this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
+    // this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
+    // this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
+    // this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
+    // this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
     this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected", false);
     this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected", false);
     this->createCallBack(LHF(AlpacaGetDescription), HTTP_GET, "description", false);
@@ -196,6 +196,7 @@ void AlpacaDevice::AlpacaPutConnected(AsyncWebServerRequest *request)
                         _clients[i].client_id = 0;
                         _clients[i].client_transaction_id = 0;
                         _clients[i].time_ms = 0;
+                        _clients[i].max_service_time_ms = 0;
                         disconnect_ok = true;
                         // if (GetNumberOfConnectedClients() == 0)
                         //     _isconnected == false;
@@ -358,13 +359,43 @@ void AlpacaDevice::CheckClientConnectionTimeout()
         if (_clients[u].client_id > 0)
         {
             uint32_t time_since_last_request_ms = sys_time_ms - _clients[u].time_ms;
+            if (_clients[u].max_service_time_ms < time_since_last_request_ms)
+            {
+                _clients[u].max_service_time_ms = time_since_last_request_ms;
+                SLOG_PRINTF(SLOG_NOTICE, "Alpaca Device <%s>: ClientId <%d> service <%fms> max_service_time_ms <%f> sys_time <%fms> _clients[%d].time <%fms>... disconnected\n",
+                            GetDeviceName(),
+                            _clients[u].client_id,
+                            (double)time_since_last_request_ms / 1000.0, 
+                            (double)_clients[u].max_service_time_ms / 1000.0,
+                            (double)sys_time_ms / 1000.0,
+                            u,
+                            (double)_clients[u].time_ms / 1000.0);
+            }
             if (time_since_last_request_ms > kAlpacaClientConnectionTimeoutMs)
             {
-                SLOG_PRINTF(SLOG_NOTICE, "Alpaca Device <%s>: Client <%d> connection timeout after <%dsec> ... disconnected\n", GetDeviceName(), _clients[u].client_id, time_since_last_request_ms / 1000);
-                _clients[u].client_id = 0;
-                _clients[u].client_transaction_id = 0;
-                _clients[u].time_ms = 0;
+                SLOG_PRINTF(SLOG_ERROR, "Alpaca Device <%s>: ClientId <%d> service timeout <%fms> max_service_time_ms <%f> sys_time <%fms> _clients[%d].time <%fms>... disconnected\n",
+                            GetDeviceName(),
+                            _clients[u].client_id,
+                            (double)time_since_last_request_ms / 1000.0,
+                            (double)_clients[u].max_service_time_ms / 1000.0,                            
+                            (double)sys_time_ms / 1000.0,
+                            u,
+                            (double)_clients[u].time_ms / 1000.0);
+                // _clients[u].client_id = 0;
+                // _clients[u].client_transaction_id = 0;
+                // _clients[u].time_ms = 0;
             }
+            // else
+            // {
+            //     SLOG_PRINTF(SLOG_NOTICE, "Alpaca Device <%s>: ClientId <%d> service time <%fms> max_service_time_ms <%f> sys_time <%fms> _clients[%d].time <%fms>\n",
+            //                 GetDeviceName(),
+            //                 _clients[u].client_id,
+            //                 (double)time_since_last_request_ms / 1000.0,
+            //                 (double)_clients[u].max_service_time_ms / 1000.0,                               
+            //                 (double)sys_time_ms / 1000.0,
+            //                 u,
+            //                 (double)_clients[u].time_ms / 1000.0);
+            // }
         }
     }
 }

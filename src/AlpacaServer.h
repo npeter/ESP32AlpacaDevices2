@@ -60,6 +60,7 @@ struct AlpacaClient_t
     uint32_t client_id;             // connected with ClientID 1,... or 0 - not connected
     uint32_t client_transaction_id; // transactionId
     uint32_t time_ms;               // last client transaction time
+    uint32_t max_service_time_ms;           // max time bitween two services
 };
 
 enum struct AlpacaErrorCode_t : int32_t
