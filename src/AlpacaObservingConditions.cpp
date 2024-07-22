@@ -48,6 +48,7 @@ METHODE(_alpacaGetWindSpeed, DBG_OBSERVING_CONDITIONS_GET_WIND_SPEED, kOcWindSpe
 void AlpacaObservingConditions::_alpacaGetSensordescription(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_SENSOR_DESCRIPTION
+    char description[kMaxSensorDescription] = {0};
     char sensor_name[kMaxSensorName] = "";
     uint32_t client_idx = 0;
     OCSensorIdx_t sensor_idx;
@@ -67,18 +68,19 @@ void AlpacaObservingConditions::_alpacaGetSensordescription(AsyncWebServerReques
             throw(&_rsp_status);
         }
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _sensors[sensor_idx].description);
+        snprintf(description, sizeof(description), "%s", _sensors[sensor_idx].description);
     }
     catch (AlpacaRspStatus_t *rspStatus)
     {
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, description);
     DBG_END
 }
 
 void AlpacaObservingConditions::_alpacaGetTimeSinceLastUpdate(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_TIME_SINCE_LAST_UPDATE
+    double update_time_rel_ms = 0.0;
     char sensor_name[kMaxSensorName] = "";
     uint32_t client_idx = 0;
     OCSensorIdx_t sensor_idx;
@@ -97,12 +99,12 @@ void AlpacaObservingConditions::_alpacaGetTimeSinceLastUpdate(AsyncWebServerRequ
             snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Sensor '%s' invalid", request->url().c_str(), sensor_name);
             throw(&_rsp_status);
         }
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (double)(millis() - _sensors[sensor_idx].update_time_ms));
+        update_time_rel_ms = (double)(millis() - _sensors[sensor_idx].update_time_ms);
     }
     catch (AlpacaRspStatus_t *rspStatus)
     {
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, update_time_rel_ms);
     DBG_END
 }
 
