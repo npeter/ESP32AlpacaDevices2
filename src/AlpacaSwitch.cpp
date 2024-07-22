@@ -59,16 +59,15 @@ void AlpacaSwitch::RegisterCallbacks()
 void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_MAX_SWITCH
+    int32_t max_switch_devices = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)_max_switch_devices);
-        DBG_END
-        return;
+        max_switch_devices = _max_switch_devices; 
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)max_switch_devices);
     DBG_END
 }
 
@@ -76,18 +75,17 @@ void AlpacaSwitch::_alpacaGetCanWrite(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_CAN_WRITE
     _alpaca_server->RspStatusClear(_rsp_status);
+    bool can_write = false;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _p_switch_devices[id].can_write);
-            DBG_END
-            return;
+            can_write = _p_switch_devices[id].can_write;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, can_write);
     DBG_END
 }
 
@@ -95,24 +93,24 @@ void AlpacaSwitch::_alpacaGetSwitch(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH
     _alpaca_server->RspStatusClear(_rsp_status);
+    bool switch_value = false;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _doubleValueToBoolValue(id, _p_switch_devices[id].value));
-            DBG_END
-            return;
+            switch_value = _doubleValueToBoolValue(id, _p_switch_devices[id].value);
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, switch_value);
     DBG_END
 }
 
 void AlpacaSwitch::_alpacaGetSwitchDescription(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_DESCRIPTION;
+    char description[kSwitchDescriptionSize] = {0};
     _alpaca_server->RspStatusClear(_rsp_status);
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
@@ -120,12 +118,10 @@ void AlpacaSwitch::_alpacaGetSwitchDescription(AsyncWebServerRequest *request)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (_p_switch_devices[id]).description, JsonValue_t::kAsJsonStringValue);
-            DBG_END
-            return;
+            snprintf(description, sizeof(description),"%s", (_p_switch_devices[id]).description);
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, description, JsonValue_t::kAsJsonStringValue);
     DBG_END
 }
 
@@ -133,18 +129,17 @@ void AlpacaSwitch::_alpacaGetSwitchName(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_NAME;
     _alpaca_server->RspStatusClear(_rsp_status);
+    char name[kSwitchNameSize] = {0};
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (_p_switch_devices[id]).name, JsonValue_t::kAsJsonStringValue);
-            DBG_END
-            return;
+            snprintf(name, sizeof(name),"%s", (_p_switch_devices[id]).name);            
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, name, JsonValue_t::kAsJsonStringValue);
     DBG_END
 }
 
@@ -152,18 +147,17 @@ void AlpacaSwitch::_alpacaGetSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_VALUE;
     _alpaca_server->RspStatusClear(_rsp_status);
+    double value = 0.0;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _p_switch_devices[id].value);
-            DBG_END
-            return;
+            value =  _p_switch_devices[id].value;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, value);
     DBG_END
 }
 
@@ -171,18 +165,17 @@ void AlpacaSwitch::_alpacaGetMinSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_MIN_SWITCH_VALUE;
     _alpaca_server->RspStatusClear(_rsp_status);
+    double min_value = 0.0;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _p_switch_devices[id].min_value);
-            DBG_END
-            return;
+            min_value = _p_switch_devices[id].min_value;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, min_value);
     DBG_END
 }
 
@@ -190,18 +183,17 @@ void AlpacaSwitch::_alpacaGetMaxSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_MAX_SWITCH_VALUE;
     _alpaca_server->RspStatusClear(_rsp_status);
+    double max_value = 0.0;    
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _p_switch_devices[id].max_value);
-            DBG_END
-            return;
+            max_value = _p_switch_devices[id].max_value;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, max_value);
     DBG_END
 }
 
@@ -209,18 +201,17 @@ void AlpacaSwitch::_alpacaGetSwitchStep(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_STEP;
     _alpaca_server->RspStatusClear(_rsp_status);
+    double step = 0.0;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _p_switch_devices[id].step);
-            DBG_END
-            return;
+            step = _p_switch_devices[id].step;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, step);
     DBG_END
 }
 
