@@ -2,10 +2,12 @@
 
 ## 1.0.0 2024-07-03 created
 
-## 1.0.2 2024-07-03 in work
+## 1.0.2 2024-07-03 
 - 1.0.2.a 2024-07-03 DBG_REQ enabled
 - 1.0.2.b 2024-07-16 Dependency AsyncElegantOTA moved to npeter
 - 1.0.2.c 2024-07-16 Service counter added; Cleared by first connected client
 - 1.0.2.d 2024-07-16 refactoring _supported_action
 - 1.0.2.e 2024-07-16 AlpacaGetSupportedActions - json resp kAsPlainStringValue
 - 1.0.2.f 2024-07-20 Connection monitoring debugging
+
+## 1.0.3 2024-07-22 in work
