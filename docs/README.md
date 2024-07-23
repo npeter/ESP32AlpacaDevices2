@@ -61,7 +61,6 @@ My primary motivation was:
         - "AsyncElegantOTA": "https://github.com/npeter/AsyncElegantOTA"   
         Remark: https://github.com/ayushsharma82/ElegantOTA produces some chrashes inside AsyncTCP (to be investigated)
 
-    - Example: ESP_WifiManager (TODO)
 <br><br>
 - Webpage data has to be stored in the SPIFF-Filesystem of the ESP32
     - platformio/Build Filesystem image
@@ -88,10 +87,6 @@ ESP32AlpacaDevices class diagram
 
 ## Open Topics
 - Concept for AlpacaConfig.h
-- Support of ASCOM Methods
-    - action
-    - commandblind
-    - commandbool
-    - commandstring
 - Test device specific interface with real device implementation
+    - Already done for CoverCalibrator [CoFlat](https://github.com/npeter/CoFlat)
 

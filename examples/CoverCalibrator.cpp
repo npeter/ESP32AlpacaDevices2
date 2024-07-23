@@ -48,10 +48,11 @@ void CoverCalibrator::AlpacaReadJson(JsonObject &root)
 {
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN (root=<%s> ...\n", _ser_json_);
     AlpacaCoverCalibrator::AlpacaReadJson(root);
+
     if (JsonObject obj_config = root["Configuration"])
     {
         SetMaxBrightness(obj_config["MaxBrightness"] | GetMaxBrightness());
-        DBG_JSON_PRINTFJ(SLOG_NOTICE, obj_config,"... END (obj_config=<%s>) _max_brightness=%d\n", _ser_json, GetMaxBrightness());
+        DBG_JSON_PRINTFJ(SLOG_NOTICE, obj_config,"... END Configuration obj_config=<%s> _max_brightness=%d\n", _ser_json, GetMaxBrightness());
     }
     else
     {
@@ -72,7 +73,7 @@ void CoverCalibrator::AlpacaWriteJson(JsonObject &root)
     obj_states["CalibratorState"] = GetAlpacaCalibratorStatusStr(GetCalibratorState());
     obj_states["CoverState"] = GetAlpacaCoverStatusStr(GetCoverState());
 
-    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "END ... root=<%s>\n", _ser_json_);
+    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }
 
 // Logical CalibratorDevice

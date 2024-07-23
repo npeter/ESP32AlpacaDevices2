@@ -101,7 +101,7 @@ void ObservingConditions::_refresh()
 
 void ObservingConditions::AlpacaReadJson(JsonObject &root)
 {
-    DBG_JSON_PRINTFJ(root, "### BEGIN MyCoverCalibrator::AlpacaReadJson(root=<%s>)\n", s);
+    DBG_JSON_PRINTFJ(root, "BEGIN ... (root=<%s>)\n", _ser_json_);
     AlpacaObservingConditions::AlpacaReadJson(root);
 
     if (JsonObject obj_config = root["Configuration"])
@@ -118,7 +118,7 @@ void ObservingConditions::AlpacaReadJson(JsonObject &root)
 // to be adapted
 void ObservingConditions::AlpacaWriteJson(JsonObject &root)
 {
-    DBG_JSON_PRINTF("### BEGIN MyCoverCalibrator::AlpacaWriteJson()\n");
+    SLOG_PRINTF(SLOG_NOTICE, "BEGIN ...\n");
     AlpacaObservingConditions::AlpacaWriteJson(root);
 
     // #add # for read only
@@ -129,5 +129,5 @@ void ObservingConditions::AlpacaWriteJson(JsonObject &root)
         obj_states[GetSensorNameByIdx((OCSensorIdx_t)i)] = GetSensorValueByIdx((OCSensorIdx_t)i);        
     }
 
-    DBG_JSON_PRINTFJ(root, "### END   MyCoverCalibrator::AlpacaWriteJson(root) root=<%s>\n", s);
+    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }

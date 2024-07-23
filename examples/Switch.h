@@ -14,7 +14,7 @@ class Switch : public AlpacaSwitch
 private:
     const bool _writeSwitchValue(uint32_t id, double value)
     {
-        // TODO write to physical device
+        // write to physical device
         return true;
     }
 

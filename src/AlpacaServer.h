@@ -33,7 +33,7 @@ const char kAlpacaDiscoveryHeader[] = "alpacadiscovery";
 
 class AlpacaDevice;
 
-enum struct HttpStatus_t // TODO
+enum struct HttpStatus_t // 
 {
     kPassed = 200,         // request correctly formatted and passed to the device handler
     kInvalidRequest = 400, // device could not interprete the request
@@ -112,7 +112,7 @@ private:
     AlpacaDevice *_device[kAlpacaMaxDevices];
     int _n_devices = 0;
 
-    char _settings_file[128] = "/settings.json";    // TODO
+    char _settings_file[128] = "/settings.json";    
     bool _reset_request = false;
 
     AlpacaRspStatus_t _mng_rsp_status;

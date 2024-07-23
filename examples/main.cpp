@@ -17,7 +17,7 @@
 //#define TEST_RESTART              // only for testing
 
 #include <Arduino.h>
-#include <ESP_WiFiManager.h>
+//#include <ESP_WiFiManager.h>TODO
 #include <ESPmDNS.h>
 #include "Credentials.h"
 
@@ -50,8 +50,8 @@ void setupWifi()
 
   Serial.println("\n# Starting WiFi");
 
-  ESP_WiFiManager ESP_wifiManager("ESP32_Alpaca_test");
-  ESP_wifiManager.setConnectTimeout(30);
+  //ESP_WiFiManager ESP_wifiManager("ESP32_Alpaca_test");
+  //ESP_wifiManager.setConnectTimeout(30);
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(DEFAULT_SSID, DEFAULT_PWD);
 

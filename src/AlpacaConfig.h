@@ -85,7 +85,7 @@ const char esp32_alpaca_device_library_version[] = "1.0.3";
 // include user config 
 #include "UserConfig.h"
 
-const uint32_t kAlpacaMaxClients = ALPACA_MAX_CLIENTS; // TODO
+const uint32_t kAlpacaMaxClients = ALPACA_MAX_CLIENTS; 
 const uint32_t kAlpacaMaxDevices = ALPACA_MAX_DEVICES;
 const uint32_t kAlpacaUdpPort = ALPACA_UDP_PORT;
 const uint32_t kAlpacaTcpPort = ALPACA_TCP_PORT;

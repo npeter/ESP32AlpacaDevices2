@@ -196,8 +196,7 @@ void AlpacaServer::_getApiVersions(AsyncWebServerRequest *request)
     RspStatusClear(_mng_rsp_status);
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
-
-    // checkMngClientData(request, Spelling_t::kIgnoreCase); // TODO tbc
+    // checkMngClientData(request, Spelling_t::kIgnoreCase);     
     Respond(request, _mng_client_id, _mng_rsp_status, ALPACA_INTERFACE_VERSION, JsonValue_t::kAsPlainStringValue);
     DBG_END
 }
@@ -209,8 +208,7 @@ void AlpacaServer::_getDescription(AsyncWebServerRequest *request)
     RspStatusClear(_mng_rsp_status);
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
-    // checkMngClientData(request, Spelling_t::kIgnoreCase); TODO
-
+    // checkMngClientData(request, Spelling_t::kIgnoreCase); 
     char mng_description[1024] = {0};
     snprintf(mng_description, sizeof(mng_description),
              "{\"ServerName\":\"%s\",\"Manufacturer\":\"%s\",\"ManufacturerVersion\":\"%s\",\"Location\":\"%s\"}",
@@ -230,8 +228,8 @@ void AlpacaServer::_getConfiguredDevices(AsyncWebServerRequest *request)
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
 
-    // checkMngClientData(request, Spelling_t::kIgnoreCase); TODO
-    // TODO
+    // checkMngClientData(request, Spelling_t::kIgnoreCase); 
+
     strcat(value, "[");
     for (int i = 0; i < _n_devices; i++)
     {
@@ -578,7 +576,6 @@ bool AlpacaServer::SaveSettings()
     for (int i = 0; i < _n_devices; i++)
     {
         JsonObject json_obj = root[_device[i]->GetDeviceUID()].to<JsonObject>();
-        // JsonObject json_obj = root.createNestedObject(_device[i]->getDeviceUID()); TODO
         _device[i]->AlpacaWriteJson(json_obj);
     }
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... root=<%s> ...\n", _ser_json_);
@@ -651,7 +648,7 @@ bool AlpacaServer::CheckMngClientData(AsyncWebServerRequest *req, Spelling_t spe
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
 
-    try // TODO read parameters before throw...
+    try 
     {
         if (GetParam(req, "ClientID", _mng_client_id.client_id, spelling) == false)
             ThrowRspStatusClientIDNotFound(req, _mng_rsp_status);
