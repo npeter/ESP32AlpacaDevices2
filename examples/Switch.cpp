@@ -44,7 +44,8 @@ void Switch::Loop()
 
 void Switch::AlpacaReadJson(JsonObject &root)
 {
-  DBG_JSON_PRINTFJ(root, "%04d BEGIN Switch::AlpacaReadJson(root=<%s>)\n", g_dbg_line++, s);
+  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN ... (root=<%s>)\n", _ser_json_);
+
   AlpacaSwitch::AlpacaReadJson(root);
 
   char title[32] = "";
@@ -61,16 +62,16 @@ void Switch::AlpacaReadJson(JsonObject &root)
         InitSwitchMinValue(u, obj_config["MinValue"] | GetSwitchMinValue(u));
         InitSwitchMaxValue(u, obj_config["MaxValue"] | GetSwitchMaxValue(u));
         InitSwitchStep(u, obj_config["Step"] | GetSwitchStep(u));
-        DBG_JSON_PRINTFJ(obj_config, "%04d ...   Switch::AlpacaReadJson() \"%s\" obj_config=<%s>\n", g_dbg_line++, title, s);
+        DBG_JSON_PRINTF(SLOG_NOTICE, obj_config, "\"%s\"\n", title);
       }
     }
   }
-  DBG_JSON_PRINTF("%04d END   Switch::AlpacaReadJson()\n", g_dbg_line++);
+  SLOG_PRINTF(SLOG_NOTICE, "... END\n");
 }
 
 void Switch::AlpacaWriteJson(JsonObject &root)
 {
-  DBG_JSON_PRINTF("%04d BEGIN Switch::AlpacaWriteJson()\n", g_dbg_line++);
+  SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
   AlpacaSwitch::AlpacaWriteJson(root);
 
   char title[32] = "";
@@ -96,7 +97,7 @@ void Switch::AlpacaWriteJson(JsonObject &root)
       obj_config["MinValue"] = GetSwitchMinValue(u);
       obj_config["MaxValue"] = GetSwitchMaxValue(u);
       obj_config["Step"] = GetSwitchStep(u);
-      DBG_JSON_PRINTFJ(obj_config, "%04d ... Switch::AlpacaWriteJson() \"%s\" obj_config=<%s>\n", g_dbg_line++, title, s);
+      DBG_JSON_PRINTF(SLOG_NOTICE, obj_config, "\"%s\"=%s\n", title, _ser_json_);
     }
   }
 
@@ -127,9 +128,8 @@ void Switch::AlpacaWriteJson(JsonObject &root)
         obj_state["Step"] = GetSwitchStep(u);
       }
       obj_state["Value"] = GetSwitchValue(u);
-      DBG_JSON_PRINTFJ(obj_state, "%04d ... Switch::AlpacaWriteJson() \"%s\" obj_config=<%s>\n", g_dbg_line++, title, s);
+      DBG_JSON_PRINTF(SLOG_NOTICE, obj_config, "\"%s\"\n", title);
     }
   }
-
-  DBG_JSON_PRINTFJ(root, "%04d END   Switch::AlpacaWriteJson(root) root=<%s>\n", g_dbg_line++, s);
+  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }
