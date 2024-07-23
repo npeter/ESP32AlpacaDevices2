@@ -59,6 +59,7 @@ void AlpacaSwitch::RegisterCallbacks()
 void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_MAX_SWITCH
+        _service_counter++;
     int32_t max_switch_devices = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
@@ -74,6 +75,7 @@ void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetCanWrite(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_CAN_WRITE
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     bool can_write = false;
     uint32_t id = 0;
@@ -92,6 +94,7 @@ void AlpacaSwitch::_alpacaGetCanWrite(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetSwitch(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     bool switch_value = false;
     uint32_t id = 0;
@@ -110,6 +113,7 @@ void AlpacaSwitch::_alpacaGetSwitch(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetSwitchDescription(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_DESCRIPTION;
+        _service_counter++;
     char description[kSwitchDescriptionSize] = {0};
     _alpaca_server->RspStatusClear(_rsp_status);
     uint32_t id = 0;
@@ -128,6 +132,7 @@ void AlpacaSwitch::_alpacaGetSwitchDescription(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetSwitchName(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_NAME;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     char name[kSwitchNameSize] = {0};
     uint32_t id = 0;
@@ -146,6 +151,7 @@ void AlpacaSwitch::_alpacaGetSwitchName(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_VALUE;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     double value = 0.0;
     uint32_t id = 0;
@@ -164,6 +170,7 @@ void AlpacaSwitch::_alpacaGetSwitchValue(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetMinSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_MIN_SWITCH_VALUE;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     double min_value = 0.0;
     uint32_t id = 0;
@@ -182,6 +189,7 @@ void AlpacaSwitch::_alpacaGetMinSwitchValue(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetMaxSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_MAX_SWITCH_VALUE;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     double max_value = 0.0;    
     uint32_t id = 0;
@@ -200,6 +208,7 @@ void AlpacaSwitch::_alpacaGetMaxSwitchValue(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaGetSwitchStep(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_STEP;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     double step = 0.0;
     uint32_t id = 0;
@@ -218,6 +227,7 @@ void AlpacaSwitch::_alpacaGetSwitchStep(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_PUT_SET_SWITCH;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     uint32_t id = 0;
     bool bool_value;
@@ -264,6 +274,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaPutSetSwitchName(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_PUT_SET_SWITCH_NAME;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     uint32_t id = 0;
     char name[kSwitchNameSize] = "";
@@ -293,6 +304,7 @@ void AlpacaSwitch::_alpacaPutSetSwitchName(AsyncWebServerRequest *request)
 void AlpacaSwitch::_alpacaPutSetSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_PUT_SET_SWITCH_VALUE;
+        _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     uint32_t id = 0;
     double double_value;

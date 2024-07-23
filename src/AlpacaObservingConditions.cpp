@@ -11,6 +11,7 @@
 void AlpacaObservingConditions::_alpacaGetAveragePeriod(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_AVERAGE_PERIOD
+    _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _average_period);
     DBG_END
@@ -19,7 +20,8 @@ void AlpacaObservingConditions::_alpacaGetAveragePeriod(AsyncWebServerRequest *r
 #define METHODE(_M_, _DBGNAME_, _IDX_)                                                                                                                 \
     void AlpacaObservingConditions::_M_(AsyncWebServerRequest *request)                                                                                \
     {                                                                                                                                                  \
-        _DBGNAME_                                                                                                                                      \
+        _DBGNAME_;                                                                                                                                     \
+        _service_counter++;                                                                                                                            \
         uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);                                              \
         if (_sensors[_IDX_].is_implemented)                                                                                                            \
             _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _sensors[_IDX_].value);                                                \
@@ -48,6 +50,7 @@ METHODE(_alpacaGetWindSpeed, DBG_OBSERVING_CONDITIONS_GET_WIND_SPEED, kOcWindSpe
 void AlpacaObservingConditions::_alpacaGetSensordescription(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_SENSOR_DESCRIPTION
+    _service_counter++;
     char description[kMaxSensorDescription] = {0};
     char sensor_name[kMaxSensorName] = "";
     uint32_t client_idx = 0;
@@ -80,6 +83,7 @@ void AlpacaObservingConditions::_alpacaGetSensordescription(AsyncWebServerReques
 void AlpacaObservingConditions::_alpacaGetTimeSinceLastUpdate(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_TIME_SINCE_LAST_UPDATE
+    _service_counter++;
     double update_time_rel_ms = 0.0;
     char sensor_name[kMaxSensorName] = "";
     uint32_t client_idx = 0;
@@ -111,6 +115,7 @@ void AlpacaObservingConditions::_alpacaGetTimeSinceLastUpdate(AsyncWebServerRequ
 void AlpacaObservingConditions::_alpacaPutAveragePeriod(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_PUT_AVERAGE_PERIOD
+    _service_counter++;
     uint32_t client_idx = 0;
     double average_period = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -136,6 +141,7 @@ void AlpacaObservingConditions::_alpacaPutAveragePeriod(AsyncWebServerRequest *r
 void AlpacaObservingConditions::_alpacaPutRefresh(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_PUT_REFRESH
+    _service_counter++;
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
