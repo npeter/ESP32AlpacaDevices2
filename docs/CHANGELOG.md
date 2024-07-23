@@ -10,4 +10,9 @@
 - 1.0.2.e 2024-07-16 AlpacaGetSupportedActions - json resp kAsPlainStringValue
 - 1.0.2.f 2024-07-20 Connection monitoring debugging
 
-## 1.0.3 2024-07-22 in work
+## 2.0.0 2024-07-23 
+- Refactoring 
+- Update examples 
+- Test with:
+    - "Conform Universal 3.0.0"
+    - NINA 3.1 HF1
