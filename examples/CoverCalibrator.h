@@ -29,9 +29,22 @@ private:
   const bool _openCover();
   const bool _haltCover();
 
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
+  const bool _putAction(const char *const action, const char *const parameters);
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
+  const bool _putCommandBlind(const char *const command, const char *const raw);
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
+  const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response);
+#endif
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
+  const bool _putCommandString(const char *const command, const char *const raw, char *string_response, size_t string_response_size);
+#endif
+
   void AlpacaReadJson(JsonObject &root);
   void AlpacaWriteJson(JsonObject &root);
-    
+
   // only for simulation needed
   DeviceState_t _state = DeviceState_t::kInit;
   DeviceState_t _old_state = DeviceState_t::kInit;

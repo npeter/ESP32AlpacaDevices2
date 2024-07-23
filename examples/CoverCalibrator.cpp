@@ -46,23 +46,23 @@ const char *const CoverCalibrator::getDeviceStateStr(DeviceState_t state)
 
 void CoverCalibrator::AlpacaReadJson(JsonObject &root)
 {
-    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN (root=<%s> ...\n", _ser_json_);
-    AlpacaCoverCalibrator::AlpacaReadJson(root);
+    DBG_JSON_PRINTFJ(SLOG_INFO, root, "BEGIN (root=<%s>) ...\n", _ser_json_);
 
+    AlpacaCoverCalibrator::AlpacaReadJson(root);
     if (JsonObject obj_config = root["Configuration"])
     {
         SetMaxBrightness(obj_config["MaxBrightness"] | GetMaxBrightness());
-        DBG_JSON_PRINTFJ(SLOG_NOTICE, obj_config,"... END Configuration obj_config=<%s> _max_brightness=%d\n", _ser_json, GetMaxBrightness());
+        SLOG_PRINTF(SLOG_INFO, "... END  _max_brightness=%d\n", GetMaxBrightness());
     }
     else
     {
-        SLOG_PRINTF(SLOG_WARNING,"... END no Configuration\n");
+        SLOG_PRINTF(SLOG_WARNING, "... END    ... no Calibrator Configuration\n");
     }
 }
 
 void CoverCalibrator::AlpacaWriteJson(JsonObject &root)
 {
-    SLOG_PRINTF(SLOG_NOTICE, "BEGIN ...\n");
+    SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
     AlpacaCoverCalibrator::AlpacaWriteJson(root);
 
     JsonObject obj_config = root["Configuration"].to<JsonObject>();
@@ -134,6 +134,51 @@ const bool CoverCalibrator::_haltCover()
     _cover_halt_event = true;
     return true;
 }
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
+const bool CoverCalibrator::_putAction(const char *const action, const char *const parameters)
+{
+    bool result = true;
+
+    SLOG_PRINTF(SLOG_NOTICE, "action: <%s>  parameters: <%s>  result: <%s>\n", action, parameters, result ? "true" : "false");
+    return result;
+}
+#endif
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
+const bool CoverCalibrator::_putCommandBlind(const char *const command, const char *const raw)
+{
+
+    bool result = true;
+
+    SLOG_PRINTF(SLOG_NOTICE, "command: <%s>  raw: <%s>  result:<%s>\n", command, raw, result ? "true" : "false");
+    return result;
+}
+#endif
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
+const bool CoverCalibrator::_putCommandBool(const char *const command, const char *const raw, bool &bool_response)
+{
+
+    bool_response = true;
+    bool result = true;
+
+    SLOG_PRINTF(SLOG_NOTICE, "command: <%s>  raw: <%s>  bool_response: <%s>  result:<%s>\n", command, raw, bool_response ? "true" : "false", result ? "true" : "false");
+    return result;
+}
+#endif
+
+#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
+const bool CoverCalibrator::_putCommandString(const char *const command, const char *const raw, char *string_response, size_t string_response_size)
+{
+
+    strncpy(string_response, "Hello astronomer", string_response_size);
+    bool result = true;
+
+    SLOG_PRINTF(SLOG_NOTICE, "command: <%s>  raw: <%s>  string_response: <%s>  result:<%s>\n", command, raw, string_response, result ? "true" : "false");
+    return result;
+}
+#endif
 
 void CoverCalibrator::_coverDeviceLoop()
 {

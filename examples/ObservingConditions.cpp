@@ -43,21 +43,21 @@ void ObservingConditions::Begin()
     SetSensorImplementedByIdx(kOcWindGuestSensorIdx, true);
     SetSensorImplementedByIdx(kOcWindSpeedSensorIdx, true);
 
-    // init sensor and sensor data 
+    // init sensor and sensor data
     uint32_t system_time = millis();
-    SetSensorValueByIdx(kOcCloudCoverSensorIdx, 1.0, system_time); 
-    SetSensorValueByIdx(kOcDewPointSensorIdx, 2.0, system_time); 
-    SetSensorValueByIdx(kOcHumiditySensorIdx, 3.0, system_time); 
-    SetSensorValueByIdx(kOcPressureSensorIdx, 3.0, system_time); 
-    SetSensorValueByIdx(kOcRainRateSensorIdx, 5.0, system_time); 
-    SetSensorValueByIdx(kOcSkyBrightnessSensorIdx, 6.0, system_time); 
-    SetSensorValueByIdx(kOcSkyQualitySensorIdx, 7.0, system_time); 
-    SetSensorValueByIdx(kOcSkyTemperatureSensorIdx, 8.0, system_time); 
-    SetSensorValueByIdx(kOcStarFwhmSensorIdx, 9.0, system_time); 
-    SetSensorValueByIdx(kOcTemperatureSensorIdx, 10.0, system_time); 
-    SetSensorValueByIdx(kOcWindDirectionSensorIdx, 1.0, system_time); 
-    SetSensorValueByIdx(kOcWindGuestSensorIdx, 2.0, system_time); 
-    SetSensorValueByIdx(kOcWindSpeedSensorIdx, 3.0, system_time); 
+    SetSensorValueByIdx(kOcCloudCoverSensorIdx, 1.0, system_time);
+    SetSensorValueByIdx(kOcDewPointSensorIdx, 2.0, system_time);
+    SetSensorValueByIdx(kOcHumiditySensorIdx, 3.0, system_time);
+    SetSensorValueByIdx(kOcPressureSensorIdx, 3.0, system_time);
+    SetSensorValueByIdx(kOcRainRateSensorIdx, 5.0, system_time);
+    SetSensorValueByIdx(kOcSkyBrightnessSensorIdx, 6.0, system_time);
+    SetSensorValueByIdx(kOcSkyQualitySensorIdx, 7.0, system_time);
+    SetSensorValueByIdx(kOcSkyTemperatureSensorIdx, 8.0, system_time);
+    SetSensorValueByIdx(kOcStarFwhmSensorIdx, 9.0, system_time);
+    SetSensorValueByIdx(kOcTemperatureSensorIdx, 10.0, system_time);
+    SetSensorValueByIdx(kOcWindDirectionSensorIdx, 1.0, system_time);
+    SetSensorValueByIdx(kOcWindGuestSensorIdx, 2.0, system_time);
+    SetSensorValueByIdx(kOcWindSpeedSensorIdx, 3.0, system_time);
 
     SetAveragePeriod(0.0);
     _update_time_ms = system_time;
@@ -78,9 +78,9 @@ const bool ObservingConditions::_putAveragePeriodRequest(double average_period)
 {
     // perform your specific test
     // https://ascom-standards.org/Help/Developer/html/P_ASCOM_DeviceInterface_IObservingConditions_AveragePeriod.htm
-    if (average_period == 0.0)   // 
+    if (average_period == 0.0) //
     {
-       SetAveragePeriod(average_period);
+        SetAveragePeriod(average_period);
         return true;
     }
     else
@@ -101,33 +101,35 @@ void ObservingConditions::_refresh()
 
 void ObservingConditions::AlpacaReadJson(JsonObject &root)
 {
-    DBG_JSON_PRINTFJ(root, "BEGIN ... (root=<%s>)\n", _ser_json_);
+    DBG_JSON_PRINTFJ(SLOG_INFO, root, "BEGIN (root=<%s>) ...\n", _ser_json_);
     AlpacaObservingConditions::AlpacaReadJson(root);
 
     if (JsonObject obj_config = root["Configuration"])
     {
-        // xyz_dummy = obj_config["xyz"] | xyz;
-        //DBG_JSON_PRINTF("### END   MyCoverCalibrator::AlpacaReadJson() ... _dummy=%d\n", _dummy);
+        int xyz_dummy = 0;
+        xyz_dummy = obj_config["xyz"] | xyz_dummy;
+        SLOG_PRINTF(SLOG_INFO, "... \"xyz_dummy=%d\"\n", xyz_dummy);
     }
     else
     {
-        //DBG_JSON_PRINTF("### END   MyCoverCalibrator::AlpacaReadJson() ... +++ no Configuration\n");
+        SLOG_PRINTF(SLOG_WARNING, "... END    ... no Configuration\n");
     }
 }
 
 // to be adapted
 void ObservingConditions::AlpacaWriteJson(JsonObject &root)
 {
-    SLOG_PRINTF(SLOG_NOTICE, "BEGIN ...\n");
+    SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
     AlpacaObservingConditions::AlpacaWriteJson(root);
 
     // #add # for read only
     JsonObject obj_states = root["#States"].to<JsonObject>();
 
-    for (int i = kOcCloudCoverSensorIdx; i<kOcMaxSensorIdx; i++) {
-    if ( GetSensorImplementedByIdx((OCSensorIdx_t)i) )
-        obj_states[GetSensorNameByIdx((OCSensorIdx_t)i)] = GetSensorValueByIdx((OCSensorIdx_t)i);        
+    for (int i = kOcCloudCoverSensorIdx; i < kOcMaxSensorIdx; i++)
+    {
+        if (GetSensorImplementedByIdx((OCSensorIdx_t)i))
+            obj_states[GetSensorNameByIdx((OCSensorIdx_t)i)] = GetSensorValueByIdx((OCSensorIdx_t)i);
     }
 
-    DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
+    DBG_JSON_PRINTFJ(SLOG_INFO, obj_states, "... END \n", _ser_json_);
 }

@@ -8,34 +8,33 @@
   Copyright 2024 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 
-
 // commend/uncommend to enable/disable device testsing with templates
 #define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
 #define TEST_SWITCH               // create Switch device
 #define TEST_OBSERVING_CONDITIONS // create ObservingConditions device
 
-//#define TEST_RESTART              // only for testing
+// #define TEST_RESTART              // only for testing
 
 #include <Arduino.h>
-//#include <ESP_WiFiManager.h>TODO
-#include <ESPmDNS.h>
+#include <WiFi.h>
 #include "Credentials.h"
 
+#include <SLog.h>
 #include <AlpacaDebug.h>
 #include <AlpacaServer.h>
 
 #ifdef TEST_COVER_CALIBRATOR
-#include "CoverCalibrator.h"
+#include <CoverCalibrator.h>
 CoverCalibrator coverCalibrator;
 #endif
 
 #ifdef TEST_SWITCH
-#include "Switch.h"
+#include <Switch.h>
 Switch switchDevice;
 #endif
 
 #ifdef TEST_OBSERVING_CONDITIONS
-#include "ObservingConditions.h"
+#include <ObservingConditions.h>
 ObservingConditions observingConditions;
 #endif
 
@@ -43,35 +42,6 @@ ObservingConditions observingConditions;
 
 // ASCOM Alpaca server with discovery
 AlpacaServer alpaca_server(ALPACA_MNG_SERVER_NAME, ALPACA_MNG_MANUFACTURE, ALPACA_MNG_MANUFACTURE_VERSION, ALPACA_MNG_LOCATION);
-
-void setupWifi()
-{
-  pinMode(PIN_WIFI_LED, OUTPUT);
-
-  Serial.println("\n# Starting WiFi");
-
-  //ESP_WiFiManager ESP_wifiManager("ESP32_Alpaca_test");
-  //ESP_wifiManager.setConnectTimeout(30);
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.begin(DEFAULT_SSID, DEFAULT_PWD);
-
-  WiFi.waitForConnectResult();
-  if (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.println("# Failed to connect");
-  }
-  else
-  {
-    Serial.print("# Local IP: ");
-    Serial.println(WiFi.localIP());
-    digitalWrite(PIN_WIFI_LED, HIGH);
-    if (!MDNS.begin("HOSTNAME"))
-    {
-      Serial.println("# Error starting mDNS");
-      return;
-    }
-  }
-}
 
 #ifdef TEST_RESTART
 // ========================================================================
@@ -112,11 +82,28 @@ void checkForRestart()
 
 void setup()
 {
-  Serial.begin(115200);
-  delay(5000);  // time to detect USB device 
-  
-  Serial.printf("BigPet ESP32 ALPACA Server Test started ...\n");
-  setupWifi();
+  // setup logging and WiFi
+  g_Slog.Begin(Serial, 115200);
+  delay(5000); // time to detect USB device
+
+  SLOG_INFO_PRINTF("BigPet ESP32ALPACADeviceDemo started ...\n");
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(DEFAULT_SSID, DEFAULT_PWD);
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    SLOG_INFO_PRINTF("Connecting to WiFi ..\n");
+    delay(1000);
+  }
+  {
+    IPAddress ip = WiFi.localIP();
+    char wifi_ipstr[32] = "xxx.yyy.zzz.www";
+    snprintf(wifi_ipstr, sizeof(wifi_ipstr), "%03d.%03d.%03d.%03d", ip[0], ip[1], ip[2], ip[3]);
+    SLOG_INFO_PRINTF("connected with %s\n", wifi_ipstr);
+  }
+
+  // setup ESP32AlpacaDevices
   alpaca_server.Begin();
 
 #ifdef TEST_COVER_CALIBRATOR
@@ -135,6 +122,12 @@ void setup()
 #endif
 
   alpaca_server.LoadSettings();
+
+  // finalize logging setup
+  g_Slog.Begin(alpaca_server.GetSyslogHost().c_str());
+  g_Slog.SetLvlMsk(alpaca_server.GetLogLvl());
+  g_Slog.SetEnableSerial(alpaca_server.GetSerialLog());
+  SLOG_INFO_PRINTF("SYSLOG enabled and running log_lvl=%s enable_serial=%s\n", g_Slog.GetLvlMskStr().c_str(), alpaca_server.GetSerialLog() ? "true" : "false");
 }
 
 void loop()
@@ -156,8 +149,4 @@ void loop()
 #ifdef TEST_OBSERVING_CONDITIONS
   observingConditions.Loop();
 #endif
-
-  delay(100);
 }
-
-

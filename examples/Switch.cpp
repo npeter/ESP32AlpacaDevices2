@@ -44,8 +44,7 @@ void Switch::Loop()
 
 void Switch::AlpacaReadJson(JsonObject &root)
 {
-  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN ... (root=<%s>)\n", _ser_json_);
-
+  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN (root=<%s>) ...\n", _ser_json_);
   AlpacaSwitch::AlpacaReadJson(root);
 
   char title[32] = "";
@@ -62,7 +61,8 @@ void Switch::AlpacaReadJson(JsonObject &root)
         InitSwitchMinValue(u, obj_config["MinValue"] | GetSwitchMinValue(u));
         InitSwitchMaxValue(u, obj_config["MaxValue"] | GetSwitchMaxValue(u));
         InitSwitchStep(u, obj_config["Step"] | GetSwitchStep(u));
-        DBG_JSON_PRINTF(SLOG_NOTICE, obj_config, "\"%s\"\n", title);
+        DBG_JSON_PRINTFJ(SLOG_NOTICE, obj_config,"... title=%s obj_config=<%s> \n", title, _ser_json_);
+
       }
     }
   }
@@ -71,7 +71,7 @@ void Switch::AlpacaReadJson(JsonObject &root)
 
 void Switch::AlpacaWriteJson(JsonObject &root)
 {
-  SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
+  SLOG_PRINTF(SLOG_NOTICE, "BEGIN ...\n");
   AlpacaSwitch::AlpacaWriteJson(root);
 
   char title[32] = "";
@@ -97,7 +97,8 @@ void Switch::AlpacaWriteJson(JsonObject &root)
       obj_config["MinValue"] = GetSwitchMinValue(u);
       obj_config["MaxValue"] = GetSwitchMaxValue(u);
       obj_config["Step"] = GetSwitchStep(u);
-      DBG_JSON_PRINTF(SLOG_NOTICE, obj_config, "\"%s\"=%s\n", title, _ser_json_);
+
+      DBG_JSON_PRINTFJ(SLOG_NOTICE, obj_config, "... title=%s (obj_config=<%s>)\n", title, _ser_json_);
     }
   }
 
@@ -128,8 +129,9 @@ void Switch::AlpacaWriteJson(JsonObject &root)
         obj_state["Step"] = GetSwitchStep(u);
       }
       obj_state["Value"] = GetSwitchValue(u);
-      DBG_JSON_PRINTF(SLOG_NOTICE, obj_config, "\"%s\"\n", title);
+      DBG_JSON_PRINTFJ(SLOG_NOTICE, obj_state, "... title=%s (obj_state=<%s>)\n", title, _ser_json_);
     }
   }
-  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
+
+  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END \"%s\"\n");
 }
