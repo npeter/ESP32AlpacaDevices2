@@ -14,21 +14,34 @@
 class AlpacaFocuser : public AlpacaDevice
 {
 private:
-    uint32_t _max_switch_devices = 0;
-    //SwitchDevice_t _switch_devices[kSwitchMaxSwitchDevices];
-    //SwitchDevice_t *_p_switch_devices;
+    bool _absolut = true;   // TODO define init values
+    bool _is_moving = false;
+    int32_t _max_increment = 1000; 
+    int32_t _max_step = 1000; 
+    int32_t _position = 0;
+    int32_t _step_size = 1; 
+    bool _temp_comp = false;
+    bool _temp_comp_available = false;
+    double _temperature = 99.0; 
 
 private:
-    //void _alpacaGetMaxSwitch(AsyncWebServerRequest *request);
+    void _alpacaGetAbsolut(AsyncWebServerRequest *request);
+    void _alpacaGetIsMoving(AsyncWebServerRequest *request);
+    void _alpacaGetMaxIncrement(AsyncWebServerRequest *request);
+    void _alpacaGetMaxStep(AsyncWebServerRequest *request);
+    void _alpacaGetPosition(AsyncWebServerRequest *request);
+    void _alpacaGetStepSize(AsyncWebServerRequest *request);
+    void _alpacaGetTempComp(AsyncWebServerRequest *request);
+    void _alpacaGetTempCompAvailable(AsyncWebServerRequest *request);
+    void _alpacaGetTemperature(AsyncWebServerRequest *request);
 
+    void _alpacaPutTempComp(AsyncWebServerRequest *request);
+    void _alpacaPutHalt(AsyncWebServerRequest *request);
+    void _alpacaPutMove(AsyncWebServerRequest *request);
 
-    // private helpers
-    // bool _getAndCheckId(AsyncWebServerRequest *request, uint32_t &id, Spelling_t spelling);
-    // const bool _doubleValueToBoolValue(uint32_t id, double double_value) { return (double_value != _p_switch_devices[id].min_value);};
-    // const double _boolValueToDoubleValue(uint32_t id, bool bool_value) { return (bool_value ? _p_switch_devices[id].max_value : _p_switch_devices[id].min_value); };
-
-    // virtual function 
-    //virtual const bool _writeSwitchValue(uint32_t id, double value) = 0;
+    virtual bool _putTempComp(bool temp_comp) = 0;
+    virtual bool _putHalt() = 0;
+    virtual bool _putMove(int32_t position) = 0;
 
 protected:
     AlpacaFocuser();
@@ -36,31 +49,35 @@ protected:
     void RegisterCallbacks();
 
     // const size_t GetMaxSwitch() { return _max_switch_devices; };
-    // // geter id has to be correct!
-    // const bool GetSwitchInitBySetup(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].init_by_setup; };   
-    // const bool GetSwitchCanWrite(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].can_write; };
-    // const char *GetSwitchName(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].name; };
-    // const char *GetSwitchDescription(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].description; };
-    // const double GetValue(uint32_t id) { return _doubleValueToBoolValue((id < _max_switch_devices ? id : 0), _p_switch_devices[(id < _max_switch_devices ? id : 0)].value); };
-    // const double GetSwitchValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].value; };
-    // const double GetSwitchMinValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].min_value; };
-    // const double GetSwitchMaxValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].max_value; };
-    //const double GetSwitchStep(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].step; };
 
-    // setters ... only for initialization 
-    // void InitSwitchInitBySetup(uint32_t id, bool init_by_setup) { _p_switch_devices[id].init_by_setup = init_by_setup; };
-    // void InitSwitchCanWrite(uint32_t id, bool can_write) { _p_switch_devices[id].can_write = can_write; };
-    // void InitSwitchName(uint32_t id, const char* name) { strlcpy(_p_switch_devices[id].name, name, kSwitchNameSize ); };
-    // void InitSwitchDescription(uint32_t id, const char* description) { strlcpy(_p_switch_devices[id].description, description, kSwitchDescriptionSize); };
-    // void InitSwitchValue(uint32_t id, double double_value) { _p_switch_devices[id].value = double_value; };
-    // void InitSwitchMinValue(uint32_t id, double min_value) { _p_switch_devices[id].min_value = min_value; };
-    // void InitSwitchMaxValue(uint32_t id, double max_value) { _p_switch_devices[id].max_value = max_value; };
-    // void InitSwitchStep(uint32_t id, double step) { _p_switch_devices[id].step = step; };
+    // // geter!
+    const bool GetAbsolut() { return _absolut; };
+    const bool GetIsMoving() { return _is_moving; };
+    const int32_t GetMaxIncrement() { return _max_increment; };
+    const int32_t GetMaxStep() { return _max_step; };
+    const int32_t GetPosition() { return _position; };
+    const int32_t GetStepSize() { return _step_size; };
+    const bool GetTempComp() { return _temp_comp; };
+    const bool GetTempCompAvailable() { return _temp_comp_available; };
+    const double GetTemperature() { return _temperature; };
+    
+     // setters ... only for initialization 
+    void InitAbsolut(bool absolut) { _absolut = absolut; };
+    void InitIsMoving(bool is_moving) { _is_moving = is_moving; };
+    void InitMaxIncrement(int32_t max_increment) { _max_increment = max_increment; };
+    void InitMaxStep(int32_t max_step) { _max_step = max_step; };
+    void InitPosition(int32_t position) { _position = position; };
+    void InitStepSize(int32_t step_size) { _step_size = step_size; };
+    void InitTempComp(bool temp_comp) { _temp_comp = temp_comp; };
+    void InitTempCompAvailable(bool temp_comp_available) { _temp_comp_available = temp_comp_available; };
+    void InitTemperatur(double temperature) { _temperature = temperature; };
+
 
     // setter
+    const bool SetIsMoving(bool is_moving) { return _is_moving; }
     // const bool SetSwitch(uint32_t id, bool bool_value);
-    // const bool SetSwitchValue(uint32_t id, double double_value);
-    // const bool SetSwitchName(uint32_t id, char *name);
+
+
 
 public:
 };
