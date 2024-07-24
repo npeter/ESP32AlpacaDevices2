@@ -51,7 +51,7 @@ void AlpacaFocuser::_alpacaGetAbsolut(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        absolut = GetAbsolut();
+        absolut = _getAbsolut();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)absolut);
     DBG_END
@@ -67,7 +67,7 @@ void AlpacaFocuser::_alpacaGetIsMoving(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        is_moving = GetIsMoving();
+        is_moving = _getIsMoving();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)is_moving);
     DBG_END
@@ -83,7 +83,7 @@ void AlpacaFocuser::_alpacaGetMaxIncrement(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        max_increment = GetMaxIncrement();
+        max_increment = _getMaxIncrement();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)max_increment);
     DBG_END
@@ -99,7 +99,7 @@ void AlpacaFocuser::_alpacaGetMaxStep(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        max_step = GetMaxStep();
+        max_step = _getMaxStep();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)max_step);
     DBG_END
@@ -115,7 +115,7 @@ void AlpacaFocuser::_alpacaGetPosition(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        position = GetPosition();
+        position = _getPosition();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)position);
     DBG_END
@@ -125,15 +125,15 @@ void AlpacaFocuser::_alpacaGetStepSize(AsyncWebServerRequest *request)
 {
     DBG_FOCUSER_GET_ABSOLUT
     _service_counter++;
-    int32_t step_size = false;
+    double step_size = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        step_size = GetStepSize();
+        step_size = _getStepSize();
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)step_size);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, step_size);
     DBG_END
 }
 
@@ -147,7 +147,7 @@ void AlpacaFocuser::_alpacaGetTempComp(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        temp_comp = GetTempComp();
+        temp_comp = _getTempComp();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)temp_comp);
     DBG_END
@@ -163,7 +163,7 @@ void AlpacaFocuser::_alpacaGetTempCompAvailable(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        temp_comp_available = GetTempCompAvailable();
+        temp_comp_available = _getTempCompAvailable();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)temp_comp_available);
     DBG_END
@@ -179,7 +179,7 @@ void AlpacaFocuser::_alpacaGetTemperature(AsyncWebServerRequest *request)
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
-        temperature = GetTemperature();
+        temperature = _getTemperature();
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (double)temperature);
     DBG_END
