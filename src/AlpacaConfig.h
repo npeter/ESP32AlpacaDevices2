@@ -13,15 +13,14 @@
 // Library version see also library.json/version
 const char esp32_alpaca_device_library_version[] = "2.0.0";
 
-// ALPACA Server 
-#define ALPACA_MAX_CLIENTS  8
+// ALPACA Server
+#define ALPACA_MAX_CLIENTS 8
 #define ALPACA_MAX_DEVICES 4
 #define ALPACA_UDP_PORT 32227
 #define ALPACA_TCP_PORT 80
 #define ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC 120
 
 #define ALPACA_ENABLE_OTA_UPDATE
-
 
 // ALPACA Management Interface - Description Request
 #define ALPACA_INTERFACE_VERSION "[1]"             // /management/apiversions Value: Supported Alpaca API versions
@@ -38,10 +37,9 @@ const char esp32_alpaca_device_library_version[] = "2.0.0";
 // - Name: The short name of the driver, for display purposes
 // DeviceType - as defined ASCOM
 
-
 // =======================================================================================================
 // CoverCalibrator - Comon Properties
-#define ALPACA_COVER_CALIBRATOR_DESCRIPTION "Alpaca CoverCalibrator Template"                      // init value; managed by config
+#define ALPACA_COVER_CALIBRATOR_DESCRIPTION "Alpaca CoverCalibrator Template"        // init value; managed by config
 #define ALPACA_COVER_CALIBRATOR_DRIVER_INFO "ESP32 CoverCalibrator driver by BigPet" // init value; managed by config
 #define ALPACA_COVER_CALIBRATOR_DRIVER_VERSION "0.1"                                 //
 #define ALPACA_COVER_CALIBRATOR_INTERFACE_VERSION 1                                  // don't change
@@ -57,10 +55,9 @@ const char esp32_alpaca_device_library_version[] = "2.0.0";
 // CoverCalibrator - Specific Properties
 #define ALPACA_COVER_CALIBRATOR_MAX_BRIGHTNESS 1023 // init; managed by setup
 
-
 // =======================================================================================================
 // Switch - Comon Properties
-#define ALPACA_SWITCH_DESCRIPTION "Alpaca Switch Template"                      // init value; managed by config
+#define ALPACA_SWITCH_DESCRIPTION "Alpaca Switch Template"        // init value; managed by config
 #define ALPACA_SWITCH_DRIVER_INFO "ESP32 Switch driver by BigPet" // init value; managed by config
 #define ALPACA_SWITCH_DRIVER_VERSION "0.1"                        //
 #define ALPACA_SWITCH_INTERFACE_VERSION 1                         // don't change
@@ -70,22 +67,28 @@ const char esp32_alpaca_device_library_version[] = "2.0.0";
 // Switch - Specific Properties
 // empty
 
-
 // =======================================================================================================
 // ObservingConditions - Comon Properties
-#define ALPACA_OBSERVING_CONDITIONS_DESCRIPTION "Alpaca ObservingConditions Template"                      // init value; managed by config
+#define ALPACA_OBSERVING_CONDITIONS_DESCRIPTION "Alpaca ObservingConditions Template"        // init value; managed by config
 #define ALPACA_OBSERVING_CONDITIONS_DRIVER_INFO "ESP32 ObservingConditions driver by BigPet" // init value; managed by config
 #define ALPACA_OBSERVING_CONDITIONS_DRIVER_VERSION "0.1"                                     //
 #define ALPACA_OBSERVING_CONDITIONS_INTERFACE_VERSION 1                                      // don't change
 #define ALPACA_OBSERVING_CONDITIONS_NAME "not used"                                          // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_OBSERVING_CONDITIONS_DEVICE_TYPE "observingconditions"                        // don't change
 
+// =======================================================================================================
+// Focuser - Comon Properties
+#define ALPACA_FOCUSER_DESCRIPTION "Alpaca Focuser Template"        // init value; managed by config
+#define ALPACA_FOCUSER_DRIVER_INFO "ESP32 Focuser driver by BigPet" // init value; managed by config
+#define ALPACA_FOCUSER_DRIVER_VERSION "0.1"                         //
+#define ALPACA_FOCUSER_INTERFACE_VERSION 3                          // don't change
+#define ALPACA_FOCUSER_NAME "not used"                              // init with <deviceType>-<deviceNumber>; managed by config
+#define ALPACA_FOCUSER_DEVICE_TYPE "focuser"                        // don't change
 
-
-// include user config 
+// include user config
 #include "UserConfig.h"
 
-const uint32_t kAlpacaMaxClients = ALPACA_MAX_CLIENTS; 
+const uint32_t kAlpacaMaxClients = ALPACA_MAX_CLIENTS;
 const uint32_t kAlpacaMaxDevices = ALPACA_MAX_DEVICES;
 const uint32_t kAlpacaUdpPort = ALPACA_UDP_PORT;
 const uint32_t kAlpacaTcpPort = ALPACA_TCP_PORT;
