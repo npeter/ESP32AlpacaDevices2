@@ -31,9 +31,9 @@ private:
     void _alpacaPutHalt(AsyncWebServerRequest *request);
     void _alpacaPutMove(AsyncWebServerRequest *request);
 
-    virtual bool _putTempComp(bool temp_comp) = 0;
-    virtual bool _putHalt() = 0;
-    virtual bool _putMove(int32_t position) = 0;
+    virtual const bool _putTempComp(bool temp_comp) = 0;
+    virtual const bool _putHalt() = 0;
+    virtual const bool _putMove(int32_t position) = 0;
 
     virtual const bool _getAbsolut() = 0;
     virtual const bool _getIsMoving() = 0;
@@ -49,16 +49,6 @@ protected:
     AlpacaFocuser();
     void Begin();
     void RegisterCallbacks();
-
-    // const size_t GetMaxSwitch() { return _max_switch_devices; };
-
-
-    
-    // setter
-    //const bool SetIsMoving(bool is_moving) { return _is_moving; }
-    // const bool SetSwitch(uint32_t id, bool bool_value);
-
-
 
 public:
 };
