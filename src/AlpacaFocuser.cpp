@@ -27,14 +27,14 @@ void AlpacaFocuser::RegisterCallbacks()
     AlpacaDevice::RegisterCallbacks();
 
     this->createCallBack(LHF(_alpacaGetAbsolut), HTTP_GET, "absolute", false);
-    this->createCallBack(LHF(_alpacaGetIsMoving), HTTP_GET, "is moving", false);
+    this->createCallBack(LHF(_alpacaGetIsMoving), HTTP_GET, "ismoving", false);
     this->createCallBack(LHF(_alpacaGetMaxIncrement), HTTP_GET, "maxincrement", false);
     this->createCallBack(LHF(_alpacaGetMaxStep), HTTP_GET, "maxstep", false);
     this->createCallBack(LHF(_alpacaGetPosition), HTTP_GET, "position", false);
     this->createCallBack(LHF(_alpacaGetStepSize), HTTP_GET, "stepsize", false);
     this->createCallBack(LHF(_alpacaGetTempComp), HTTP_GET, "tempcomp", false);
     this->createCallBack(LHF(_alpacaGetTempCompAvailable), HTTP_GET, "tempcompavailable", false);
-    this->createCallBack(LHF(_alpacaGetTemperature), HTTP_GET, "temperatue", false);
+    this->createCallBack(LHF(_alpacaGetTemperature), HTTP_GET, "temperature", false);
 
     this->createCallBack(LHF(_alpacaPutTempComp), HTTP_PUT, "tempcomp", false);
     this->createCallBack(LHF(_alpacaPutHalt), HTTP_PUT, "halt", false);
@@ -189,25 +189,22 @@ void AlpacaFocuser::_alpacaPutTempComp(AsyncWebServerRequest *request)
 {
     DBG_FOCUSER_PUT_TEMP_COMP;
     _service_counter++;
-    _alpaca_server->RspStatusClear(_rsp_status);
-    uint32_t id = 0;
+    uint32_t client_idx = 0;
     bool temp_comp = false;
+    _alpaca_server->RspStatusClear(_rsp_status);
 
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-    if (client_idx > 0)
+    try
     {
-        // TODO check temp_comp_available
-        if (_alpaca_server->GetParam(request, "TempComp", temp_comp, Spelling_t::kIgnoreCase))
-        {
-            _putTempComp(temp_comp);
-        }
-        else
-        {
-            _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
-            _rsp_status.http_status = HttpStatus_t::kPassed;
-            snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \"Name\" not found or invalid",
-                     request->url().c_str());
-        }
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "TempComp", temp_comp, Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "TempComp");
+
+        _putTempComp(temp_comp);
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    { // empty
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
@@ -233,25 +230,22 @@ void AlpacaFocuser::_alpacaPutMove(AsyncWebServerRequest *request)
 {
     DBG_FOCUSER_PUT_TEMP_COMP;
     _service_counter++;
+    uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
-    uint32_t id = 0;
     int32_t position = 0;
 
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-    if (client_idx > 0)
+    try
     {
-        // TODO check temp_comp_available
-        if (_alpaca_server->GetParam(request, "Position", position, Spelling_t::kIgnoreCase))
-        {
-            _putMove(position);
-        }
-        else
-        {
-            _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
-            _rsp_status.http_status = HttpStatus_t::kPassed;
-            snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \"Name\" not found or invalid",
-                     request->url().c_str());
-        }
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Position", position, Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Position");
+
+        _putMove(position);
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    { // empty
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
