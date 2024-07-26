@@ -11,7 +11,7 @@
 #include <Arduino.h>
 
 // Library version see also library.json/version
-const char esp32_alpaca_device_library_version[] = "2.0.0";
+const char esp32_alpaca_device_library_version[] = "2.1.0";
 
 // ALPACA Server
 #define ALPACA_MAX_CLIENTS 8
@@ -26,7 +26,7 @@ const char esp32_alpaca_device_library_version[] = "2.0.0";
 #define ALPACA_INTERFACE_VERSION "[1]"             // /management/apiversions Value: Supported Alpaca API versions
 #define ALPACA_MNG_SERVER_NAME "ALPACA-ESP32-DEMO" // only for init; managed by config
 #define ALPACA_MNG_MANUFACTURE "DIY by @BigPet"
-#define ALPACA_MNG_MANUFACTURE_VERSION "v1.0"
+#define ALPACA_MNG_MANUFACTURE_VERSION esp32_alpaca_device_library_version
 #define ALPACA_MNG_LOCATION "Germany/Bavaria"
 
 // AscomDriver Common Properties:

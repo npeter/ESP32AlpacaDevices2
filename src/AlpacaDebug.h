@@ -108,8 +108,8 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
 #define DBG_FOCUSER_GET_POSITION DBG_REQ;
 #define DBG_FOCUSER_GET_STEP_SIZE DBG_REQ;
 #define DBG_FOCUSER_GET_TEMP_COMP DBG_REQ;
-#define DBG_FOCUSER_GET_TEMP_COMP_AVAILABLE DBG_REQ;
-#define DBG_FOCUSER_GET_ TEMPERATUR DBG_REQ;
+#define DBG_FOCUSER_GET_TEMP_COMP_AVAILABLE //DBG_REQ;
+#define DBG_FOCUSER_GET_TEMPERATUR DBG_REQ;
 
 #define DBG_FOCUSER_PUT_TEMP_COMP DBG_REQ;
 #define DBG_FOCUSER_PUT_HALT DBG_REQ;
@@ -142,7 +142,7 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
 
 #define DBG_RESPOND_VALUE \
     if (gDbg)             \
-        SLOG_INFO_PRINTF("Alpaca RSP %d %s\n", (int32_t)rsp_status.http_status, response);
+        SLOG_INFO_PRINTF("Alpaca RSP %d %s\n\n", (int32_t)rsp_status.http_status, response);
 
 #define DBG_END gDbg = false;
 

@@ -59,7 +59,7 @@ void AlpacaFocuser::_alpacaGetAbsolut(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetIsMoving(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_IS_MOVING
     _service_counter++;
     bool is_moving = false;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -75,7 +75,7 @@ void AlpacaFocuser::_alpacaGetIsMoving(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetMaxIncrement(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_MAX_INCREMENT
     _service_counter++;
     int32_t max_increment = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -91,7 +91,7 @@ void AlpacaFocuser::_alpacaGetMaxIncrement(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetMaxStep(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_MAX_STEP
     _service_counter++;
     int32_t max_step = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -107,7 +107,7 @@ void AlpacaFocuser::_alpacaGetMaxStep(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetPosition(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_POSITION
     _service_counter++;
     int32_t position = false;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -123,7 +123,7 @@ void AlpacaFocuser::_alpacaGetPosition(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetStepSize(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_STEP_SIZE
     _service_counter++;
     double step_size = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -139,7 +139,7 @@ void AlpacaFocuser::_alpacaGetStepSize(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetTempComp(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_TEMP_COMP
     _service_counter++;
     bool temp_comp = false;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -155,7 +155,7 @@ void AlpacaFocuser::_alpacaGetTempComp(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetTempCompAvailable(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_TEMP_COMP_AVAILABLE
     _service_counter++;
     bool temp_comp_available = false;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -171,7 +171,7 @@ void AlpacaFocuser::_alpacaGetTempCompAvailable(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaGetTemperature(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_GET_ABSOLUT
+    DBG_FOCUSER_GET_TEMPERATUR
     _service_counter++;
     double temperature = false;
     _alpaca_server->RspStatusClear(_rsp_status);
@@ -212,7 +212,7 @@ void AlpacaFocuser::_alpacaPutTempComp(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaPutHalt(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_PUT_TEMP_COMP;
+    DBG_FOCUSER_PUT_HALT;
     _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
     uint32_t id = 0;
@@ -228,7 +228,7 @@ void AlpacaFocuser::_alpacaPutHalt(AsyncWebServerRequest *request)
 
 void AlpacaFocuser::_alpacaPutMove(AsyncWebServerRequest *request)
 {
-    DBG_FOCUSER_PUT_TEMP_COMP;
+    DBG_FOCUSER_PUT_MOVE;
     _service_counter++;
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);

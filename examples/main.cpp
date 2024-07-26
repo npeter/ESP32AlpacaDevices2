@@ -12,9 +12,9 @@
 #define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
 #define TEST_SWITCH               // create Switch device
 #define TEST_OBSERVING_CONDITIONS // create ObservingConditions device
+#define TEST_FOCUSER              // create Focuser device
 
 // #define TEST_RESTART              // only for testing
-
 #include <Arduino.h>
 #include <WiFi.h>
 #include "Credentials.h"
@@ -38,7 +38,14 @@ Switch switchDevice;
 ObservingConditions observingConditions;
 #endif
 
+#ifdef TEST_FOCUSER
+#include <Focuser.h>
+Focuser focuser;
+#endif
+
 #define PIN_WIFI_LED 15 // if lolin_s2_mini
+
+#define VERSION "2.0.1"
 
 // ASCOM Alpaca server with discovery
 AlpacaServer alpaca_server(ALPACA_MNG_SERVER_NAME, ALPACA_MNG_MANUFACTURE, ALPACA_MNG_MANUFACTURE_VERSION, ALPACA_MNG_LOCATION);
@@ -121,6 +128,12 @@ void setup()
   alpaca_server.AddDevice(&observingConditions);
 #endif
 
+
+#ifdef TEST_FOCUSER
+  focuser.Begin();
+  alpaca_server.AddDevice(&focuser);
+#endif
+
   alpaca_server.LoadSettings();
 
   // finalize logging setup
@@ -149,4 +162,9 @@ void loop()
 #ifdef TEST_OBSERVING_CONDITIONS
   observingConditions.Loop();
 #endif
+
+#ifdef TEST_FOCUSER
+  focuser.Loop();
+#endif
+
 }

@@ -16,3 +16,10 @@
 - Test with:
     - "Conform Universal 3.0.0"
     - NINA 3.1 HF1
+
+## 2.1.0 2024-07-26
+- Alpaca device type Focuser added
+- Demo application extended 
+- Test with:
+    - **Conform Universal 3.0.0 (Build 29642.2251685)**
+    - **N.I.N.A 3.1 HF1**

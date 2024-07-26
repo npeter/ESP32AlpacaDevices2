@@ -5,7 +5,7 @@ The following devices are supported:
 - Cover Calibrator V1
 - Observing Conditions V1
 - Switch  V2
-- Focuser V3 (in future)
+- Focuser V3 
 
 This library is more or less a new implementation. But it's primary based on the great ideas and work of:
 - https://github.com/agnunez/AlpacaServerESP32.git 
@@ -43,11 +43,14 @@ My primary motivation was:
     - CoverCalibrator.h, CoverCalibrator.cpp
     - ObservingConditions.h, ObservingConditions.cpp
     - Switch.h, Switch.cpp
-    - In future Focuser.h, Focuser.cpp
+    - Focuser.h, Focuser.cpp
 - Support of ASCOM Methods: action, commandblind, commandbool, commandstring
     - Full implementation for CoverCalibrator
+- Logging using SLog: "https://github.com/npeter/SLog"
 - Configuration via dynamicaly created webpages as developed by (https://github.com/elenhinan/ESPAscomAlpacaServer)
-<img src="Setup.png" width="600">
+<br>
+<br>
+<img src="AlpacaAscomDriverSetup.png" width="600">
 <br><br>
 
 ## Remarks
@@ -71,11 +74,17 @@ My primary motivation was:
 - Let your class inherit the relevant AscomDevice-derived class (e.c. AscomSwitch, AscomCoverCalibrator, AscomObservingConditions)
 - Implement all pure virtual functions
 - Implement all your device specific functions
+- See demo application  .\Examples\*
 
-
+<br><br>
 <img src="Design.png" width="600">
 ESP32AlpacaDevices class diagram
+
 <br><br>
+<img src="AlpacaDiscoveryMap.png" width="600">
+Demo Application: Alpaca Discovery Map generated with **Conform Universal **
+<br><br>
+
 
 ## Useful Links
 - [ASCOM Alpaca API](https://ascom-standards.org/api/#/)
@@ -89,4 +98,5 @@ ESP32AlpacaDevices class diagram
 - Concept for AlpacaConfig.h
 - Test device specific interface with real device implementation
     - Already done for CoverCalibrator [CoFlat](https://github.com/npeter/CoFlat)
+    
 
