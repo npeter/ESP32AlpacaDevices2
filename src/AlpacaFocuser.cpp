@@ -26,6 +26,19 @@ void AlpacaFocuser::RegisterCallbacks()
 {
     AlpacaDevice::RegisterCallbacks();
 
+#ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
+    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
+#endif    
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
+    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
+#endif    
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
+#endif    
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
+    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
+#endif    
+
     this->createCallBack(LHF(_alpacaGetAbsolut), HTTP_GET, "absolute", false);
     this->createCallBack(LHF(_alpacaGetIsMoving), HTTP_GET, "ismoving", false);
     this->createCallBack(LHF(_alpacaGetMaxIncrement), HTTP_GET, "maxincrement", false);
