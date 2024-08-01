@@ -163,6 +163,7 @@ public:
     const uint16_t GetLogLvl() { return _log_level; };
     const bool GetSerialLog() { return _serial_log; };
     const bool GetResetRequest() { return _reset_request; };
+    void SetResetRequest() { _reset_request = true; };
 
     // only for testing
     void RemoveSettingsFile() { SPIFFS.remove(_settings_file); }
