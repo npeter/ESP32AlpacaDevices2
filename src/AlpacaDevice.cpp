@@ -60,6 +60,8 @@ void AlpacaDevice::_setSetupPage()
     // serve static setup page
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/setup.html\n", _device_url);
     _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html");
+    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/ajax_tst.html\n", _device_url); // TODO
+    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/ajax_tst.html");    
 }
 
 void AlpacaDevice::_addAction(const char *const action)

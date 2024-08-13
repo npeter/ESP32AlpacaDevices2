@@ -27,3 +27,4 @@
 ## 2.1.1 2024-07-26 in work
 1. ALPACA optional focuser services implemented
 2. SetResetRequestAdded
+3. Ajax test
