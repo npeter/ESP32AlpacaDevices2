@@ -52,6 +52,16 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutTempComp), HTTP_PUT, "tempcomp", false);
     this->createCallBack(LHF(_alpacaPutHalt), HTTP_PUT, "halt", false);
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move", false);
+
+    this->createCallBackUrl(LHF(_alpacaGetAdminPage), HTTP_GET, "/focuser_admin.htlm");
+}
+
+void AlpacaFocuser::_alpacaGetAdminPage(AsyncWebServerRequest *request)
+{
+    //DBG_FOCUSER_GET_ABSOLUT
+    _service_counter++;
+    request->send(SPIFFS, "/focuser_admin.htm", String(), true);
+    //DBG_END    
 }
 
 void AlpacaFocuser::_alpacaGetAbsolut(AsyncWebServerRequest *request)

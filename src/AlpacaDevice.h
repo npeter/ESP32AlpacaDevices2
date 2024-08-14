@@ -53,9 +53,6 @@ protected:
     virtual void AlpacaPutCommandBool(AsyncWebServerRequest *request);
     virtual void AlpacaPutCommandString(AsyncWebServerRequest *request);
 
-    // virtual void AlpacaGetAdmin(AsyncWebServerRequest *request);    // TODO AJAX
-
-
     virtual void AlpacaGetConnected(AsyncWebServerRequest *request);
     virtual void AlpacaPutConnected(AsyncWebServerRequest *request);
     void AlpacaGetDescription(AsyncWebServerRequest *request);

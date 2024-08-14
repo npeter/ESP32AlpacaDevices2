@@ -17,6 +17,8 @@ private:
 
 
 private:
+    void _alpacaGetAdminPage(AsyncWebServerRequest *request);
+
     void _alpacaGetAbsolut(AsyncWebServerRequest *request);
     void _alpacaGetIsMoving(AsyncWebServerRequest *request);
     void _alpacaGetMaxIncrement(AsyncWebServerRequest *request);
