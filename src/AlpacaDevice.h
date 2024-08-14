@@ -42,15 +42,19 @@ protected:
     void _getJsondata(AsyncWebServerRequest *request);
     void _putJsondata(AsyncWebServerRequest *request);
     void createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[], bool deviceMethod = true);
-    void _addAction(const char* const action);
-    
+    void createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[]);
+    void _addAction(const char *const action);
+
     // alpaca commands
-    
+
     // overload this functions in device specific class if implemended
     virtual void AlpacaPutAction(AsyncWebServerRequest *request);
     virtual void AlpacaPutCommandBlind(AsyncWebServerRequest *request);
     virtual void AlpacaPutCommandBool(AsyncWebServerRequest *request);
     virtual void AlpacaPutCommandString(AsyncWebServerRequest *request);
+
+    virtual void AlpacaGetAdmin(AsyncWebServerRequest *request);    // TODO AJAX
+
 
     virtual void AlpacaGetConnected(AsyncWebServerRequest *request);
     virtual void AlpacaPutConnected(AsyncWebServerRequest *request);

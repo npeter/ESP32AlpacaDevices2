@@ -29,13 +29,14 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
 
     // register handler for generated URI
     _alpaca_server->getServerTCP()->on(url, type, fn);
+}
 
-    // // add command to supported methods if devicemethod is true
-    // if (devicemethod)
-    // { // json array value: <["command-1", "command-2", ... "command-n"]>
-    //     int len = strlen(_supported_actions);
-    //     snprintf(&(_supported_actions[len - 1]), sizeof(_supported_actions) - len - 1, "%s%s\"]", (len > 2) ? ", " : "", command);
-    // }
+// create url and register callback for REST API
+void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[])
+{
+    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\"\n", url);
+    // register handler for URL
+    _alpaca_server->getServerTCP()->on(url, type, fn);
 }
 
 void AlpacaDevice::_setSetupPage()
@@ -60,8 +61,8 @@ void AlpacaDevice::_setSetupPage()
     // serve static setup page
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/setup.html\n", _device_url);
     _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html");
-    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/ajax_tst.html\n", _device_url); // TODO
-    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/ajax_tst.html");    
+    // SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/ajax_tst.html\n", _device_url); // TODO
+    // _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/ajax_tst.html");    
 }
 
 void AlpacaDevice::_addAction(const char *const action)
@@ -77,6 +78,7 @@ void AlpacaDevice::RegisterCallbacks()
     // this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
     // this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
     // this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
+    this->createCallBackUrl(LHF(AlpacaGetAdmin), HTTP_GET, "/www/ajax_tst.html");   // TODO AJAX
     this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected", false);
     this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected", false);
     this->createCallBack(LHF(AlpacaGetDescription), HTTP_GET, "description", false);
@@ -88,6 +90,17 @@ void AlpacaDevice::RegisterCallbacks()
 
     _setSetupPage();
 }
+
+void AlpacaDevice::AlpacaGetAdmin(AsyncWebServerRequest *request)   // TODO AJAX
+{
+    //DBG_DEVICE_GET_DRIVER_INFO
+    _service_counter++;
+    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_info, JsonValue_t::kAsJsonStringValue);
+    //DBG_END
+};
+
+
 
 void AlpacaDevice::SetDeviceNumber(int8_t device_number)
 {
