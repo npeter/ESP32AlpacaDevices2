@@ -60,9 +60,7 @@ void AlpacaDevice::_setSetupPage()
 
     // serve static setup page
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/setup.html\n", _device_url);
-    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html");
-    // SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/ajax_tst.html\n", _device_url); // TODO
-    // _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/ajax_tst.html");    
+    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html"); 
 }
 
 void AlpacaDevice::_addAction(const char *const action)
@@ -74,11 +72,6 @@ void AlpacaDevice::_addAction(const char *const action)
 
 void AlpacaDevice::RegisterCallbacks()
 {
-    // this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
-    // this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
-    // this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
-    // this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
-    //this->createCallBackUrl(LHF(AlpacaGetAdmin), HTTP_GET, "/www/ajax_tst.html");   // TODO AJAX
     this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected", false);
     this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected", false);
     this->createCallBack(LHF(AlpacaGetDescription), HTTP_GET, "description", false);
@@ -90,19 +83,6 @@ void AlpacaDevice::RegisterCallbacks()
 
     _setSetupPage();
 }
-
-// void AlpacaDevice::AlpacaGetAdmin(AsyncWebServerRequest *request)   // TODO AJAX
-// {
-//     //DBG_DEVICE_GET_DRIVER_INFO
-//     _service_counter++;
-//     //uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-//     //_alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_info, JsonValue_t::kAsJsonStringValue);
-//     SLOG_PRINTF(SLOG_INFO, "send(SPIFFS, \"/ajax_tst.html\")\n");
-//     request->send(SPIFFS, "/ajax_tst.html");
-//     //DBG_END
-// };
-
-
 
 void AlpacaDevice::SetDeviceNumber(int8_t device_number)
 {
