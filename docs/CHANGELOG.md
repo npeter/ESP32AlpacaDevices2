@@ -29,3 +29,4 @@
 2. SetResetRequestAdded
 3. Ajax test 
 4. createCallBackUrl() added
+5. Ajax test removed
