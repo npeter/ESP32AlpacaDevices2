@@ -60,7 +60,7 @@ void AlpacaFocuser::_alpacaGetAdminPage(AsyncWebServerRequest *request)
 {
     //DBG_FOCUSER_GET_ABSOLUT
     _service_counter++;
-    request->send(SPIFFS, "/focuser_admin.htm", String(), true);
+    request->send(SPIFFS, "/focuser_admin.htm");
     //DBG_END    
 }
 
