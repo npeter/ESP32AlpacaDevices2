@@ -95,8 +95,10 @@ void AlpacaDevice::AlpacaGetAdmin(AsyncWebServerRequest *request)   // TODO AJAX
 {
     //DBG_DEVICE_GET_DRIVER_INFO
     _service_counter++;
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_info, JsonValue_t::kAsJsonStringValue);
+    //uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
+    //_alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_info, JsonValue_t::kAsJsonStringValue);
+    SLOG_PRINTF(SLOG_INFO, "send(SPIFFS, \"/ajax_tst.html\")\n");
+    request->send(SPIFFS, "/ajax_tst.html");
     //DBG_END
 };
 
