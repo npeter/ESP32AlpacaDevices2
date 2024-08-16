@@ -30,3 +30,4 @@
 3. Ajax test 
 4. createCallBackUrl() added
 5. Ajax test removed 
+6. Test and corect optional Alpaca Services with focuser

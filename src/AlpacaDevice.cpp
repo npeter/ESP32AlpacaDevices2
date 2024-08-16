@@ -60,7 +60,7 @@ void AlpacaDevice::_setSetupPage()
 
     // serve static setup page
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/setup.html\n", _device_url);
-    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html"); 
+    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/www/setup.html");
 }
 
 void AlpacaDevice::_addAction(const char *const action)
@@ -95,11 +95,17 @@ void AlpacaDevice::SetDeviceNumber(int8_t device_number)
 // alpaca commands
 void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
 {
-
     DBG_DEVICE_PUT_ACTION_REQ
     _service_counter++;
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-    _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "putaction");
+    uint32_t client_idx = 0;
+    try
+    {
+        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "putaction");
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    {
+    }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -108,8 +114,15 @@ void AlpacaDevice::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_BLIND
     _service_counter++;
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-    _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandblind");
+    uint32_t client_idx = 0;
+    try
+    {
+        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandblind");
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    {
+    }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -117,8 +130,15 @@ void AlpacaDevice::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_BOOL
     _service_counter++;
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-    _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandbool");
+    uint32_t client_idx = 0;
+    try
+    {
+        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandbool");
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    {
+    }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -126,8 +146,15 @@ void AlpacaDevice::AlpacaPutCommandString(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_COMMAND_STRING
     _service_counter++;
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-    _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandstring");
+    uint32_t client_idx = 0;
+    try
+    {
+        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandstring");
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    {
+    }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -363,7 +390,7 @@ void AlpacaDevice::CheckClientConnectionTimeout()
                 SLOG_PRINTF(SLOG_NOTICE, "Alpaca Device <%s>: ClientId <%d> service <%fms> max_service_time_ms <%f> sys_time <%fms> _clients[%d].time <%fms>... disconnected\n",
                             GetDeviceName(),
                             _clients[u].client_id,
-                            (double)time_since_last_request_ms / 1000.0, 
+                            (double)time_since_last_request_ms / 1000.0,
                             (double)_clients[u].max_service_time_ms / 1000.0,
                             (double)sys_time_ms / 1000.0,
                             u,
@@ -375,7 +402,7 @@ void AlpacaDevice::CheckClientConnectionTimeout()
                             GetDeviceName(),
                             _clients[u].client_id,
                             (double)time_since_last_request_ms / 1000.0,
-                            (double)_clients[u].max_service_time_ms / 1000.0,                            
+                            (double)_clients[u].max_service_time_ms / 1000.0,
                             (double)sys_time_ms / 1000.0,
                             u,
                             (double)_clients[u].time_ms / 1000.0);
@@ -389,7 +416,7 @@ void AlpacaDevice::CheckClientConnectionTimeout()
             //                 GetDeviceName(),
             //                 _clients[u].client_id,
             //                 (double)time_since_last_request_ms / 1000.0,
-            //                 (double)_clients[u].max_service_time_ms / 1000.0,                               
+            //                 (double)_clients[u].max_service_time_ms / 1000.0,
             //                 (double)sys_time_ms / 1000.0,
             //                 u,
             //                 (double)_clients[u].time_ms / 1000.0);

@@ -33,6 +33,11 @@ private:
     void _alpacaPutHalt(AsyncWebServerRequest *request);
     void _alpacaPutMove(AsyncWebServerRequest *request);
 
+#ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
+    void AlpacaPutAction(AsyncWebServerRequest *request);
+    virtual const bool _putAction(const char *const action, const char *const parameters)=0;
+#endif
+
     virtual const bool _putTempComp(bool temp_comp) = 0;
     virtual const bool _putHalt() = 0;
     virtual const bool _putMove(int32_t position) = 0;

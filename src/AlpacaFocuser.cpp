@@ -8,6 +8,9 @@
 **************************************************************************************************/
 #include "AlpacaFocuser.h"
 
+
+const char k_focuser_admin_page[] = "/focuser_admin.html";
+
 AlpacaFocuser::AlpacaFocuser()
 {
     strlcpy(_device_type, ALPACA_FOCUSER_DEVICE_TYPE, sizeof(_device_type));
@@ -53,15 +56,14 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutHalt), HTTP_PUT, "halt", false);
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move", false);
 
-    this->createCallBackUrl(LHF(_alpacaGetAdminPage), HTTP_GET, "/focuser_admin.htlm");
+    this->createCallBackUrl(LHF(_alpacaGetAdminPage), HTTP_GET, k_focuser_admin_page);
 }
 
 void AlpacaFocuser::_alpacaGetAdminPage(AsyncWebServerRequest *request)
 {
-    //DBG_FOCUSER_GET_ABSOLUT
-    _service_counter++;
-    request->send(SPIFFS, "/focuser_admin.htm");
-    //DBG_END    
+    _service_counter++;   
+    SLOG_PRINTF(SLOG_INFO,"send(SPIFFS, %s)\n", k_focuser_admin_page);
+    request->send(SPIFFS, k_focuser_admin_page);
 }
 
 void AlpacaFocuser::_alpacaGetAbsolut(AsyncWebServerRequest *request)
@@ -273,3 +275,34 @@ void AlpacaFocuser::_alpacaPutMove(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
+
+#ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
+void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    _service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char action[64] = {0};
+    char parameters[128] = {0};
+
+    try
+    {
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+
+        if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+
+        _putAction(action, parameters);
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    { // empty
+    }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    DBG_END
+};
+#endif
