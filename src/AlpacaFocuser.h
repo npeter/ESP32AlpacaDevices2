@@ -37,6 +37,14 @@ private:
     void AlpacaPutAction(AsyncWebServerRequest *request);
     virtual const bool _putAction(const char *const action, const char *const parameters)=0;
 #endif
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+    void AlpacaPutCommandBool(AsyncWebServerRequest *request);
+    virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response)=0;
+#endif
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
+    void AlpacaPutCommandString(AsyncWebServerRequest *request);
+    virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size)=0;
+#endif
 
     virtual const bool _putTempComp(bool temp_comp) = 0;
     virtual const bool _putHalt() = 0;

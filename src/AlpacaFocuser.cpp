@@ -8,7 +8,6 @@
 **************************************************************************************************/
 #include "AlpacaFocuser.h"
 
-
 const char k_focuser_admin_page[] = "/focuser_admin.html";
 
 AlpacaFocuser::AlpacaFocuser()
@@ -31,16 +30,16 @@ void AlpacaFocuser::RegisterCallbacks()
 
 #ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
     this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
-#endif    
+#endif
 #ifdef ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
     this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
-#endif    
+#endif
 #ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
     this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
-#endif    
+#endif
 #ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
     this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
-#endif    
+#endif
 
     this->createCallBack(LHF(_alpacaGetAbsolut), HTTP_GET, "absolute", false);
     this->createCallBack(LHF(_alpacaGetIsMoving), HTTP_GET, "ismoving", false);
@@ -61,8 +60,8 @@ void AlpacaFocuser::RegisterCallbacks()
 
 void AlpacaFocuser::_alpacaGetAdminPage(AsyncWebServerRequest *request)
 {
-    _service_counter++;   
-    SLOG_PRINTF(SLOG_INFO,"send(SPIFFS, %s)\n", k_focuser_admin_page);
+    _service_counter++;
+    SLOG_PRINTF(SLOG_INFO, "send(SPIFFS, %s)\n", k_focuser_admin_page);
     request->send(SPIFFS, k_focuser_admin_page);
 }
 
@@ -303,6 +302,76 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
     { // empty
     }
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    DBG_END
+};
+#endif
+
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+void AlpacaFocuser::AlpacaPutCommandBool(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    _service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char command[64] = {0};
+    char raw[16] = "true";
+    bool bool_response = false;
+
+    try
+    {
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+
+        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
+
+        if (_putCommandBool(command, raw, bool_response) == false)
+            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, "Command");
+
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)bool_response);
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    {
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    }
+    DBG_END
+};
+#endif
+
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
+void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    _service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char command_str[256] = {0};
+    char raw[16] = "true";
+    char str_response[64] = {0};
+
+    try
+    {
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+            throw(&_rsp_status);
+
+        if (_alpaca_server->GetParam(request, "Command", command_str, sizeof(command_str), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+
+        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
+
+        if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
+            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, command_str);
+
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
+    }
+    catch (AlpacaRspStatus_t *rspStatus)
+    {
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    }
     DBG_END
 };
 #endif
