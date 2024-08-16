@@ -329,7 +329,7 @@ void AlpacaFocuser::AlpacaPutCommandBool(AsyncWebServerRequest *request)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
 
         if (_putCommandBool(command, raw, bool_response) == false)
-            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, "Command");
+            _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, command);
 
         _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)bool_response);
     }
@@ -364,7 +364,7 @@ void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
 
         if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
-            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, command_str);
+            _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, command_str);
 
         _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
     }

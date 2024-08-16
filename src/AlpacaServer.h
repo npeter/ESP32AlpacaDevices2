@@ -224,6 +224,13 @@ public:
         throw(&rsp_status);
     }
 
+    void ThrowRspStatusCommandStringInvalid(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, const char *command_str)
+    {
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
+        rsp_status.http_status = HttpStatus_t::kPassed;
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Command string %s invalid", req->url().c_str(), command_str);
+        throw(&rsp_status);
+    }
     void ThrowRspStatusClientAlreadyConnected(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, int32_t clientID)
     {
         rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;
