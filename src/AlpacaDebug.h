@@ -135,7 +135,7 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
         for (int i = 0; i < request->args(); i++)                                                                                                                                                     \
         {                                                                                                                                                                                             \
             int len = strlen(s);                                                                                                                                                                      \
-            snprintf(&s[len], sizeof(s) - len, " - %s='%s", request->argName(i).c_str(), request->arg(i).c_str());                                                                                    \
+            snprintf(&s[len], sizeof(s) - len, " - %s=<%s>", request->argName(i).c_str(), request->arg(i).c_str());                                                                                    \
         }                                                                                                                                                                                             \
         SLOG_INFO_PRINTF("%s\n", s);                                                                                                                                                                  \
     }

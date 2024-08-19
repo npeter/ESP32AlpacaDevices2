@@ -284,6 +284,7 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
     _alpaca_server->RspStatusClear(_rsp_status);
     char action[64] = {0};
     char parameters[128] = {0};
+    char str_response[64] = {0};
 
     try
     {
@@ -296,12 +297,15 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
         if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        _putAction(action, parameters);
+        if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
+            _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, parameters);
+
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
     }
     catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
+    {
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
 #endif
