@@ -300,7 +300,7 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
         if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
             _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, parameters);
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
+        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response, JsonValue_t::kAsJsonStringValue);
     }
     catch (AlpacaRspStatus_t *rspStatus)
     {
