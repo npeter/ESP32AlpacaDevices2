@@ -284,7 +284,7 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
     _alpaca_server->RspStatusClear(_rsp_status);
     char action[64] = {0};
     char parameters[128] = {0};
-    char str_response[64] = {0};
+    char str_response[1024] = {0};
 
     try
     {
