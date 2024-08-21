@@ -17,7 +17,12 @@ private:
 
 
 private:
-    void _alpacaGetAdminPage(AsyncWebServerRequest *request);
+#ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
+    void _alpacaGetPage(AsyncWebServerRequest *request, const char* const page);
+    void _alpacaGetAdminPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, k_focuser_admin_url); };
+    void _alpacaGetTestbenchPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, k_focuser_testbench_url); };
+    void _alpacaGeStatePage(AsyncWebServerRequest *request) { _alpacaGetPage(request, k_focuser_states_url); };
+#endif
 
     void _alpacaGetAbsolut(AsyncWebServerRequest *request);
     void _alpacaGetIsMoving(AsyncWebServerRequest *request);
