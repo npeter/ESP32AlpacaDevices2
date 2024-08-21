@@ -9,7 +9,11 @@
 #pragma once
 #include "AlpacaDevice.h"
 
-
+#ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
+#define FOCUSER_ADMIN_URL "/focuser_admin"
+#define FOCUSER_TESTBENCH_URL "/focuser_testbench"
+#define FOCUSER_STATES_URL "/focuser_states"
+#endif
 
 class AlpacaFocuser : public AlpacaDevice
 {
@@ -19,9 +23,9 @@ private:
 private:
 #ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
     void _alpacaGetPage(AsyncWebServerRequest *request, const char* const page);
-    void _alpacaGetAdminPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, k_focuser_admin_url); };
-    void _alpacaGetTestbenchPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, k_focuser_testbench_url); };
-    void _alpacaGeStatePage(AsyncWebServerRequest *request) { _alpacaGetPage(request, k_focuser_states_url); };
+    void _alpacaGetAdminPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_ADMIN_URL); };
+    void _alpacaGetTestbenchPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_TESTBENCH_URL); };
+    void _alpacaGeStatePage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_STATES_URL); };
 #endif
 
     void _alpacaGetAbsolut(AsyncWebServerRequest *request);

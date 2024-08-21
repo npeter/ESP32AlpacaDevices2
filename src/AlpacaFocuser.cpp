@@ -8,12 +8,6 @@
 **************************************************************************************************/
 #include "AlpacaFocuser.h"
 
-#ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
-const char k_focuser_admin_url[] = "/focuser_admin";
-const char k_focuser_testbench_url[] = "/focuser_testbench";
-const char k_focuser_states_url[] = "/focuser_states";
-#endif
-
 AlpacaFocuser::AlpacaFocuser()
 {
     strlcpy(_device_type, ALPACA_FOCUSER_DEVICE_TYPE, sizeof(_device_type));
@@ -60,9 +54,9 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move", false);
 
 #ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
-    this->createCallBackUrl(LHF(_alpacaGetAdminPage), HTTP_GET, k_focuser_admin_url);
-    this->createCallBackUrl(LHF(_alpacaGetTestbenchPage), HTTP_GET, k_focuser_testbench_url);
-    this->createCallBackUrl(LHF(_alpacaGeStatePage), HTTP_GET, k_focuser_states_url);
+    this->createCallBackUrl(LHF(_alpacaGetAdminPage), HTTP_GET, FOCUSER_ADMIN_URL);
+    this->createCallBackUrl(LHF(_alpacaGetTestbenchPage), HTTP_GET, FOCUSER_TESTBENCH_URL);
+    this->createCallBackUrl(LHF(_alpacaGeStatePage), HTTP_GET, FOCUSER_STATES_URL);
 #endif
 }
 
@@ -71,7 +65,7 @@ void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *c
     _service_counter++;
     char path[256] = {0};
     snprintf(path, sizeof(path), "%s.html", page);
-    SLOG_PRINTF(SLOG_INFO, "send(SPIFFS, %s.html)\n", path);
+    SLOG_PRINTF(SLOG_INFO, "send(SPIFFS, %s)\n", path);
     request->send(SPIFFS, path);
 }
 
