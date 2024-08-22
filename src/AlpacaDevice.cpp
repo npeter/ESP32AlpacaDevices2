@@ -432,7 +432,7 @@ void AlpacaDevice::CheckClientConnectionTimeout()
  * _rspStatus is filled
  * @return client_idx
  */
-int32_t AlpacaDevice::checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &client_idx, Spelling_t spelling)
+int32_t AlpacaDevice::checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &client_idx, Spelling_t spelling, bool check_connection)
 {
     client_idx = 0;
     int32_t client_id = 0;
@@ -463,8 +463,11 @@ int32_t AlpacaDevice::checkClientDataAndConnection(AsyncWebServerRequest *reques
         if (client_transaction_id <= 0)
             _alpaca_server->ThrowRspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
 
-        if (client_idx == 0)
-            _alpaca_server->ThrowRspStatusClientNotConnected(request, _rsp_status, client_id);
+        if (check_connection == true)
+        {
+            if (client_idx == 0)
+                _alpaca_server->ThrowRspStatusClientNotConnected(request, _rsp_status, client_id);
+        }
     }
     catch (AlpacaRspStatus_t *rspStatus)
     { // empty

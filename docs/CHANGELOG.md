@@ -32,3 +32,4 @@
 5. Ajax test removed 
 6. Test and corect optional Alpaca Services with focuser
 7. Support focuser optional URL's
+8. Support services without connection

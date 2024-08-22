@@ -292,8 +292,7 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
 
     try
     {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict, false);
 
         if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
