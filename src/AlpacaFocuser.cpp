@@ -283,7 +283,7 @@ void AlpacaFocuser::_alpacaPutMove(AsyncWebServerRequest *request)
 void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_ACTION_REQ;
-    _service_counter++;
+    //_service_counter++;
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
     char action[64] = {0};
