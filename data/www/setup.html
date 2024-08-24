@@ -27,7 +27,6 @@
                 <button type="button" id="json_refresh" class="btn btn-primary">Refresh</button>
                 <button type="button" id="json_update" class="btn btn-primary">Update</button>
                 <button type="button" id="json_save" class="btn btn-primary">Save</button>
-                <button type="button" id="json_reset" class="btn btn-primary">Reset</button>
             </div>
         </div>
         <script>
@@ -55,11 +54,6 @@
                 $("#json_save").click(function () {
                     $.getJSON("/save_settings", function(data) {
                         alert(data['saved'] == true? "Saved succesfully" : "Save failed!");
-                    })
-                });
-                $("#json_reset").click(function () {
-                    $.getJSON("/reset", function(data) {
-                        alert(data['activated'] == true? "RESET activated" : "RESET not activated");
                     })
                 });
                 $("#json_refresh").click(function () {
