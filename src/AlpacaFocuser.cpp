@@ -52,12 +52,6 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutTempComp), HTTP_PUT, "tempcomp", false);
     this->createCallBack(LHF(_alpacaPutHalt), HTTP_PUT, "halt", false);
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move", false);
-
-#ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
-    this->createCallBackUrl(LHF(_alpacaGetConfigPage), HTTP_GET, FOCUSER_CONFIG_URL);
-    this->createCallBackUrl(LHF(_alpacaGetTestbenchPage), HTTP_GET, FOCUSER_TESTBENCH_URL);
-    this->createCallBackUrl(LHF(_alpacaGeStatePage), HTTP_GET, FOCUSER_STATES_URL);
-#endif
 }
 
 void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)
