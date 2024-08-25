@@ -135,22 +135,25 @@ void AlpacaServer::AddDevice(AlpacaDevice *device)
 void AlpacaServer::_registerCallbacks()
 {
     // setup rest api
-    SLOG_INFO_PRINTF("REGISTER handler for \"/management/apiversions\" to getApiVersions\n");
+    SLOG_INFO_PRINTF("REGISTER handler for \"/management/apiversions\" to _getApiVersions\n");
     _server_tcp->on("/management/apiversions", HTTP_GET, LHF(_getApiVersions));
-    SLOG_INFO_PRINTF("REGISTER handler for \"/management/v1/description\" to getDescription\n");
+    SLOG_INFO_PRINTF("REGISTER handler for \"/management/v1/description\" to _getDescription\n");
     _server_tcp->on("/management/v1/description", HTTP_GET, LHF(_getDescription));
-    SLOG_INFO_PRINTF("REGISTER handler for \"/management/v1/configureddevices\" to getConfiguredDevices\n");
+    SLOG_INFO_PRINTF("REGISTER handler for \"/management/v1/configureddevices\" to _getConfiguredDevices\n");
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
     // setup webpages
-    _server_tcp->serveStatic("/setup", SPIFFS, "/www/setup.html");
+    _server_tcp->serveStatic("/setup", SPIFFS, "/setup.html");
     _server_tcp->serveStatic(_settings_file, SPIFFS, _settings_file);
-    _server_tcp->serveStatic("/js", SPIFFS, "/www/js/").setCacheControl("max-age=3600");
-    _server_tcp->serveStatic("/css", SPIFFS, "/www/css/").setCacheControl("max-age=3600");
+    _server_tcp->serveStatic("/", SPIFFS, "/").setCacheControl("max-age=3600");
+    //_server_tcp->serveStatic("/css", SPIFFS, "/www/css/").setCacheControl("max-age=3600");
 
-    SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to readJson\n");
+    SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
+
+    SLOG_INFO_PRINTF("REGISTER handler for \"/links\" to _getLinks\n");
     _server_tcp->on("/links", HTTP_GET, LHF(_getLinks));
+
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler("/jsondata", [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {
     SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
@@ -179,15 +182,6 @@ void AlpacaServer::_registerCallbacks()
         _reset_request = true;
         request->send(200,"application/json","{\"activated\":true}");
         DBG_END; });
-
-    _server_tcp->on("/delete_settings", HTTP_GET, [this](AsyncWebServerRequest *request)
-                    {
-        SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
-        DBG_REQ          
-        SPIFFS.remove(_settings_file);        
-        request->send(200,"application/json","{\"deleted\":true}");
-        SLOG_PRINTF(SLOG_INFO, "... END REQ (%s)\n", request->url().c_str());                    
-        DBG_END });
 }
 
 void AlpacaServer::_getApiVersions(AsyncWebServerRequest *request)
@@ -196,7 +190,7 @@ void AlpacaServer::_getApiVersions(AsyncWebServerRequest *request)
     RspStatusClear(_mng_rsp_status);
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
-    // checkMngClientData(request, Spelling_t::kIgnoreCase);     
+    // checkMngClientData(request, Spelling_t::kIgnoreCase);
     Respond(request, _mng_client_id, _mng_rsp_status, ALPACA_INTERFACE_VERSION, JsonValue_t::kAsPlainStringValue);
     DBG_END
 }
@@ -208,7 +202,7 @@ void AlpacaServer::_getDescription(AsyncWebServerRequest *request)
     RspStatusClear(_mng_rsp_status);
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
-    // checkMngClientData(request, Spelling_t::kIgnoreCase); 
+    // checkMngClientData(request, Spelling_t::kIgnoreCase);
     char mng_description[1024] = {0};
     snprintf(mng_description, sizeof(mng_description),
              "{\"ServerName\":\"%s\",\"Manufacturer\":\"%s\",\"ManufacturerVersion\":\"%s\",\"Location\":\"%s\"}",
@@ -228,7 +222,7 @@ void AlpacaServer::_getConfiguredDevices(AsyncWebServerRequest *request)
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
 
-    // checkMngClientData(request, Spelling_t::kIgnoreCase); 
+    // checkMngClientData(request, Spelling_t::kIgnoreCase);
 
     strcat(value, "[");
     for (int i = 0; i < _n_devices; i++)
@@ -548,7 +542,7 @@ void AlpacaServer::_readJson(JsonObject &root)
     _serial_log = (root["SERIAL_log"] | 1) == 0 ? false : true;
 
     SLOG_PRINTF(SLOG_INFO, "... END _mng_server_name=%s _port_tcp=%d _port_udp=%d _syslog_host=%s _log_level=%d _serial_log=%s\n",
-                _mng_server_name.c_str(), _port_tcp, _port_udp, _syslog_host.c_str(), _log_level, _serial_log==true?"true":"false");
+                _mng_server_name.c_str(), _port_tcp, _port_udp, _syslog_host.c_str(), _log_level, _serial_log == true ? "true" : "false");
 }
 
 void AlpacaServer::_writeJson(JsonObject &root)
@@ -562,7 +556,7 @@ void AlpacaServer::_writeJson(JsonObject &root)
     root["SYSLOG_host"] = _syslog_host;
     root["LOG_level"] = _log_level;
     root["SERIAL_log"] = _serial_log ? 1 : 0;
-    
+
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }
 
@@ -648,7 +642,7 @@ bool AlpacaServer::CheckMngClientData(AsyncWebServerRequest *req, Spelling_t spe
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
 
-    try 
+    try
     {
         if (GetParam(req, "ClientID", _mng_client_id.client_id, spelling) == false)
             ThrowRspStatusClientIDNotFound(req, _mng_rsp_status);

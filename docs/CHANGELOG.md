@@ -33,3 +33,5 @@
 6. Test and corect optional Alpaca Services with focuser
 7. Support focuser optional URL's
 8. Support services without connection
+9. /www/setup.html moved to /setup.html
+10. /www/* moved to /
