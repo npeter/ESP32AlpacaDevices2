@@ -154,6 +154,7 @@ void AlpacaServer::_registerCallbacks()
     SLOG_INFO_PRINTF("REGISTER handler for \"/links\" to _getLinks\n");
     _server_tcp->on("/links", HTTP_GET, LHF(_getLinks));
 
+    // jsonhandler
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler("/jsondata", [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {
     SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
@@ -165,6 +166,7 @@ void AlpacaServer::_registerCallbacks()
         DBG_END });
     _server_tcp->addHandler(jsonhandler);
 
+    // /save_settings  handler
     _server_tcp->on("/save_settings", HTTP_GET, [this](AsyncWebServerRequest *request)
                     {
         SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());               
@@ -175,6 +177,7 @@ void AlpacaServer::_registerCallbacks()
         SLOG_PRINTF(SLOG_INFO, "... END REQ (%s)\n", request->url().c_str());                    
         DBG_END });
 
+    // /reset handler
     _server_tcp->on("/reset", HTTP_GET, [this](AsyncWebServerRequest *request)
                     {
         SLOG_PRINTF(SLOG_INFO,"BEGIN REQ (%s) ... RESET\n", request->url().c_str());
