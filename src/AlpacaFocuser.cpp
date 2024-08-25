@@ -54,7 +54,7 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move", false);
 
 #ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
-    this->createCallBackUrl(LHF(_alpacaGetAdminPage), HTTP_GET, FOCUSER_ADMIN_URL);
+    this->createCallBackUrl(LHF(_alpacaGetConfigPage), HTTP_GET, FOCUSER_CONFIG_URL);
     this->createCallBackUrl(LHF(_alpacaGetTestbenchPage), HTTP_GET, FOCUSER_TESTBENCH_URL);
     this->createCallBackUrl(LHF(_alpacaGeStatePage), HTTP_GET, FOCUSER_STATES_URL);
 #endif

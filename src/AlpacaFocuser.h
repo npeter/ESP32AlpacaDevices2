@@ -10,7 +10,8 @@
 #include "AlpacaDevice.h"
 
 #ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
-#define FOCUSER_ADMIN_URL "/focuser_admin"
+#define FOCUSER_CONFIG_URL "/focuser_config"
+#define FOCUSER_CONFIG_URL "/focuser_config_form"
 #define FOCUSER_TESTBENCH_URL "/focuser_testbench"
 #define FOCUSER_STATES_URL "/focuser_states"
 #endif
@@ -23,7 +24,7 @@ private:
 private:
 #ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
     void _alpacaGetPage(AsyncWebServerRequest *request, const char* const page);
-    void _alpacaGetAdminPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_ADMIN_URL); };
+    void _alpacaGetConfigPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_CONFIG_URL); };
     void _alpacaGetTestbenchPage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_TESTBENCH_URL); };
     void _alpacaGeStatePage(AsyncWebServerRequest *request) { _alpacaGetPage(request, FOCUSER_STATES_URL); };
 #endif
