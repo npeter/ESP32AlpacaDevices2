@@ -90,7 +90,6 @@ const char esp32_alpaca_device_library_version[] = "2.1.0";
 // #define ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
 // #define ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
 // #define ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
-#define ALPACA_FOCUSER_OPTIONAL_PAGES // support optional URL's
 
 // include user config
 #include "UserConfig.h"

@@ -9,15 +9,6 @@
 #pragma once
 #include "AlpacaDevice.h"
 
-// #ifdef ALPACA_FOCUSER_OPTIONAL_PAGES
-// #define FOCUSER_CONFIG_URL "/focuser_config"
-// #define FOCUSER_CONFIG_FORM_URL "/focuser_config_form"
-// #define FOCUSER_CONFIG_SUBMIT "/focuser_config_submit"
-// #define FOCUSER_CONFIG_SUBMIT_AND_SAVE "/focuser_config_submit_and_save"
-// #define FOCUSER_TESTBENCH_URL "/focuser_testbench"
-// #define FOCUSER_STATES_URL "/focuser_states"
-// #endif
-
 class AlpacaFocuser : public AlpacaDevice
 {
 
