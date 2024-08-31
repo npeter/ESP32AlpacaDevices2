@@ -237,7 +237,7 @@ void AlpacaFocuser::_alpacaPutHalt(AsyncWebServerRequest *request)
     DBG_FOCUSER_PUT_HALT;
     _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
-    uint32_t id = 0;
+    //uint32_t id = 0;
 
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
