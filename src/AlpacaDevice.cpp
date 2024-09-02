@@ -444,8 +444,10 @@ int32_t AlpacaDevice::checkClientDataAndConnection(AsyncWebServerRequest *reques
         bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, spelling);
         bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, spelling);
 
-        if (get_client_id && client_id > 0)
-            client_idx = getClientIdxByClientID(client_id);
+        if ( check_connection) {
+            if (get_client_id && client_id > 0)
+                client_idx = getClientIdxByClientID(client_id);
+        }
 
         _clients[client_idx].client_id = (client_id >= 0) ? (uint32_t)client_id : 0;
         _clients[client_idx].client_transaction_id = (client_transaction_id >= 0) ? (uint32_t)client_transaction_id : 0;
