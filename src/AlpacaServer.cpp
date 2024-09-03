@@ -146,7 +146,6 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->serveStatic("/setup", SPIFFS, "/setup.html");
     _server_tcp->serveStatic(_settings_file, SPIFFS, _settings_file);
     _server_tcp->serveStatic("/", SPIFFS, "/").setCacheControl("max-age=3600");
-    //_server_tcp->serveStatic("/css", SPIFFS, "/www/css/").setCacheControl("max-age=3600");
 
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
