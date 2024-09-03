@@ -63,7 +63,7 @@ protected:
     void AlpacaGetSupportedActions(AsyncWebServerRequest *request);
 
     // helpers
-    int32_t checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &clientIdx, Spelling_t spelling, bool check_connection = true );
+    int32_t checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &clientIdx, Spelling_t spelling);
     uint32_t getClientIdxByClientID(uint32_t clientID);
 
 public:

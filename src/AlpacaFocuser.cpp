@@ -237,7 +237,7 @@ void AlpacaFocuser::_alpacaPutHalt(AsyncWebServerRequest *request)
     DBG_FOCUSER_PUT_HALT;
     _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
-    //uint32_t id = 0;
+    // uint32_t id = 0;
 
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
@@ -286,7 +286,8 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
 
     try
     {
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict, false);
+        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0 && _clients[client_idx].client_id != ALPACA_CONNECTION_LESS_CLIENT_ID)
+            throw(&_rsp_status);
 
         if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
