@@ -21,7 +21,8 @@ protected:
     int32_t _device_interface_version = 0; // device type specific interface version
     char _device_uid[65] = "";             // unique device id
     char _device_description[129] = "";    // device description - set by config; init with default from specific device
-    char _device_url[129] = "";            // /api/v1/<deviceType>/<deviceNumber>
+    char _device_url[129] = "";            // /api/v1/<deviceType>/<deviceNumber>/setup
+
     int8_t _device_number = -1;            // A0,... for each device_type
     char _device_name[33] = "";            // device name - set by config; init with <deviceType>-<deviceNumber>
 

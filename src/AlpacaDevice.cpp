@@ -42,7 +42,7 @@ void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMeth
 void AlpacaDevice::_setSetupPage()
 {
     char url[64];
-    snprintf(url, sizeof(url), kAlpacaDeviceCommand, _device_type, _device_number, "jsondata");
+    snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "jsondata"); // TODO
     // setup json get handler
     this->createCallBack(LHF(_getJsondata), HTTP_GET, "jsondata", false);
     // setup json post handler
@@ -87,7 +87,7 @@ void AlpacaDevice::RegisterCallbacks()
 void AlpacaDevice::SetDeviceNumber(int8_t device_number)
 {
     _device_number = device_number;
-    snprintf(_device_url, sizeof(_device_url), kAlpacaDeviceCommand, _device_type, _device_number, "setup");
+    snprintf(_device_url, sizeof(_device_url), kAlpacaDeviceSetup, _device_type, _device_number, "setup");  // TODO
     snprintf(_device_name, sizeof(_device_name), "%s-%i", _device_type, _device_number);
     snprintf(_device_uid, sizeof(_device_uid), "%s-%s%02X", _device_type, _alpaca_server->GetUID(), _device_number);
 }

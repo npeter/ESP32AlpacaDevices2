@@ -21,7 +21,9 @@
 #include "AlpacaDebug.h"
 #include "AlpacaConfig.h"
 
-const char kAlpacaDeviceCommand[] = "/api/v1/%s/%d/%s"; // device_type, device_number, command
+const char kAlpacaDeviceCommand[] = "/api/v1/%s/%d/%s"; // <device_type>, <device_number>, <command>
+const char kAlpacaDeviceSetup[] = "/setup/v1/%s/%d/%s"; // device_type, device_number, command
+
 const char kAlpacaJsonType[] = "application/json";
 const uint32_t kAlpacaDiscoveryLength = 64;
 const char kAlpacaDiscoveryHeader[] = "alpacadiscovery";

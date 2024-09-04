@@ -30,9 +30,10 @@
 3. Ajax test 
 4. createCallBackUrl() added
 5. Ajax test removed 
-6. Test and corect optional Alpaca Services with focuser
+6. Test and correct optional Alpaca Services with focuser
 7. Support focuser optional URL's
 8. Support services without connection
 9. /www/setup.html moved to /setup.html
 10. /www/* moved to /
 11. Include fw-version in AlpacaGetDriverVersion service
+12. Correct device setup link
