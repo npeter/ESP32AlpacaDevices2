@@ -17,7 +17,7 @@ AlpacaCoverCalibrator::AlpacaCoverCalibrator()
     strlcpy(_device_type, ALPACA_COVER_CALIBRATOR_DEVICE_TYPE, sizeof(_device_type));
     strlcpy(_device_description, ALPACA_COVER_CALIBRATOR_DESCRIPTION, sizeof(_device_description));
     strlcpy(_driver_info, ALPACA_COVER_CALIBRATOR_DRIVER_INFO, sizeof(_driver_info));
-    strlcpy(_device_and_driver_version, ALPACA_COVER_CALIBRATOR_DRIVER_VERSION, sizeof(_device_and_driver_version));
+    strlcpy(_device_and_driver_version, esp32_alpaca_device_library_version, sizeof(_device_and_driver_version));
     _device_interface_version = ALPACA_COVER_CALIBRATOR_INTERFACE_VERSION;
 
     _brightness = 0;
@@ -25,7 +25,7 @@ AlpacaCoverCalibrator::AlpacaCoverCalibrator()
 
 void AlpacaCoverCalibrator::Begin()
 {
-    snprintf(_device_and_driver_version, sizeof(_device_and_driver_version), "%s/%s", _getFirmwareVersion(), ALPACA_COVER_CALIBRATOR_DRIVER_VERSION);
+    snprintf(_device_and_driver_version, sizeof(_device_and_driver_version), "%s/%s", _getFirmwareVersion(), esp32_alpaca_device_library_version);
     AlpacaDevice::Begin();
 }
 

@@ -13,13 +13,13 @@ AlpacaFocuser::AlpacaFocuser()
     strlcpy(_device_type, ALPACA_FOCUSER_DEVICE_TYPE, sizeof(_device_type));
     strlcpy(_device_description, ALPACA_FOCUSER_DESCRIPTION, sizeof(_device_description));
     strlcpy(_driver_info, ALPACA_FOCUSER_DRIVER_INFO, sizeof(_driver_info));
-    strlcpy(_device_and_driver_version, ALPACA_FOCUSER_DRIVER_VERSION, sizeof(_device_and_driver_version));
+    strlcpy(_device_and_driver_version, esp32_alpaca_device_library_version, sizeof(_device_and_driver_version));
     _device_interface_version = ALPACA_FOCUSER_INTERFACE_VERSION;
 }
 
 void AlpacaFocuser::Begin()
 {
-    snprintf(_device_and_driver_version, sizeof(_device_and_driver_version), "%s/%s", _getFirmwareVersion(), ALPACA_FOCUSER_DRIVER_VERSION);
+    snprintf(_device_and_driver_version, sizeof(_device_and_driver_version), "%s/%s", _getFirmwareVersion(), esp32_alpaca_device_library_version);
     AlpacaDevice::Begin();
 }
 
