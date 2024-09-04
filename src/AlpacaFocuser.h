@@ -43,6 +43,7 @@ private:
     virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size)=0;
 #endif
 
+    virtual const char* const _getFirmwareVersion() { return "-"; };
     virtual const bool _putTempComp(bool temp_comp) = 0;
     virtual const bool _putHalt() = 0;
     virtual const bool _putMove(int32_t position) = 0;

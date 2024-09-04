@@ -35,3 +35,4 @@
 8. Support services without connection
 9. /www/setup.html moved to /setup.html
 10. /www/* moved to /
+11. Include fw-version in AlpacaGetDriverVersion service

@@ -179,7 +179,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_device_type, ALPACA_OBSERVING_CONDITIONS_DEVICE_TYPE, sizeof(_device_type));
     strlcpy(_device_description, ALPACA_OBSERVING_CONDITIONS_DESCRIPTION, sizeof(_device_description));
     strlcpy(_driver_info, ALPACA_OBSERVING_CONDITIONS_DRIVER_INFO, sizeof(_driver_info));
-    strlcpy(_driver_version, ALPACA_OBSERVING_CONDITIONS_DRIVER_VERSION, sizeof(_driver_version));
+    strlcpy(_device_and_driver_version, ALPACA_OBSERVING_CONDITIONS_DRIVER_VERSION, sizeof(_device_and_driver_version));
     _device_interface_version = ALPACA_OBSERVING_CONDITIONS_INTERFACE_VERSION;
 
     for (int i = 0; i < (int)OCSensorIdx_t::kOcMaxSensorIdx; i++)
@@ -218,6 +218,12 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcWindDirectionSensorIdx].description, "WindDirection  Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcWindGuestSensorIdx].description, "WindGuest  Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcWindSpeedSensorIdx].description, "windSpeed  Description", kMaxSensorDescription);
+}
+
+void AlpacaObservingConditions::Begin()
+{
+    snprintf(_device_and_driver_version, sizeof(_device_and_driver_version), "%s/%s", _getFirmwareVersion(), ALPACA_OBSERVING_CONDITIONS_DRIVER_VERSION);
+    AlpacaDevice::Begin();
 }
 
 void AlpacaObservingConditions::RegisterCallbacks()

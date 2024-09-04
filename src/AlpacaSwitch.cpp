@@ -16,7 +16,7 @@ AlpacaSwitch::AlpacaSwitch(uint32_t num_of_switch_devices)
     strlcpy(_device_type, ALPACA_SWITCH_DEVICE_TYPE, sizeof(_device_type));
     strlcpy(_device_description, ALPACA_SWITCH_DESCRIPTION, sizeof(_device_description));
     strlcpy(_driver_info, ALPACA_SWITCH_DRIVER_INFO, sizeof(_driver_info));
-    strlcpy(_driver_version, ALPACA_SWITCH_DRIVER_VERSION, sizeof(_driver_version));
+    strlcpy(_device_and_driver_version, ALPACA_SWITCH_DRIVER_VERSION, sizeof(_device_and_driver_version));
     _device_interface_version = ALPACA_SWITCH_INTERFACE_VERSION;
 
     //_max_switch_devices = kSwitchMaxSwitchDevices;
@@ -34,6 +34,7 @@ AlpacaSwitch::AlpacaSwitch(uint32_t num_of_switch_devices)
 
 void AlpacaSwitch::Begin()
 {
+    snprintf(_device_and_driver_version, sizeof(_device_and_driver_version), "%s/%s", _getFirmwareVersion(), ALPACA_SWITCH_DRIVER_VERSION);    
     AlpacaDevice::Begin();
 }
 

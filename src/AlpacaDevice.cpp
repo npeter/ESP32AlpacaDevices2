@@ -295,10 +295,10 @@ void AlpacaDevice::AlpacaGetDriverInfo(AsyncWebServerRequest *request)
 };
 void AlpacaDevice::AlpacaGetDriverVersion(AsyncWebServerRequest *request)
 {
-    DBG_DEVICE_GET_DRIVER_VERSION
+    DBG_DEVICE_GET_DRIVER_VERSION     
     _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _driver_version, JsonValue_t::kAsJsonStringValue);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_and_driver_version, JsonValue_t::kAsJsonStringValue);
     DBG_END
 };
 void AlpacaDevice::AlpacaGetInterfaceVersion(AsyncWebServerRequest *request)

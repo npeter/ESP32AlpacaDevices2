@@ -53,6 +53,7 @@ private:
     const double _boolValueToDoubleValue(uint32_t id, bool bool_value) { return (bool_value ? _p_switch_devices[id].max_value : _p_switch_devices[id].min_value); };
 
     // virtual function 
+    virtual const char* const _getFirmwareVersion() { return "-"; };    
     virtual const bool _writeSwitchValue(uint32_t id, double value) = 0;
 
 protected:

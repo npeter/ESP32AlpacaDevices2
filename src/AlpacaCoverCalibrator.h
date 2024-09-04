@@ -60,6 +60,7 @@ private:
   void AlpacaPutCommandString(AsyncWebServerRequest *request);
 #endif
 
+  virtual const char* const _getFirmwareVersion() { return "-"; };
   void _alpacaGetBrightness(AsyncWebServerRequest *request);
   void _alpacaGetCalibratorState(AsyncWebServerRequest *request);
   void _alpacaGetCoverState(AsyncWebServerRequest *request);

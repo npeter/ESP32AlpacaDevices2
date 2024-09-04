@@ -71,13 +71,14 @@ private:
   const bool _getSensorIdxByName(const char *sensor_name, OCSensorIdx_t &sensor_idx);
 
   // virtual instanc specific methods
+  virtual const char* const _getFirmwareVersion() { return "-"; };  
   virtual void _putRefreshRequest() = 0;  
   virtual const bool _putAveragePeriodRequest(double average_period) = 0;
 
 protected:
   // Interface for specific implementation
   AlpacaObservingConditions();
-  void Begin() { AlpacaDevice::Begin(); }
+  void Begin();
   void RegisterCallbacks();
   void Loop() { ; } // empty
 

@@ -25,7 +25,7 @@ protected:
     int8_t _device_number = -1;            // A0,... for each device_type
     char _device_name[33] = "";            // device name - set by config; init with <deviceType>-<deviceNumber>
 
-    char _driver_version[16] = "";
+    char _device_and_driver_version[32] = "";
     char _driver_info[64] = "";
 
     char _supported_actions[512] = "[]";
