@@ -226,6 +226,22 @@ public:
         throw(&rsp_status);
     }
 
+    void ThrowRspStatusParameterInvalidValue(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, const char *paraName, bool paraValue)
+    {
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
+        rsp_status.http_status = HttpStatus_t::kPassed;
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%s invalid", req->url().c_str(), paraName, paraValue?"true":"false");
+        throw(&rsp_status);
+    }
+
+    void ThrowRspStatusParameterInvalidValue(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, const char *paraName, double paraValue)
+    {
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
+        rsp_status.http_status = HttpStatus_t::kPassed;
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%f invalid", req->url().c_str(), paraName, paraValue);
+        throw(&rsp_status);
+    }
+
     void ThrowRspStatusCommandStringInvalid(AsyncWebServerRequest *req, AlpacaRspStatus_t &rsp_status, const char *command_str)
     {
         rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;

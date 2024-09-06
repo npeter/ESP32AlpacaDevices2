@@ -37,3 +37,5 @@
 10. /www/* moved to /
 11. Include fw-version in AlpacaGetDriverVersion service
 12. Correct device setup link
+13. New Exception: ThrowRspStatusParameterInvalidValue(... bool) added
+14. New Exception: ThrowRspStatusParameterInvalidValue(... double) added

@@ -224,7 +224,8 @@ void AlpacaFocuser::_alpacaPutTempComp(AsyncWebServerRequest *request)
         if (_alpaca_server->GetParam(request, "TempComp", temp_comp, Spelling_t::kStrict) == false)
             _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "TempComp");
 
-        _putTempComp(temp_comp);
+        if (!_putTempComp(temp_comp))
+            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, "TempComp", temp_comp);
     }
     catch (AlpacaRspStatus_t *rspStatus)
     { // empty
