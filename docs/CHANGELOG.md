@@ -24,7 +24,7 @@
     - **Conform Universal 3.0.0 (Build 29642.2251685)**
     - **N.I.N.A 3.1 HF1**
 
-## 2.1.1 2024-07-26 in work
+## 2.1.1 2024-07-26 Adaption for MoFo4
 1. ALPACA optional focuser services implemented
 2. SetResetRequestAdded
 3. Ajax test 
@@ -39,3 +39,8 @@
 12. Correct device setup link
 13. New Exception: ThrowRspStatusParameterInvalidValue(... bool) added
 14. New Exception: ThrowRspStatusParameterInvalidValue(... double) added
+
+## 2.2.0 2024-09-09 Baseline after Adaption for MoFo4 1.0.0
+
+## 2.2.1 2024-09-09 New workin branch created
+
