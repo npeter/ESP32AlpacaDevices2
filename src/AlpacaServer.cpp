@@ -143,9 +143,12 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
     // setup webpages
-    _server_tcp->serveStatic("/setup", SPIFFS, "/setup.html");
+    _server_tcp->serveStatic("/setup.html", SPIFFS, "/setup.html");    
+    _server_tcp->serveStatic("/focuser_setup.html", SPIFFS, "/focuser_setup.html");    
     _server_tcp->serveStatic(_settings_file, SPIFFS, _settings_file);
-    _server_tcp->serveStatic("/", SPIFFS, "/").setCacheControl("max-age=3600");
+    _server_tcp->serveStatic("/www/js", SPIFFS, "/www/js/");
+    _server_tcp->serveStatic("/www/css", SPIFFS, "/www/css/");    
+    //_server_tcp->serveStatic("/setup", SPIFFS, "/setup.html").setCacheControl("max-age=3600");
 
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
