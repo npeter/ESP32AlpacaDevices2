@@ -43,4 +43,8 @@
 ## 2.2.0 2024-09-09 Baseline after Adaption for MoFo4 1.0.0
 
 ## 2.2.1 2024-09-09 New workin branch created
+1. ServeStaticSPIFFS() added
+2. /setup not found solved
+3. Refactor _registerCallbacks()
+
 

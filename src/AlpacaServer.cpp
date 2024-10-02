@@ -131,6 +131,13 @@ void AlpacaServer::AddDevice(AlpacaDevice *device)
     SLOG_INFO_PRINTF("ADD deviceType=%s deviceNumber=%d\n", deviceType, deviceNumber);
 }
 
+
+AsyncStaticWebHandler&  AlpacaServer::ServeStaticSPIFFS(const char* uri, const char* path)
+{
+    SLOG_INFO_PRINTF("Serve static SPIFF uri=%s path=%s\n", uri, path);    
+    return _server_tcp->serveStatic(uri, SPIFFS, path);    
+}
+
 // register callbacks for REST API
 void AlpacaServer::_registerCallbacks()
 {
@@ -143,12 +150,12 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
     // setup webpages
-    _server_tcp->serveStatic("/setup.html", SPIFFS, "/setup.html");    
-    _server_tcp->serveStatic("/focuser_setup.html", SPIFFS, "/focuser_setup.html");    
-    _server_tcp->serveStatic(_settings_file, SPIFFS, _settings_file);
-    _server_tcp->serveStatic("/www/js", SPIFFS, "/www/js/");
-    _server_tcp->serveStatic("/www/css", SPIFFS, "/www/css/");    
-    //_server_tcp->serveStatic("/setup", SPIFFS, "/setup.html").setCacheControl("max-age=3600");
+    ServeStaticSPIFFS("/setup.html", "/setup");    
+    ServeStaticSPIFFS("/focuser_setup.html", "/focuser_setup.html");    
+    ServeStaticSPIFFS(_settings_file, _settings_file);
+    ServeStaticSPIFFS("/www/js", "/www/js/");
+    ServeStaticSPIFFS("/www/css", "/www/css/");    
+    ServeStaticSPIFFS("/setup.html", "/setup.html").setCacheControl("max-age=3600");
 
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
@@ -157,6 +164,7 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->on("/links", HTTP_GET, LHF(_getLinks));
 
     // jsonhandler
+    SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\"\n");         
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler("/jsondata", [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {
     SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
@@ -167,8 +175,10 @@ void AlpacaServer::_registerCallbacks()
         SLOG_PRINTF(SLOG_INFO, "... END REQ (%s)\n", request->url().c_str());    
         DBG_END });
     _server_tcp->addHandler(jsonhandler);
+    
 
     // /save_settings  handler
+    SLOG_INFO_PRINTF("REGISTER handler for \"/save_settings\"\n");        
     _server_tcp->on("/save_settings", HTTP_GET, [this](AsyncWebServerRequest *request)
                     {
         SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());               
@@ -180,6 +190,7 @@ void AlpacaServer::_registerCallbacks()
         DBG_END });
 
     // /reset handler
+    SLOG_INFO_PRINTF("REGISTER handler for \"/reset\"\n");           
     _server_tcp->on("/reset", HTTP_GET, [this](AsyncWebServerRequest *request)
                     {
         SLOG_PRINTF(SLOG_INFO,"BEGIN REQ (%s) ... RESET\n", request->url().c_str());

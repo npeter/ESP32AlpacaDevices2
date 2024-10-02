@@ -160,6 +160,8 @@ public:
     bool SaveSettings();
     void OnAlpacaDiscovery(AsyncUDPPacket &udpPacket);
     AsyncWebServer *getServerTCP() { return _server_tcp; }
+    AsyncStaticWebHandler&  ServeStaticSPIFFS(const char* uri, const char* path);
+
     const char *GetUID() { return _uid; }
     const String GetSyslogHost() { return _syslog_host; };
     const uint16_t GetLogLvl() { return _log_level; };

@@ -31,7 +31,7 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
     _alpaca_server->getServerTCP()->on(url, type, fn);
 }
 
-// create url and register callback for REST API
+// register callback for REST API
 void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[])
 {
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\"\n", url);
@@ -57,10 +57,7 @@ void AlpacaDevice::_setSetupPage()
         DBG_END });
 
     _alpaca_server->getServerTCP()->addHandler(jsonhandler);
-
-    // serve static setup page
-    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /setup.html\n", _device_url);
-    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/setup.html");
+    _alpaca_server->ServeStaticSPIFFS(_device_url, "/setup.html");    
 }
 
 void AlpacaDevice::_addAction(const char *const action)
