@@ -20,8 +20,9 @@ void AlpacaDevice::Begin()
     _alpaca_server->RspStatusClear(_rsp_status);
 }
 
-// create url and register callback for REST API
-void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[], bool devicemethod)
+// create url from device <command> and register callback <fn> for REST API
+// /api/v1/<_device_type>/<_device_number>/<command>
+void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[])
 {
     char url[64];
     snprintf(url, sizeof(url), kAlpacaDeviceCommand, _device_type, _device_number, command);
@@ -31,7 +32,8 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
     _alpaca_server->getServerTCP()->on(url, type, fn);
 }
 
-// create url and register callback for REST API
+// create <url> and register callback <fn> for REST API
+// <url> 
 void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[])
 {
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\"\n", url);
@@ -42,9 +44,11 @@ void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMeth
 void AlpacaDevice::_setSetupPage()
 {
     char url[64];
+    // /api/v1/<_device_type>/<_device_number>/jsondata
     snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "jsondata"); // TODO
     // setup json get handler
-    this->createCallBack(LHF(_getJsondata), HTTP_GET, "jsondata", false);
+    this->createCallBack(LHF(_getJsondata), HTTP_GET, "jsondata");
+    
     // setup json post handler
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler(url, [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {    
@@ -59,8 +63,8 @@ void AlpacaDevice::_setSetupPage()
     _alpaca_server->getServerTCP()->addHandler(jsonhandler);
 
     // serve static setup page
-    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /setup.html\n", _device_url);
-    _alpaca_server->getServerTCP()->serveStatic(_device_url, LittleFS, "/setup.html");
+    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /www/setup.html\n", _device_url);
+    _alpaca_server->getServerTCP()->serveStatic(_device_url, LittleFS, "/www/setup.html");
 }
 
 void AlpacaDevice::_addAction(const char *const action)
@@ -72,14 +76,14 @@ void AlpacaDevice::_addAction(const char *const action)
 
 void AlpacaDevice::RegisterCallbacks()
 {
-    this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected", false);
-    this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected", false);
-    this->createCallBack(LHF(AlpacaGetDescription), HTTP_GET, "description", false);
-    this->createCallBack(LHF(AlpacaGetDriverInfo), HTTP_GET, "driverinfo", false);
-    this->createCallBack(LHF(AlpacaGetDriverVersion), HTTP_GET, "driverversion", false);
-    this->createCallBack(LHF(AlpacaGetInterfaceVersion), HTTP_GET, "interfaceversion", false);
-    this->createCallBack(LHF(AlpacaGetName), HTTP_GET, "name", false);
-    this->createCallBack(LHF(AlpacaGetSupportedActions), HTTP_GET, "supportedactions", false);
+    this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected");
+    this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected");
+    this->createCallBack(LHF(AlpacaGetDescription), HTTP_GET, "description");
+    this->createCallBack(LHF(AlpacaGetDriverInfo), HTTP_GET, "driverinfo");
+    this->createCallBack(LHF(AlpacaGetDriverVersion), HTTP_GET, "driverversion");
+    this->createCallBack(LHF(AlpacaGetInterfaceVersion), HTTP_GET, "interfaceversion");
+    this->createCallBack(LHF(AlpacaGetName), HTTP_GET, "name");
+    this->createCallBack(LHF(AlpacaGetSupportedActions), HTTP_GET, "supportedactions");
 
     _setSetupPage();
 }
@@ -351,6 +355,7 @@ void AlpacaDevice::AlpacaWriteJson(JsonObject &root)
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END root=<%s>\n", _ser_json_);
 }
 
+// json get handler
 void AlpacaDevice::_getJsondata(AsyncWebServerRequest *request)
 {
     SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");

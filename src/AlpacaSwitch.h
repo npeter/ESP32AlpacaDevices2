@@ -15,7 +15,7 @@ const size_t kSwitchDescriptionSize = 128;
 
 struct SwitchDevice_t
 {
-    bool init_by_setup;  // init via web page / init Begin()
+    bool init_by_setup;  // init via setup web page / init with const values ... Begin()
     bool can_write;
     char name[kSwitchNameSize];
     char description[kSwitchDescriptionSize];

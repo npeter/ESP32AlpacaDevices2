@@ -56,7 +56,7 @@ My primary motivation was:
 ## Remarks
 - For this project "platformio" (https://platformio.org/) is used as development system
 <br><br>
-- Library dependencies:
+- Library dependencies: (TODO rework)
     - ESP32AlpacaDevices:
         - "bblanchon/ArduinoJson": "^7.0.2",
         - "me-no-dev/ESP Async WebServer": "^1.2.4",
@@ -65,9 +65,68 @@ My primary motivation was:
         Remark: https://github.com/ayushsharma82/ElegantOTA produces some chrashes inside AsyncTCP (to be investigated)
 
 <br><br>
-- Webpage data has to be stored in the SPIFF-Filesystem of the ESP32
+- Webpage data has to be stored in the LittleFS - Filesystem of the ESP32
     - platformio/Build Filesystem image
-    - platformio/Upload Filesystem Image
+
+        **Example:**<br>
+        Building FS image from 'data' directory to .pio\build\wemos_d1_mini32\littlefs.bin
+        /www/css/bootstrap.min.css.gz
+        /www/css/jquery-ui.min.css.gz
+        /www/css/theme.css
+        /www/js/bootstrap.min.js.gz
+        /www/js/jquery-ui.min.js.gz
+        /www/js/jquery.min.js.gz
+        /www/js/jsonFormer.jquery.js
+        /www/setup.html
+
+
+    - platformio/Upload Filesystem Image<br>
+        **Example:**<br>
+        Building in release mode<br>
+        Building FS image from 'data' directory to .pio\build\wemos_d1_mini32\littlefs.bin<br>
+        /www/css/bootstrap.min.css.gz        
+        /www/css/jquery-ui.min.css.gz<br>
+        /www/css/theme.css<br>
+        /www/js/bootstrap.min.js.gz<br>
+        /www/js/jquery-ui.min.js.gz<br>
+        /www/js/jquery.min.js.gz<br>
+        /www/js/jsonFormer.jquery.js<br>
+        /www/setup.html<br>
+        Looking for upload port...<br>
+        Auto-detected: COM5<br>
+        Uploading .pio\build\wemos_d1_mini32\littlefs.bin<br>
+        esptool.py v4.7.5<br>
+        Serial port COM5<br>
+        Connecting.......<br>
+        Chip is ESP32-D0WDQ6 (revision v1.0)<br>
+        Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None<br>
+        Crystal is 40MHz<br>
+        MAC: c8:c9:a3:cb:7c:d4<br>
+        Uploading stub...<br>
+        Running stub...<br>
+        Stub running...<br>
+        Changing baud rate to 460800<br>
+        Changed.<br>
+        Configuring flash size...<br>
+        Auto-detected Flash size: 4MB<br>
+        Flash will be erased from 0x00290000 to 0x003effff...<br>
+        Compressed 1441792 bytes to 152944...<br>
+        Writing at 0x00290000... (10 %)<br>
+        Writing at 0x002e7915... (20 %)<br>
+        Writing at 0x002ebc14... (30 %)<br>
+        Writing at 0x002f2968... (40 %)<br>
+        Writing at 0x002f6f46... (50 %)<br>
+        Writing at 0x002faf41... (60 %)<br>
+        Writing at 0x002fef3c... (70 %)<br>
+        Writing at 0x00302f37... (80 %)<br>
+        Writing at 0x00307639... (90 %)<br>
+        Writing at 0x0030b5f2... (100 %)<br>
+        Wrote 1441792 bytes (152944 compressed) at 0x00290000 in 9.5 seconds (effective 1214.9 kbit/s)...<br>
+        Hash of data verified.<br>
+        Leaving...<br>
+        Hard resetting via RTS pin...<br>
+ 
+
 <br><br>
 
 ## Usage

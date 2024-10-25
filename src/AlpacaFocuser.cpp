@@ -28,31 +28,31 @@ void AlpacaFocuser::RegisterCallbacks()
     AlpacaDevice::RegisterCallbacks();
 
 #ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
-    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
+    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action");
 #endif
 #ifdef ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
-    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
+    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind");
 #endif
 #ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
-    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
+    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool");
 #endif
 #ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
-    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
+    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring");
 #endif
 
-    this->createCallBack(LHF(_alpacaGetAbsolut), HTTP_GET, "absolute", false);
-    this->createCallBack(LHF(_alpacaGetIsMoving), HTTP_GET, "ismoving", false);
-    this->createCallBack(LHF(_alpacaGetMaxIncrement), HTTP_GET, "maxincrement", false);
-    this->createCallBack(LHF(_alpacaGetMaxStep), HTTP_GET, "maxstep", false);
-    this->createCallBack(LHF(_alpacaGetPosition), HTTP_GET, "position", false);
-    this->createCallBack(LHF(_alpacaGetStepSize), HTTP_GET, "stepsize", false);
-    this->createCallBack(LHF(_alpacaGetTempComp), HTTP_GET, "tempcomp", false);
-    this->createCallBack(LHF(_alpacaGetTempCompAvailable), HTTP_GET, "tempcompavailable", false);
-    this->createCallBack(LHF(_alpacaGetTemperature), HTTP_GET, "temperature", false);
+    this->createCallBack(LHF(_alpacaGetAbsolut), HTTP_GET, "absolute");
+    this->createCallBack(LHF(_alpacaGetIsMoving), HTTP_GET, "ismoving");
+    this->createCallBack(LHF(_alpacaGetMaxIncrement), HTTP_GET, "maxincrement");
+    this->createCallBack(LHF(_alpacaGetMaxStep), HTTP_GET, "maxstep");
+    this->createCallBack(LHF(_alpacaGetPosition), HTTP_GET, "position");
+    this->createCallBack(LHF(_alpacaGetStepSize), HTTP_GET, "stepsize");
+    this->createCallBack(LHF(_alpacaGetTempComp), HTTP_GET, "tempcomp");
+    this->createCallBack(LHF(_alpacaGetTempCompAvailable), HTTP_GET, "tempcompavailable");
+    this->createCallBack(LHF(_alpacaGetTemperature), HTTP_GET, "temperature");
 
-    this->createCallBack(LHF(_alpacaPutTempComp), HTTP_PUT, "tempcomp", false);
-    this->createCallBack(LHF(_alpacaPutHalt), HTTP_PUT, "halt", false);
-    this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move", false);
+    this->createCallBack(LHF(_alpacaPutTempComp), HTTP_PUT, "tempcomp");
+    this->createCallBack(LHF(_alpacaPutHalt), HTTP_PUT, "halt");
+    this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move");
 }
 
 void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)

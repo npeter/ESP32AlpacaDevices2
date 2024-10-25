@@ -43,5 +43,8 @@
 16. me-no-dev/ESPAsyncWebServer replaced by mathieucarbou/ESPAsyncWebServer byMathieu Carbou
 17. AsyncElegantOTA replaced by ElegantOTA
 18. library.json/dependencies reworked
-19. esp_read_mac(mac_adr, ESP_MAC_WIFI_STA); TODO
+19. esp_read_mac() replaced by esp_wifi_get_mac()
 20. Focusser pure virtual function missed TODO
+21. Test with current N.I.N.A version TODO
+22. Remove parameter devicemethode in CreateCallback()
+23. setup.html moved to /www/setup.html

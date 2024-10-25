@@ -9,6 +9,9 @@
             based on https://github.com/elenhinan/ESPAscomAlpacaServer
 **************************************************************************************************/
 #define ALPACA_VAR_DECLS // don't change
+#include <Arduino.h>
+#include <WiFi.h>
+#include <esp_wifi.h>
 #include "AlpacaServer.h"
 #include "AlpacaDevice.h"
 #ifdef ALPACA_ENABLE_OTA_UPDATE
@@ -46,9 +49,9 @@ AlpacaServer::AlpacaServer(const String mng_server_name,
     _mng_manufacture_version = mng_manufacture_version;
     _mng_location = mng_location;
 
-    // Get unique ID from wifi macadr.
-    uint8_t mac_adr[6] = {1,2,3,4,5,6}; // TODO
-    //esp_read_mac(mac_adr, ESP_MAC_WIFI_STA);
+    // Get unique ID from wifi macadr. Default 000000000000
+    uint8_t mac_adr[6] = {0}; 
+    esp_wifi_get_mac(WIFI_IF_STA, mac_adr);
     snprintf(_uid, sizeof(_uid), "%02X%02X%02X%02X%02X%02X", mac_adr[0], mac_adr[1], mac_adr[2], mac_adr[3], mac_adr[4], mac_adr[5]);
 }
 
@@ -143,7 +146,7 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
     // setup webpages
-    _server_tcp->serveStatic("/setup", LittleFS, "/setup.html");
+    _server_tcp->serveStatic("/setup", LittleFS, "/www/setup.html");
     _server_tcp->serveStatic(_settings_file, LittleFS, _settings_file);
     _server_tcp->serveStatic("/", LittleFS, "/").setCacheControl("max-age=3600");
 

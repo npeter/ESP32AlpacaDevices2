@@ -42,19 +42,19 @@ void AlpacaSwitch::RegisterCallbacks()
 {
     AlpacaDevice::RegisterCallbacks();
 
-    this->createCallBack(LHF(_alpacaGetMaxSwitch), HTTP_GET, "maxswitch", false);
-    this->createCallBack(LHF(_alpacaGetCanWrite), HTTP_GET, "canwrite", false);
-    this->createCallBack(LHF(_alpacaGetSwitch), HTTP_GET, "getswitch", false);
-    this->createCallBack(LHF(_alpacaGetSwitchDescription), HTTP_GET, "getswitchdescription", false);
-    this->createCallBack(LHF(_alpacaGetSwitchName), HTTP_GET, "getswitchname", false);
-    this->createCallBack(LHF(_alpacaGetSwitchValue), HTTP_GET, "getswitchvalue", false);
-    this->createCallBack(LHF(_alpacaGetMinSwitchValue), HTTP_GET, "minswitchvalue", false);
-    this->createCallBack(LHF(_alpacaGetMaxSwitchValue), HTTP_GET, "maxswitchvalue", false);
-    this->createCallBack(LHF(_alpacaGetSwitchStep), HTTP_GET, "switchstep", false);
+    this->createCallBack(LHF(_alpacaGetMaxSwitch), HTTP_GET, "maxswitch");
+    this->createCallBack(LHF(_alpacaGetCanWrite), HTTP_GET, "canwrite");
+    this->createCallBack(LHF(_alpacaGetSwitch), HTTP_GET, "getswitch");
+    this->createCallBack(LHF(_alpacaGetSwitchDescription), HTTP_GET, "getswitchdescription");
+    this->createCallBack(LHF(_alpacaGetSwitchName), HTTP_GET, "getswitchname");
+    this->createCallBack(LHF(_alpacaGetSwitchValue), HTTP_GET, "getswitchvalue");
+    this->createCallBack(LHF(_alpacaGetMinSwitchValue), HTTP_GET, "minswitchvalue");
+    this->createCallBack(LHF(_alpacaGetMaxSwitchValue), HTTP_GET, "maxswitchvalue");
+    this->createCallBack(LHF(_alpacaGetSwitchStep), HTTP_GET, "switchstep");
 
-    this->createCallBack(LHF(_alpacaPutSetSwitch), HTTP_GET, "setswitch", false);
-    this->createCallBack(LHF(_alpacaPutSetSwitchName), HTTP_GET, "setswitchname", false);
-    this->createCallBack(LHF(_alpacaPutSetSwitchValue), HTTP_GET, "setswitchvalue", false);
+    this->createCallBack(LHF(_alpacaPutSetSwitch), HTTP_GET, "setswitch");
+    this->createCallBack(LHF(_alpacaPutSetSwitchName), HTTP_GET, "setswitchname");
+    this->createCallBack(LHF(_alpacaPutSetSwitchValue), HTTP_GET, "setswitchvalue");
 }
 
 void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)

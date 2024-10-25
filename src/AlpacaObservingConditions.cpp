@@ -230,24 +230,24 @@ void AlpacaObservingConditions::RegisterCallbacks()
 {
     AlpacaDevice::RegisterCallbacks();
 
-    this->createCallBack(LHF(_alpacaGetAveragePeriod), HTTP_GET, "averageperiod", false);
-    this->createCallBack(LHF(_alpacaGetCloudCover), HTTP_GET, "cloudcover", false);
-    this->createCallBack(LHF(_alpacaGetDewPoint), HTTP_GET, "dewpoint", false);
-    this->createCallBack(LHF(_alpacaGetHumidity), HTTP_GET, "humidity", false);
-    this->createCallBack(LHF(_alpacaGetPressure), HTTP_GET, "pressure", false);
-    this->createCallBack(LHF(_alpacaGetRainRate), HTTP_GET, "rainrate", false);
-    this->createCallBack(LHF(_alpacaGetSkyBrightness), HTTP_GET, "skybrightness", false);
-    this->createCallBack(LHF(_alpacaGetSkyQuality), HTTP_GET, "skyquality", false);
-    this->createCallBack(LHF(_alpacaGetSkyTemperature), HTTP_GET, "skytemperature", false);
-    this->createCallBack(LHF(_alpacaGetStarFwhm), HTTP_GET, "starfwhm", false);
-    this->createCallBack(LHF(_alpacaGetTemperature), HTTP_GET, "temperature", false);
-    this->createCallBack(LHF(_alpacaGetWindDirection), HTTP_GET, "winddirection", false);
-    this->createCallBack(LHF(_alpacaGetWindGust), HTTP_GET, "windgust", false);
-    this->createCallBack(LHF(_alpacaGetWindSpeed), HTTP_GET, "windspeed", false);
-    this->createCallBack(LHF(_alpacaGetSensordescription), HTTP_GET, "sensordescription", false);
-    this->createCallBack(LHF(_alpacaGetTimeSinceLastUpdate), HTTP_GET, "timesincelastupdate", false);
-    this->createCallBack(LHF(_alpacaPutAveragePeriod), HTTP_PUT, "averageperiod", false);
-    this->createCallBack(LHF(_alpacaPutRefresh), HTTP_PUT, "refresh", false);
+    this->createCallBack(LHF(_alpacaGetAveragePeriod), HTTP_GET, "averageperiod");
+    this->createCallBack(LHF(_alpacaGetCloudCover), HTTP_GET, "cloudcover");
+    this->createCallBack(LHF(_alpacaGetDewPoint), HTTP_GET, "dewpoint");
+    this->createCallBack(LHF(_alpacaGetHumidity), HTTP_GET, "humidity");
+    this->createCallBack(LHF(_alpacaGetPressure), HTTP_GET, "pressure");
+    this->createCallBack(LHF(_alpacaGetRainRate), HTTP_GET, "rainrate");
+    this->createCallBack(LHF(_alpacaGetSkyBrightness), HTTP_GET, "skybrightness");
+    this->createCallBack(LHF(_alpacaGetSkyQuality), HTTP_GET, "skyquality");
+    this->createCallBack(LHF(_alpacaGetSkyTemperature), HTTP_GET, "skytemperature");
+    this->createCallBack(LHF(_alpacaGetStarFwhm), HTTP_GET, "starfwhm");
+    this->createCallBack(LHF(_alpacaGetTemperature), HTTP_GET, "temperature");
+    this->createCallBack(LHF(_alpacaGetWindDirection), HTTP_GET, "winddirection");
+    this->createCallBack(LHF(_alpacaGetWindGust), HTTP_GET, "windgust");
+    this->createCallBack(LHF(_alpacaGetWindSpeed), HTTP_GET, "windspeed");
+    this->createCallBack(LHF(_alpacaGetSensordescription), HTTP_GET, "sensordescription");
+    this->createCallBack(LHF(_alpacaGetTimeSinceLastUpdate), HTTP_GET, "timesincelastupdate");
+    this->createCallBack(LHF(_alpacaPutAveragePeriod), HTTP_PUT, "averageperiod");
+    this->createCallBack(LHF(_alpacaPutRefresh), HTTP_PUT, "refresh");
 };
 
 const bool AlpacaObservingConditions::SetSensorValueByIdx(OCSensorIdx_t idx, double value, uint32_t update_time_ms)

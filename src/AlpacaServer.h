@@ -111,7 +111,7 @@ private:
     uint16_t _port_udp;
     uint32_t _server_transaction_id = 0;
 
-    char _uid[13]; // from wifi mac
+    char _uid[13] = {0}; // from wifi mac
     AlpacaDevice *_device[kAlpacaMaxDevices];
     int _n_devices = 0;
 

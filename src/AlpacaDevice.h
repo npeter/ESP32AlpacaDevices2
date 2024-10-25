@@ -42,7 +42,7 @@ protected:
     virtual void _setSetupPage();
     void _getJsondata(AsyncWebServerRequest *request);
     void _putJsondata(AsyncWebServerRequest *request);
-    void createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[], bool deviceMethod = true);
+    void createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[]);
     void createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[]);
     void _addAction(const char *const action);
 

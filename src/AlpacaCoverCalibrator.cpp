@@ -33,21 +33,21 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
 {
     AlpacaDevice::RegisterCallbacks();
 
-    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action", false);
-    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind", false);
-    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool", false);
-    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring", false);
+    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action");
+    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind");
+    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool");
+    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring");
 
-    this->createCallBack(LHF(_alpacaGetBrightness), HTTP_GET, "brightness", false);
-    this->createCallBack(LHF(_alpacaGetCalibratorState), HTTP_GET, "calibratorstate", false);
-    this->createCallBack(LHF(_alpacaGetCoverState), HTTP_GET, "coverstate", false);
-    this->createCallBack(LHF(_alpacaGetMaxBrightness), HTTP_GET, "maxbrightness", false);
+    this->createCallBack(LHF(_alpacaGetBrightness), HTTP_GET, "brightness");
+    this->createCallBack(LHF(_alpacaGetCalibratorState), HTTP_GET, "calibratorstate");
+    this->createCallBack(LHF(_alpacaGetCoverState), HTTP_GET, "coverstate");
+    this->createCallBack(LHF(_alpacaGetMaxBrightness), HTTP_GET, "maxbrightness");
 
-    this->createCallBack(LHF(_alpacaPutCalibratorOff), HTTP_PUT, "calibratoroff", false);
-    this->createCallBack(LHF(_alpacaPutCalibratorOn), HTTP_PUT, "calibratoron", false);
-    this->createCallBack(LHF(_alpacaPutCloseCover), HTTP_PUT, "closecover", false);
-    this->createCallBack(LHF(_alpacaPutHaltCover), HTTP_PUT, "haltcover", false);
-    this->createCallBack(LHF(_alpacaPutOpenCover), HTTP_PUT, "opencover", false);
+    this->createCallBack(LHF(_alpacaPutCalibratorOff), HTTP_PUT, "calibratoroff");
+    this->createCallBack(LHF(_alpacaPutCalibratorOn), HTTP_PUT, "calibratoron");
+    this->createCallBack(LHF(_alpacaPutCloseCover), HTTP_PUT, "closecover");
+    this->createCallBack(LHF(_alpacaPutHaltCover), HTTP_PUT, "haltcover");
+    this->createCallBack(LHF(_alpacaPutOpenCover), HTTP_PUT, "opencover");
 }
 
 #ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
