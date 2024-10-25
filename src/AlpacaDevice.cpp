@@ -60,7 +60,7 @@ void AlpacaDevice::_setSetupPage()
 
     // serve static setup page
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to /setup.html\n", _device_url);
-    _alpaca_server->getServerTCP()->serveStatic(_device_url, SPIFFS, "/setup.html");
+    _alpaca_server->getServerTCP()->serveStatic(_device_url, LittleFS, "/setup.html");
 }
 
 void AlpacaDevice::_addAction(const char *const action)

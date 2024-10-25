@@ -39,3 +39,9 @@
 12. Correct device setup link
 13. New Exception: ThrowRspStatusParameterInvalidValue(... bool) added
 14. New Exception: ThrowRspStatusParameterInvalidValue(... double) added
+15. SPIFFS replaced by LittleFS
+16. me-no-dev/ESPAsyncWebServer replaced by mathieucarbou/ESPAsyncWebServer byMathieu Carbou
+17. AsyncElegantOTA replaced by ElegantOTA
+18. library.json/dependencies reworked
+19. esp_read_mac(mac_adr, ESP_MAC_WIFI_STA); TODO
+20. Focusser pure virtual function missed TODO

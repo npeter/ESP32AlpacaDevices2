@@ -12,7 +12,7 @@
 #include "AlpacaServer.h"
 #include "AlpacaDevice.h"
 #ifdef ALPACA_ENABLE_OTA_UPDATE
-#include "AsyncElegantOTA.h"
+#include "ElegantOTA.h"
 #endif
 
 // discovery package
@@ -47,21 +47,21 @@ AlpacaServer::AlpacaServer(const String mng_server_name,
     _mng_location = mng_location;
 
     // Get unique ID from wifi macadr.
-    uint8_t mac_adr[6];
-    esp_read_mac(mac_adr, ESP_MAC_WIFI_STA);
+    uint8_t mac_adr[6] = {1,2,3,4,5,6}; // TODO
+    //esp_read_mac(mac_adr, ESP_MAC_WIFI_STA);
     snprintf(_uid, sizeof(_uid), "%02X%02X%02X%02X%02X%02X", mac_adr[0], mac_adr[1], mac_adr[2], mac_adr[3], mac_adr[4], mac_adr[5]);
 }
 
 // initialize alpaca server
-void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_spiffs)
+void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_littlefs)
 {
     RspStatusClear(_mng_rsp_status);
     // Setup filesystem
-    if (mount_spiffs)
+    if (mount_littlefs)
     {
-        if (!SPIFFS.begin())
+        if (!LittleFS.begin())
         {
-            SLOG_ERROR_PRINTF("SPIFFS mounting error\n");
+            SLOG_ERROR_PRINTF("LittleFS mounting error\n");
         }
     }
 
@@ -88,7 +88,7 @@ void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_spiffs
 
     _registerCallbacks();
 #ifdef ALPACA_ENABLE_OTA_UPDATE
-    AsyncElegantOTA.begin(_server_tcp);
+    ElegantOTA.begin(_server_tcp);
 #endif
 }
 
@@ -99,7 +99,7 @@ void AlpacaServer::Loop()
         _device[i]->CheckClientConnectionTimeout();
     }
 #ifdef ALPACA_ENABLE_OTA_UPDATE
-    AsyncElegantOTA.loop();
+    ElegantOTA.loop();
 #endif
 }
 
@@ -143,9 +143,9 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
     // setup webpages
-    _server_tcp->serveStatic("/setup", SPIFFS, "/setup.html");
-    _server_tcp->serveStatic(_settings_file, SPIFFS, _settings_file);
-    _server_tcp->serveStatic("/", SPIFFS, "/").setCacheControl("max-age=3600");
+    _server_tcp->serveStatic("/setup", LittleFS, "/setup.html");
+    _server_tcp->serveStatic(_settings_file, LittleFS, _settings_file);
+    _server_tcp->serveStatic("/", LittleFS, "/").setCacheControl("max-age=3600");
 
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
@@ -576,11 +576,11 @@ bool AlpacaServer::SaveSettings()
     }
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... root=<%s> ...\n", _ser_json_);
 
-    SPIFFS.remove(_settings_file);
-    File file = SPIFFS.open(_settings_file, FILE_WRITE);
+    LittleFS.remove(_settings_file);
+    File file = LittleFS.open(_settings_file, FILE_WRITE);
     if (!file)
     {
-        SLOG_PRINTF(SLOG_WARNING, "... END SPIFFS could not create %s\n", _settings_file);
+        SLOG_PRINTF(SLOG_WARNING, "... END LittleFS could not create %s\n", _settings_file);
         return false;
     }
     if (serializeJson(doc, file) == 0)
@@ -602,10 +602,10 @@ bool AlpacaServer::LoadSettings()
     SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
     JsonDocument doc;
 
-    File file = SPIFFS.open(_settings_file, FILE_READ);
+    File file = LittleFS.open(_settings_file, FILE_READ);
     if (!file)
     {
-        SLOG_WARNING_PRINTF("SPIFFS: %s could not open\n", _settings_file);
+        SLOG_WARNING_PRINTF("LittleFS: %s could not open\n", _settings_file);
         return false;
     }
     DeserializationError error = deserializeJson(doc, file);
@@ -617,7 +617,7 @@ bool AlpacaServer::LoadSettings()
         return false;
     }
 
-    SLOG_PRINTF(SLOG_INFO, "... SPIFFS: %s loaded ...\n", _settings_file);
+    SLOG_PRINTF(SLOG_INFO, "... LittleFS: %s loaded ...\n", _settings_file);
     _readJson(root);
 
     for (int i = 0; i < _n_devices; i++)

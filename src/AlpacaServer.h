@@ -10,7 +10,8 @@
 **************************************************************************************************/
 #pragma once
 #include <Arduino.h>
-#include <SPIFFS.h>
+//#include <SPIFFS.h>
+#include <LittleFS.h>
 #include <esp_system.h>
 #include <AsyncUDP.h>
 #include <ESPAsyncWebServer.h>
@@ -138,7 +139,7 @@ public:
                  const String mng_manufacture_version,
                  const String mng_location);
 
-    void Begin(uint16_t udp_port = kAlpacaUdpPort, uint16_t tcp_port = kAlpacaTcpPort, bool mount_spiffs = true);
+    void Begin(uint16_t udp_port = kAlpacaUdpPort, uint16_t tcp_port = kAlpacaTcpPort, bool mount_little_fs = true);
     void Loop();
     void AddDevice(AlpacaDevice *device);
     bool GetParam(AsyncWebServerRequest *request, const char *name, bool &value, Spelling_t spelling);
@@ -168,7 +169,7 @@ public:
     void SetResetRequest() { _reset_request = true; };
 
     // only for testing
-    void RemoveSettingsFile() { SPIFFS.remove(_settings_file); }
+    void RemoveSettingsFile() { LittleFS.remove(_settings_file); }
 
     // Alpaca response status helpers ==============================================================================================
     void RspStatusClear(AlpacaRspStatus_t &rsp_status)
