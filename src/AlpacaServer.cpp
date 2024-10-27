@@ -48,16 +48,20 @@ AlpacaServer::AlpacaServer(const String mng_server_name,
     _mng_manufacture = mng_manufacture;
     _mng_manufacture_version = mng_manufacture_version;
     _mng_location = mng_location;
-
-    // Get unique ID from wifi macadr. Default 000000000000
-    uint8_t mac_adr[6] = {0}; 
-    esp_wifi_get_mac(WIFI_IF_STA, mac_adr);
-    snprintf(_uid, sizeof(_uid), "%02X%02X%02X%02X%02X%02X", mac_adr[0], mac_adr[1], mac_adr[2], mac_adr[3], mac_adr[4], mac_adr[5]);
 }
 
 // initialize alpaca server
 void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_littlefs)
 {
+    // Lib version
+    SLOG_PRINTF(SLOG_INFO, "ESP32AlpacaDevice2 Library version=%s\n", esp32_alpaca_device_library_version);
+
+    // Get unique ID from wifi macadr. Default 000000000000
+    uint8_t mac_adr[6] = {0}; 
+    esp_wifi_get_mac(WIFI_IF_STA, mac_adr);
+    snprintf(_uid, sizeof(_uid), "%02X%02X%02X%02X%02X%02X", mac_adr[0], mac_adr[1], mac_adr[2], mac_adr[3], mac_adr[4], mac_adr[5]);
+    SLOG_PRINTF(SLOG_DEBUG, "_uid=%s\n", _uid);
+
     RspStatusClear(_mng_rsp_status);
     // Setup filesystem
     if (mount_littlefs)

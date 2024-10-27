@@ -44,20 +44,19 @@ void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMeth
 void AlpacaDevice::_setSetupPage()
 {
     char url[64];
-    // /api/v1/<_device_type>/<_device_number>/jsondata
+    // HTTP_GET /api/v1/<_device_type>/<_device_number>/jsondata
     snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "jsondata"); // TODO
-    // setup json get handler
-    this->createCallBack(LHF(_getJsondata), HTTP_GET, "jsondata");
-    
-    // setup json post handler
+    this->createCallBackUrl(LHF(_getJsondata), HTTP_GET, url);
+      
+    // HTTP_PUT setup json post handler
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler(url, [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {    
-        SLOG_PRINTF(SLOG_INFO, "BEGIN REQ AlpacaDevice::handler(%s)\n", request->url().c_str());
+        DBG_JSON_PRINTFJ(SLOG_INFO, json, "BEGIN REQ AlpacaDevice::handler(url=%s, json=%s)\n", request->url().c_str(), _ser_json_);
         DBG_REQ
         JsonObject jsonObj = json.as<JsonObject>();
-        this->AlpacaReadJson(jsonObj);
+        this->AlpacaReadJson(jsonObj); 
         request->send(200, F("application/json"), F("{\"recieved\":\"true\"}")); 
-        SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::handler(%s)\n", request->url().c_str());          
+        SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaDevice::handler(%s)\n", request->url().c_str());          
         DBG_END });
 
     _alpaca_server->getServerTCP()->addHandler(jsonhandler);

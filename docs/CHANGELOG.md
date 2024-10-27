@@ -44,7 +44,12 @@
 17. AsyncElegantOTA replaced by ElegantOTA
 18. library.json/dependencies reworked
 19. esp_read_mac() replaced by esp_wifi_get_mac()
-20. Focusser pure virtual function missed TODO
+20. Add -fexceptions to build_flags
 21. Test with current N.I.N.A version TODO
 22. Remove parameter devicemethode in CreateCallback()
 23. setup.html moved to /www/setup.html
+
+
+### Open topics 
+1. Focusser pure virtual function missed 
+2. Version output in log
