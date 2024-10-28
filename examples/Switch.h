@@ -12,11 +12,7 @@
 class Switch : public AlpacaSwitch
 {
 private:
-    const bool _writeSwitchValue(uint32_t id, double value)
-    {
-        // write to physical device
-        return true;
-    }
+    const bool _writeSwitchValue(uint32_t id, double value);
 
     void AlpacaReadJson(JsonObject &root);
     void AlpacaWriteJson(JsonObject &root);

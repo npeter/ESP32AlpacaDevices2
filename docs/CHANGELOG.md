@@ -48,8 +48,16 @@
 21. Test with current N.I.N.A version TODO
 22. Remove parameter devicemethode in CreateCallback()
 23. setup.html moved to /www/setup.html
+24. Log libversion
+25. Examples/*.* adapted
+
+## 3.0.0 2024-10-28 Alpha
+- Based on "Arduino core 3.0.x"  
+- SPIFF has been replaced by LittleFS
+    - execute "Build Filesystem image" and "Upload Filesystem"
+- Changelog see 2.1.1
 
 
 ### Open topics 
-1. Focusser pure virtual function missed 
+
 2. Version output in log

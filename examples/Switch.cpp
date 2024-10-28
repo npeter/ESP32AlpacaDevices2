@@ -11,10 +11,10 @@
 const uint32_t k_num_of_switch_devices = 4;
 
 SwitchDevice_t init_switch_device[k_num_of_switch_devices] = {
-    {true, true, "Switch 0", "My Switch 0 read/write", 0.0, 0.0, 10.0, 1.0},
-    {false, false, "Switch 1", "My Switch 1 read only", 20.0, -50.0, 50.0, 0.1},
-    {true, false, "Switch 2", "My Switch 2 read only - fixed init", 0.0, 0.0, 1.0, 1.0},
-    {false, true, "Switch 3", "My Switch 3 read/write - fixed init", 0.0, 0.0, 100.0, 0.01}};
+    {true, true, "Switch-0", "Relay 0 (read/write)", 0.0, 0.0, 10.0, 1.0},
+    {false, false, "Switch-1", "Temperature (read only)", 20.0, -50.0, 50.0, 0.1},
+    {true, false, "Switch 2", "Door closed (read only) - fixed init", 0.0, 0.0, 1.0, 1.0},
+    {false, true, "Switch-3", "Heater (read/write) - fixed init", 0.0, 0.0, 100.0, 0.5}};
 
 Switch::Switch() : AlpacaSwitch(k_num_of_switch_devices)
 {
@@ -35,11 +35,41 @@ void Switch::Begin()
   }
 
   AlpacaSwitch::Begin();
+
+  // SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\"\n", "/setup/v1/switch/0/setup");
+  // _p_alpaca_server->getServerTCP()->on("/setup/v1/switch/0/setup", HTTP_GET, [this](AsyncWebServerRequest *request)
+  //                                      { DBG_REQ; _alpacaGetPage(request, FOCUSER_SETUP_URL); DBG_END; });
+
+
+
   // Init switches
 }
 
 void Switch::Loop()
-{ // empty
+{  
+  // TODO
+  // This is only an example with funny HW to simulate some inputs
+
+  // Get physical data and set value
+  double temperature = 11.0 + static_cast<double>(millis()%10)/10;
+  SetSwitchValue(1, temperature); // double
+
+  bool door_closed = ((millis()/10000)%2) == 0 ? true : false;
+  SetSwitch(2, door_closed);  // bool
+}
+
+/**
+ * This methode is called by AlpacaSwitch to manipulate physical device 
+ */
+const bool Switch::_writeSwitchValue(uint32_t id, double value) {
+  bool result = false;  // wrong id or invalid value
+
+  // TODO check id 
+  // TODO write to physical device, GPIO, etc
+  result = true; 
+  SLOG_DEBUG_PRINTF("id=%d value=%f result=%s", id, value, result?"true":"false");
+
+  return result;
 }
 
 void Switch::AlpacaReadJson(JsonObject &root)
@@ -71,7 +101,7 @@ void Switch::AlpacaReadJson(JsonObject &root)
 
 void Switch::AlpacaWriteJson(JsonObject &root)
 {
-  SLOG_PRINTF(SLOG_NOTICE, "BEGIN ...\n");
+  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "BEGIN root=%s ...\n", _ser_json_);
   AlpacaSwitch::AlpacaWriteJson(root);
 
   char title[32] = "";
@@ -133,5 +163,5 @@ void Switch::AlpacaWriteJson(JsonObject &root)
     }
   }
 
-  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END \"%s\"\n");
+  DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... END \"%s\"\n", _ser_json_);
 }

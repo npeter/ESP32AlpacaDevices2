@@ -156,6 +156,9 @@ Demo Application: Alpaca Discovery Map generated with **Conform Universal **
 ## Open Topics
 - Concept for AlpacaConfig.h
 - Test device specific interface with real device implementation
-    - Already done for CoverCalibrator [CoFlat](https://github.com/npeter/CoFlat)
+    - Already done for 
+        - CoverCalibrator [CoFlat](https://github.com/npeter/CoFlat)
+        - Focuser MoFo4
+
     
 

@@ -108,7 +108,7 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
 #define DBG_FOCUSER_GET_POSITION DBG_REQ;
 #define DBG_FOCUSER_GET_STEP_SIZE DBG_REQ;
 #define DBG_FOCUSER_GET_TEMP_COMP DBG_REQ;
-#define DBG_FOCUSER_GET_TEMP_COMP_AVAILABLE //DBG_REQ;
+#define DBG_FOCUSER_GET_TEMP_COMP_AVAILABLE // DBG_REQ;
 #define DBG_FOCUSER_GET_TEMPERATUR DBG_REQ;
 
 #define DBG_FOCUSER_PUT_TEMP_COMP DBG_REQ;
@@ -135,9 +135,10 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
         for (int i = 0; i < request->args(); i++)                                                                                                                                                     \
         {                                                                                                                                                                                             \
             int len = strlen(s);                                                                                                                                                                      \
-            snprintf(&s[len], sizeof(s) - len, " - %s=<%s>", request->argName(i).c_str(), request->arg(i).c_str());                                                                                    \
+            snprintf(&s[len], sizeof(s) - len, " - %s=<%s>", request->argName(i).c_str(), request->arg(i).c_str());                                                                                   \
         }                                                                                                                                                                                             \
         SLOG_INFO_PRINTF("%s\n", s);                                                                                                                                                                  \
+        delay(100);                                                                                                                                                                                   \
     }
 
 #define DBG_RESPOND_VALUE \

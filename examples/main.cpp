@@ -9,14 +9,12 @@
 **************************************************************************************************/
 
 // commend/uncommend to enable/disable device testsing with templates
-#define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
+//#define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
 #define TEST_SWITCH               // create Switch device
-#define TEST_OBSERVING_CONDITIONS // create ObservingConditions device
+//#define TEST_OBSERVING_CONDITIONS // create ObservingConditions device
 #define TEST_FOCUSER              // create Focuser device
 
 // #define TEST_RESTART              // only for testing
-#include <Arduino.h>
-#include <WiFi.h>
 #include "Credentials.h"
 
 #include <SLog.h>
@@ -91,7 +89,9 @@ void setup()
 {
   // setup logging and WiFi
   g_Slog.Begin(Serial, 115200);
+#ifdef LOLIN_S2_MINI  
   delay(5000); // time to detect USB device
+#endif  
 
   SLOG_INFO_PRINTF("BigPet ESP32ALPACADeviceDemo started ...\n");
 
@@ -109,6 +109,7 @@ void setup()
     snprintf(wifi_ipstr, sizeof(wifi_ipstr), "%03d.%03d.%03d.%03d", ip[0], ip[1], ip[2], ip[3]);
     SLOG_INFO_PRINTF("connected with %s\n", wifi_ipstr);
   }
+
 
   // setup ESP32AlpacaDevices
   alpaca_server.Begin();
@@ -166,5 +167,7 @@ void loop()
 #ifdef TEST_FOCUSER
   focuser.Loop();
 #endif
+
+  delay(50);
 
 }
