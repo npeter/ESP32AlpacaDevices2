@@ -11,7 +11,7 @@
 #include <Arduino.h>
 
 // Library version see also library.json/version
-const char esp32_alpaca_device_library_version[] = "3.0.0";
+const char esp32_alpaca_device_library_version[] = "3.0.1";
 
 // ALPACA Server
 #define ALPACA_MAX_CLIENTS 8

@@ -57,6 +57,9 @@
     - execute "Build Filesystem image" and "Upload Filesystem"
 - Changelog see 2.1.1
 
+## 3.0.1 2024-10-28 in work
+1. Exception with Conform Universal ( Alpaca REQ (192.168.178.30) /api/v1/switch/0/connected - ClientID=<> - ClientTransactionID=<67890>)
+2. Remove delay() AlpacaDebug.h/DBG_REQ
 
 ### Open topics 
 
