@@ -57,7 +57,7 @@ void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_little
     SLOG_PRINTF(SLOG_INFO, "ESP32AlpacaDevice2 Library version=%s\n", esp32_alpaca_device_library_version);
 
     // Get unique ID from wifi macadr. Default 000000000000
-    uint8_t mac_adr[6] = {0}; 
+    uint8_t mac_adr[6] = {0};
     esp_wifi_get_mac(WIFI_IF_STA, mac_adr);
     snprintf(_uid, sizeof(_uid), "%02X%02X%02X%02X%02X%02X", mac_adr[0], mac_adr[1], mac_adr[2], mac_adr[3], mac_adr[4], mac_adr[5]);
     SLOG_PRINTF(SLOG_DEBUG, "_uid=%s\n", _uid);
@@ -354,8 +354,15 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, in
     {
         try
         {
-            value = std::stoi(request->arg(index).c_str());
-            return true;
+            if (!request->arg(index).isEmpty())
+            {
+                value = std::stoi(request->arg(index).c_str());
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         catch (std::out_of_range const &ex)
         {

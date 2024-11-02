@@ -58,8 +58,11 @@
 - Changelog see 2.1.1
 
 ## 3.0.1 2024-10-28 in work
-1. Exception with Conform Universal ( Alpaca REQ (192.168.178.30) /api/v1/switch/0/connected - ClientID=<> - ClientTransactionID=<67890>)
-2. Remove delay() AlpacaDebug.h/DBG_REQ
+1. AlpacaSwitch.RegisterCallback() _alpacaPut... HTTP_GET replaced by HTTP_PUT
+2. AlpacaServer.Begin initialize mac_adr wit {0}
+0. Exception with Conform Universal ( Alpaca REQ (192.168.178.30) /api/v1/switch/0/connected - ClientID=<> - ClientTransactionID=<67890>)  TODO
+0. Remove delay() AlpacaDebug.h/DBG_REQ TODO
+
 
 ### Open topics 
 

@@ -52,9 +52,9 @@ void AlpacaSwitch::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaGetMaxSwitchValue), HTTP_GET, "maxswitchvalue");
     this->createCallBack(LHF(_alpacaGetSwitchStep), HTTP_GET, "switchstep");
 
-    this->createCallBack(LHF(_alpacaPutSetSwitch), HTTP_GET, "setswitch");
-    this->createCallBack(LHF(_alpacaPutSetSwitchName), HTTP_GET, "setswitchname");
-    this->createCallBack(LHF(_alpacaPutSetSwitchValue), HTTP_GET, "setswitchvalue");
+    this->createCallBack(LHF(_alpacaPutSetSwitch), HTTP_PUT, "setswitch");
+    this->createCallBack(LHF(_alpacaPutSetSwitchName), HTTP_PUT, "setswitchname");
+    this->createCallBack(LHF(_alpacaPutSetSwitchValue), HTTP_PUT, "setswitchvalue");
 }
 
 void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
