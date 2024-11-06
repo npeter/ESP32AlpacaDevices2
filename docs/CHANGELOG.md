@@ -63,10 +63,11 @@
 3. AlpacaServer replace std::stoi, std::stoul, std::stof, std::tod by sscanf to avoid exceptions
 4. Exception with Conform Universal ( Alpaca REQ (192.168.178.30) /api/v1/switch/0/connected - ClientID=<> - ClientTransactionID=<67890>) -> try catch removed
 5. Replace try and catch in all source files
-6. Disable try/catch support: Remove build_flags in platformio.ini
+6. Disable try/catch support: Remove build_flags "fexceptions" in platformio.ini
 7. Remove delay() AlpacaDebug.h/DBG_REQ TODO
 8. Log library version
 
 ### Open topics 
-- WebServer triesunexpected filesystem operations (report from rneumait@web.de)  - tbi 
+- WebServer tries unexpected filesystem operations (report from rneumait@web.de)  - tbi 
+- doc -fex
 

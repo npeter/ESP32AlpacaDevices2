@@ -9,9 +9,9 @@
 **************************************************************************************************/
 
 // commend/uncommend to enable/disable device testsing with templates
-//#define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
+#define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
 #define TEST_SWITCH               // create Switch device
-//#define TEST_OBSERVING_CONDITIONS // create ObservingConditions device
+#define TEST_OBSERVING_CONDITIONS // create ObservingConditions device
 #define TEST_FOCUSER              // create Focuser device
 
 // #define TEST_RESTART              // only for testing

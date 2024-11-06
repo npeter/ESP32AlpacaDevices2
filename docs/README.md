@@ -32,14 +32,13 @@ My primary motivation was:
 
 - Multi ASCOM devices on one ESP32
 - Support for several client connections per device 
-- Connection watch dog 
-    - if no request for a certain time (ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC)
-    - impliziet device specific disconnect 
 - Pass ASCOM Conform Universal validation with zero errors and issues (ConformU 3.0.0)
 - Addapted for ArduinoJason V7 (https://github.com/bblanchon/ArduinoJson.git)
 
-- Test with N.I.N.A 3.1 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
+- Test with N.I.N.A 3.1 HF2 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
 - Suported ASCOM devices:
+    - CoverCalibrator, ObservingConditions, Switch, Focuser
+- Example Applications
     - CoverCalibrator.h, CoverCalibrator.cpp
     - ObservingConditions.h, ObservingConditions.cpp
     - Switch.h, Switch.cpp
@@ -54,17 +53,67 @@ My primary motivation was:
 <br><br>
 
 ## Remarks
-- For this project "platformio" (https://platformio.org/) is used as development system
+- For this project "platformio" (https://platformio.org/) is used as development system.
 <br><br>
-- Library dependencies: (TODO rework)
-    - ESP32AlpacaDevices:
-        - "bblanchon/ArduinoJson": "^7.0.2",
-        - "me-no-dev/ESP Async WebServer": "^1.2.4",
-        - "SLog": "https://github.com/npeter/SLog",
-        - "AsyncElegantOTA": "https://github.com/npeter/AsyncElegantOTA"   
-        Remark: https://github.com/ayushsharma82/ElegantOTA produces some chrashes inside AsyncTCP (to be investigated)
+### Example platformio.ini
+
+
+    [env]
+    platform = espressif32
+    framework = arduino
+    monitor_speed = 115200
+    board_build.filesystem = littlefs
+
+    lib_deps = https://github.com/npeter/ESP32AlpacaDevices2
+
+    [env:wemos_d1_mini32]
+    board = wemos_d1_mini32
+    build_flags=
+	    -D ELEGANTOTA_USE_ASYNC_WEBSERVER=1
+        -D WEMOS_D1_MINI32
+
+    [env:lolin_s2_mini]
+    board = lolin_s2_mini
+    monitor_port = COM3
+    upload_speed = 921600
+    build_flags=
+	    -D ELEGANTOTA_USE_ASYNC_WEBSERVER=1
+        -D ARDUINO_USB_CDC_ON_BOOT=1
+        -D LOLIN_S2_MINI
+
 
 <br><br>
+### ESP32AlpacaDevices library dependencies: (see library.json)
+    ...
+    "dependencies": [
+        {
+            "owner": "mathieucarbou",
+            "name": "ESPAsyncWebServer",
+            "version": "^3.3.11",
+            "platforms": [
+                "espressif8266",
+                "espressif32"
+            ]
+        },
+        {
+            "owner": "bblanchon",
+            "name": "ArduinoJson",
+            "version": "^7.0.2"
+        },
+        {
+            "owner": "ayushsharma82",
+            "name": "ElegantOTA",
+            "version": "^3.1.6"
+        },
+        {
+            "name": "SLog",
+            "version": "https://github.com/npeter/SLog"
+        }
+    ],
+    ...
+
+<br><br>
+### Webpage data
 - Webpage data has to be stored in the LittleFS - Filesystem of the ESP32
     - platformio/Build Filesystem image
 
@@ -159,6 +208,9 @@ Demo Application: Alpaca Discovery Map generated with **Conform Universal **
     - Already done for 
         - CoverCalibrator [CoFlat](https://github.com/npeter/CoFlat)
         - Focuser MoFo4
+- Connection watch dog 
+    - if no request for a certain time (ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC)
+    - impliziet device specific disconnect         
 
     
 
