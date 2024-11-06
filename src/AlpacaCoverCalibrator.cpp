@@ -62,23 +62,19 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+    if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+    if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-        if (!_putAction(action, parameters))
-            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, action, parameters);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    if (!_putAction(action, parameters))
+        MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, action, parameters);
+
+mycatch:
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
@@ -97,23 +93,19 @@ void AlpacaCoverCalibrator::AlpacaPutCommandBlind(AsyncWebServerRequest *request
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+    if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-        if (!_putCommandBlind(command, raw))
-            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, command, raw);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    if (!_putCommandBlind(command, raw))
+        MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, command, raw);
+
+mycatch:
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
@@ -133,27 +125,25 @@ void AlpacaCoverCalibrator::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+    if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-        if (!_putCommandBool(command, raw, bool_response))
-            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, command, raw);
+    if (!_putCommandBool(command, raw, bool_response))
+        MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, command, raw);
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, bool_response);            
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
-    }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, bool_response);
 
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
 #endif
@@ -167,35 +157,32 @@ void AlpacaCoverCalibrator::AlpacaPutCommandString(AsyncWebServerRequest *reques
     uint32_t client_idx = 0;
     char command[128] = {0};
     char raw[16] = {0};
-    char string_response[128] = { 0 };
+    char string_response[128] = {0};
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+    if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Parameters");
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-        if (!_putCommandString(command, raw, string_response, sizeof(string_response)))
-            _alpaca_server->ThrowRspStatusActionNotImplemented(request, _rsp_status, command, raw);
+    if (!_putCommandString(command, raw, string_response, sizeof(string_response)))
+        MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, command, raw);
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, string_response);            
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
-    }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, string_response);
 
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
 #endif
-
 
 void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 {
@@ -240,19 +227,15 @@ void AlpacaCoverCalibrator::_alpacaPutCalibratorOff(AsyncWebServerRequest *reque
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if (GetCalibratorState() == AlpacaCalibratorStatus_t::kNotPresent)
-            _alpaca_server->ThrowRspStatusDeviceNotImplemented(request, _rsp_status, "Calibrator");
+    if (GetCalibratorState() == AlpacaCalibratorStatus_t::kNotPresent)
+        MYTHROW_RspStatusDeviceNotImplemented(request, _rsp_status, "Calibrator");
 
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        _calibratorOff();
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    _calibratorOff();
+
+mycatch:
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
@@ -266,23 +249,20 @@ void AlpacaCoverCalibrator::_alpacaPutCalibratorOn(AsyncWebServerRequest *reques
     int32_t brightness = -1;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if (GetCalibratorState() == AlpacaCalibratorStatus_t::kNotPresent)
-            _alpaca_server->ThrowRspStatusDeviceNotImplemented(request, _rsp_status, "Calibrator");
+    if (GetCalibratorState() == AlpacaCalibratorStatus_t::kNotPresent)
+        MYTHROW_RspStatusDeviceNotImplemented(request, _rsp_status, "Calibrator");
 
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Brightness", brightness, Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Brigthness");
+    if (_alpaca_server->GetParam(request, "Brightness", brightness, Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Brigthness");
 
-        if (_calibratorOn(brightness) == false)
-            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, "Brightness", brightness);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    if (_calibratorOn(brightness) == false)
+        MYTHROW_RspStatusParameterInvalidInt32Value(request, _rsp_status, "Brightness", brightness);
+
+mycatch:
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }
@@ -294,17 +274,13 @@ void AlpacaCoverCalibrator::_alpacaPutCloseCover(AsyncWebServerRequest *request)
     uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if (GetCoverState() == AlpacaCoverStatus_t::kNotPresent)
-            _alpaca_server->ThrowRspStatusDeviceNotImplemented(request, _rsp_status, "Cover");
+    if (GetCoverState() == AlpacaCoverStatus_t::kNotPresent)
+        MYTHROW_RspStatusDeviceNotImplemented(request, _rsp_status, "Cover");
 
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _closeCover();
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    _closeCover();
+
+mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }
@@ -316,17 +292,14 @@ void AlpacaCoverCalibrator::_alpacaPutHaltCover(AsyncWebServerRequest *request)
     uint32_t client_idx = 0;
     int32_t brightness = -1;
     _alpaca_server->RspStatusClear(_rsp_status);
-    try
-    {
-        if (GetCoverState() == AlpacaCoverStatus_t::kNotPresent)
-            _alpaca_server->ThrowRspStatusDeviceNotImplemented(request, _rsp_status, "Cover");
 
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _haltCover();
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    if (GetCoverState() == AlpacaCoverStatus_t::kNotPresent)
+        MYTHROW_RspStatusDeviceNotImplemented(request, _rsp_status, "Cover");
+
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    _haltCover();
+
+mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }
@@ -338,17 +311,14 @@ void AlpacaCoverCalibrator::_alpacaPutOpenCover(AsyncWebServerRequest *request)
     uint32_t client_idx = 0;
     int32_t brightness = -1;
     _alpaca_server->RspStatusClear(_rsp_status);
-    try
-    {
-        if (GetCoverState() == AlpacaCoverStatus_t::kNotPresent)
-            _alpaca_server->ThrowRspStatusDeviceNotImplemented(request, _rsp_status, "Cover");
 
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _openCover();
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    if (GetCoverState() == AlpacaCoverStatus_t::kNotPresent)
+        MYTHROW_RspStatusDeviceNotImplemented(request, _rsp_status, "Cover");
+
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    _openCover();
+
+mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }

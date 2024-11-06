@@ -216,20 +216,17 @@ void AlpacaFocuser::_alpacaPutTempComp(AsyncWebServerRequest *request)
     bool temp_comp = false;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "TempComp", temp_comp, Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "TempComp");
+    if (_alpaca_server->GetParam(request, "TempComp", temp_comp, Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "TempComp");
 
-        if (!_putTempComp(temp_comp))
-            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, "TempComp", temp_comp);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    if (!_putTempComp(temp_comp))
+        MYTHROW_RspStatusParameterInvalidBoolValue(request, _rsp_status, "TempComp", temp_comp);
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -258,19 +255,16 @@ void AlpacaFocuser::_alpacaPutMove(AsyncWebServerRequest *request)
     _alpaca_server->RspStatusClear(_rsp_status);
     int32_t position = 0;
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Position", position, Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Position");
+    if (_alpaca_server->GetParam(request, "Position", position, Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Position");
 
-        _putMove(position);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+    _putMove(position);
+
+mycatch:
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -286,27 +280,25 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
     char parameters[128] = {0};
     char str_response[1024] = {0};
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0 && _clients[client_idx].client_id != ALPACA_CONNECTION_LESS_CLIENT_ID)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0 && _clients[client_idx].client_id != ALPACA_CONNECTION_LESS_CLIENT_ID)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+    if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Action");
+    if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
 
-        if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
-            _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, parameters);
+    if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, parameters);
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response, JsonValue_t::kAsPlainStringValue);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
-    }
-    DBG_END
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response, JsonValue_t::kAsPlainStringValue);
+
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
 };
 #endif
 
@@ -321,26 +313,26 @@ void AlpacaFocuser::AlpacaPutCommandBool(AsyncWebServerRequest *request)
     char raw[16] = "true";
     bool bool_response = false;
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+    if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Command");
 
-        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
 
-        if (_putCommandBool(command, raw, bool_response) == false)
-            _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, command);
+    if (_putCommandBool(command, raw, bool_response) == false)
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command);
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)bool_response);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
-    }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)bool_response);
+
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+
     DBG_END
 };
 #endif
@@ -356,26 +348,26 @@ void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
     char raw[16] = "true";
     char str_response[64] = {0};
 
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        throw(&_rsp_status);
 
-        if (_alpaca_server->GetParam(request, "Command", command_str, sizeof(command_str), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+    if (_alpaca_server->GetParam(request, "Command", command_str, sizeof(command_str), Spelling_t::kStrict) == false)
+        _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
 
-        if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
 
-        if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
-            _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, command_str);
+    if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
+        _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, command_str);
 
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-        _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
-    }
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
+
+    DBG_END;
+    return;
+    
+mycatch:
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
 #endif

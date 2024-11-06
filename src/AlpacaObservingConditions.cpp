@@ -55,27 +55,25 @@ void AlpacaObservingConditions::_alpacaGetSensordescription(AsyncWebServerReques
     char sensor_name[kMaxSensorName] = "";
     uint32_t client_idx = 0;
     OCSensorIdx_t sensor_idx;
-    try
+
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase)) == 0)
+        goto mycatch;
+
+    if (_alpaca_server->GetParam(request, "SensorName", sensor_name, sizeof(sensor_name), Spelling_t::kIgnoreCase) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "SensorName");
+
+    if (_getSensorIdxByName(sensor_name, sensor_idx) == false)
     {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase)) == 0)
-            throw(&_rsp_status);
-
-        if (_alpaca_server->GetParam(request, "SensorName", sensor_name, sizeof(sensor_name), Spelling_t::kIgnoreCase) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "SensorName");
-
-        if (_getSensorIdxByName(sensor_name, sensor_idx) == false)
-        {
-            _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
-            _rsp_status.http_status = HttpStatus_t::kPassed;
-            snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Sensor '%s' invalid", request->url().c_str(), sensor_name);
-            throw(&_rsp_status);
-        }
-
-        snprintf(description, sizeof(description), "%s", _sensors[sensor_idx].description);
+        _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
+        _rsp_status.http_status = HttpStatus_t::kPassed;
+        snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Sensor '%s' invalid", request->url().c_str(), sensor_name);
+        goto mycatch;
     }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-    }
+
+    snprintf(description, sizeof(description), "%s", _sensors[sensor_idx].description);
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, description);
     DBG_END
 }
@@ -88,26 +86,24 @@ void AlpacaObservingConditions::_alpacaGetTimeSinceLastUpdate(AsyncWebServerRequ
     char sensor_name[kMaxSensorName] = "";
     uint32_t client_idx = 0;
     OCSensorIdx_t sensor_idx;
-    try
-    {
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase)) == 0)
-            throw(&_rsp_status);
 
-        if (_alpaca_server->GetParam(request, "SensorName", sensor_name, sizeof(sensor_name), Spelling_t::kIgnoreCase) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "SensorName");
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase)) == 0)
+        goto mycatch;
 
-        if (_getSensorIdxByName(sensor_name, sensor_idx) == false)
-        {
-            _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
-            _rsp_status.http_status = HttpStatus_t::kPassed;
-            snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Sensor '%s' invalid", request->url().c_str(), sensor_name);
-            throw(&_rsp_status);
-        }
-        update_time_rel_ms = (double)(millis() - _sensors[sensor_idx].update_time_ms);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
+    if (_alpaca_server->GetParam(request, "SensorName", sensor_name, sizeof(sensor_name), Spelling_t::kIgnoreCase) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "SensorName");
+
+    if (_getSensorIdxByName(sensor_name, sensor_idx) == false)
     {
+        _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
+        _rsp_status.http_status = HttpStatus_t::kPassed;
+        snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Sensor '%s' invalid", request->url().c_str(), sensor_name);
+        goto mycatch;
     }
+    update_time_rel_ms = (double)(millis() - _sensors[sensor_idx].update_time_ms);
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, update_time_rel_ms);
     DBG_END
 }
@@ -120,20 +116,17 @@ void AlpacaObservingConditions::_alpacaPutAveragePeriod(AsyncWebServerRequest *r
     double average_period = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
-    {
         if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            throw(&_rsp_status);
+            goto mycatch;
 
         if (_alpaca_server->GetParam(request, "AveragePeriod", average_period, Spelling_t::kStrict) == false)
-            _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "AvaragePeriod");
+            MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "AvaragePeriod");
 
         if (_putAveragePeriodRequest(average_period) == false)
-            _alpaca_server->ThrowRspStatusParameterInvalidValue(request, _rsp_status, "AvaragePeriod", average_period);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+            MYTHROW_RspStatusParameterInvalidDoubleValue(request, _rsp_status, "AvaragePeriod", average_period);
+    
+    mycatch: // empty
+ 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }

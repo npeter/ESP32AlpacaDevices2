@@ -305,19 +305,7 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, do
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        try
-        {
-            value = std::stod(request->arg(index).c_str());
-            return true;
-        }
-        catch (std::out_of_range const &ex)
-        {
-            return false;
-        }
-        catch (std::invalid_argument const &ex)
-        {
-            return false;
-        }
+        return sscanf(request->arg(index).c_str(), "%lf", &value) == 1;
     }
     return false;
 }
@@ -328,19 +316,7 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, fl
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        try
-        {
-            value = std::stof(request->arg(index).c_str());
-            return true;
-        }
-        catch (std::out_of_range const &ex)
-        {
-            return false;
-        }
-        catch (std::invalid_argument const &ex)
-        {
-            return false;
-        }
+        return sscanf(request->arg(index).c_str(), "%f", &value) == 1;
     }
     return false;
 }
@@ -352,26 +328,7 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, in
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        try
-        {
-            if (!request->arg(index).isEmpty())
-            {
-                value = std::stoi(request->arg(index).c_str());
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (std::out_of_range const &ex)
-        {
-            return false;
-        }
-        catch (std::invalid_argument const &ex)
-        {
-            return false;
-        }
+        return sscanf(request->arg(index).c_str(), "%i", &value) == 1;
     }
     return false;
 }
@@ -382,19 +339,7 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, ui
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        try
-        {
-            value = std::stoul(request->arg(index).c_str());
-            return true;
-        }
-        catch (std::out_of_range const &ex)
-        {
-            return false;
-        }
-        catch (std::invalid_argument const &ex)
-        {
-            return false;
-        }
+        return sscanf(request->arg(index).c_str(), "%u", &value) == 1;
     }
     return false;
 }
@@ -654,24 +599,22 @@ bool AlpacaServer::LoadSettings()
 bool AlpacaServer::CheckMngClientData(AsyncWebServerRequest *req, Spelling_t spelling)
 {
     RspStatusClear(_mng_rsp_status);
-
+    bool result = false;
     _mng_client_id.client_id = 0;
     _mng_client_id.client_transaction_id = 0;
 
-    try
-    {
-        if (GetParam(req, "ClientID", _mng_client_id.client_id, spelling) == false)
-            ThrowRspStatusClientIDNotFound(req, _mng_rsp_status);
+    if (GetParam(req, "ClientID", _mng_client_id.client_id, spelling) == false)
+        MYTHROW_RspStatusClientIDNotFound(req, _mng_rsp_status);
 
-        if (GetParam(req, "ClientTransactionID", _mng_client_id.client_transaction_id, spelling) == false)
-            ThrowRspStatusClientTransactionIDNotFound(req, _mng_rsp_status);
+    if (GetParam(req, "ClientTransactionID", _mng_client_id.client_transaction_id, spelling) == false)
+        MYTHROW_RspStatusClientTransactionIDNotFound(req, _mng_rsp_status);
 
-        if (_mng_client_id.client_transaction_id <= 0)
-            ThrowRspStatusClientTransactionIDInvalid(req, _mng_rsp_status, _mng_client_id.client_transaction_id);
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-        return false;
-    }
-    return true;
+    if (_mng_client_id.client_transaction_id <= 0)
+        MYTHROW_RspStatusClientTransactionIDInvalid(req, _mng_rsp_status, _mng_client_id.client_transaction_id);
+
+    result = true;
+
+mycatch: // empty
+
+    return result;
 }

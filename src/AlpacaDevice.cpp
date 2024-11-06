@@ -33,7 +33,7 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
 }
 
 // create <url> and register callback <fn> for REST API
-// <url> 
+// <url>
 void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[])
 {
     SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\"\n", url);
@@ -47,7 +47,7 @@ void AlpacaDevice::_setSetupPage()
     // HTTP_GET /api/v1/<_device_type>/<_device_number>/jsondata
     snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "jsondata"); // TODO
     this->createCallBackUrl(LHF(_getJsondata), HTTP_GET, url);
-      
+
     // HTTP_PUT setup json post handler
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler(url, [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {    
@@ -90,7 +90,7 @@ void AlpacaDevice::RegisterCallbacks()
 void AlpacaDevice::SetDeviceNumber(int8_t device_number)
 {
     _device_number = device_number;
-    snprintf(_device_url, sizeof(_device_url), kAlpacaDeviceSetup, _device_type, _device_number, "setup");  // TODO
+    snprintf(_device_url, sizeof(_device_url), kAlpacaDeviceSetup, _device_type, _device_number, "setup"); // TODO
     snprintf(_device_name, sizeof(_device_name), "%s-%i", _device_type, _device_number);
     snprintf(_device_uid, sizeof(_device_uid), "%s-%s%02X", _device_type, _alpaca_server->GetUID(), _device_number);
 }
@@ -101,14 +101,12 @@ void AlpacaDevice::AlpacaPutAction(AsyncWebServerRequest *request)
     DBG_DEVICE_PUT_ACTION_REQ
     _service_counter++;
     uint32_t client_idx = 0;
-    try
-    {
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "putaction");
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-    }
+
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    MYTHROW_RspStatusCommandNotImplemented(request, _rsp_status, "putaction");
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -118,14 +116,11 @@ void AlpacaDevice::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
     DBG_DEVICE_PUT_COMMAND_BLIND
     _service_counter++;
     uint32_t client_idx = 0;
-    try
-    {
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandblind");
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-    }
+
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    MYTHROW_RspStatusCommandNotImplemented(request, _rsp_status, "commandblind");
+
+mycatch: // empty
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -134,14 +129,12 @@ void AlpacaDevice::AlpacaPutCommandBool(AsyncWebServerRequest *request)
     DBG_DEVICE_PUT_COMMAND_BOOL
     _service_counter++;
     uint32_t client_idx = 0;
-    try
-    {
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandbool");
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-    }
+
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    MYTHROW_RspStatusCommandNotImplemented(request, _rsp_status, "commandbool");
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -150,14 +143,12 @@ void AlpacaDevice::AlpacaPutCommandString(AsyncWebServerRequest *request)
     DBG_DEVICE_PUT_COMMAND_STRING
     _service_counter++;
     uint32_t client_idx = 0;
-    try
-    {
-        client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
-        _alpaca_server->ThrowRspStatusCommandNotImplemented(request, _rsp_status, "commandstring");
-    }
-    catch (AlpacaRspStatus_t *rspStatus)
-    {
-    }
+
+    client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict);
+    MYTHROW_RspStatusCommandNotImplemented(request, _rsp_status, "commandstring");
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -179,96 +170,92 @@ void AlpacaDevice::AlpacaPutConnected(AsyncWebServerRequest *request)
     _clients[0].client_transaction_id = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
+    bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, Spelling_t::kStrict);
+    bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, Spelling_t::kStrict);
+    bool get_connected = _alpaca_server->GetParam(request, "Connected", connected, Spelling_t::kStrict); // check 'Connected' and Connected value
+
+    if (get_client_id == true && get_client_transaction_id == true &&
+        client_id > 0 && client_transaction_id > 0 && get_connected == true)
     {
-        bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, Spelling_t::kStrict);
-        bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, Spelling_t::kStrict);
-        bool get_connected = _alpaca_server->GetParam(request, "Connected", connected, Spelling_t::kStrict); // check 'Connected' and Connected value
-
-        if (get_client_id == true && get_client_transaction_id == true &&
-            client_id > 0 && client_transaction_id > 0 && get_connected == true)
+        if (connected) // names and values correct - try to connectd
         {
-            if (connected) // names and values correct - try to connectd
+            for (int i = 1; i <= kAlpacaMaxClients; i++)
             {
-                for (int i = 1; i <= kAlpacaMaxClients; i++)
+                if (_clients[i].client_id == client_id)
                 {
-                    if (_clients[i].client_id == client_id)
-                    {
-                        already_connected = true; // already connected
-                        break;
-                    }
+                    already_connected = true; // already connected
+                    break;
                 }
-
-                for (int i = 1; i <= kAlpacaMaxClients; i++) // search empty client slot
-                {
-                    if (_clients[i].client_id == 0) // connect
-                    {
-                        client_idx = i;
-                        connect_ok = true;
-                        if (GetNumberOfConnectedClients() == 0) // if the first client attached
-                            _service_counter = 0;
-                        break;
-                    }
-                }
-
-                if (connect_ok == false)
-                    to_many_clients_connected = true; // to manny clients connected
             }
-            else // names and values correct - try to disconnect
+
+            for (int i = 1; i <= kAlpacaMaxClients; i++) // search empty client slot
             {
-                for (int i = 1; i <= kAlpacaMaxClients; i++) // search client to disconnect
+                if (_clients[i].client_id == 0) // connect
                 {
-                    if (_clients[i].client_id == client_id) // disconnect
-                    {
-                        _clients[i].client_id = 0;
-                        _clients[i].client_transaction_id = 0;
-                        _clients[i].time_ms = 0;
-                        _clients[i].max_service_time_ms = 0;
-                        disconnect_ok = true;
-                        // if (GetNumberOfConnectedClients() == 0)
-                        //     _isconnected == false;
-                        break;
-                    }
+                    client_idx = i;
+                    connect_ok = true;
+                    if (GetNumberOfConnectedClients() == 0) // if the first client attached
+                        _service_counter = 0;
+                    break;
                 }
-
-                if (disconnect_ok == false) // client not found
-                    client_not_found = true;
             }
-            _clients[client_idx].client_id = (get_client_id == true) ? (uint32_t)client_id : 0;
-            _clients[client_idx].client_transaction_id = (get_client_transaction_id == true) ? (uint32_t)client_transaction_id : 0;
-            _clients[client_idx].time_ms = millis();
 
-            if (already_connected == true) // already connected
-                _alpaca_server->ThrowRspStatusClientAlreadyConnected(request, _rsp_status, client_id);
-
-            if (to_many_clients_connected == true) // to manny clients connected
-                _alpaca_server->ThrowRspStatusToMannyClients(request, _rsp_status, kAlpacaMaxClients);
+            if (connect_ok == false)
+                to_many_clients_connected = true; // to manny clients connected
         }
-        else
+        else // names and values correct - try to disconnect
         {
-            _clients[client_idx].client_id = (get_client_id == true) ? (uint32_t)get_client_id : 0;
-            _clients[client_idx].client_transaction_id = (get_client_transaction_id == true) ? (uint32_t)client_transaction_id : 0;
+            for (int i = 1; i <= kAlpacaMaxClients; i++) // search client to disconnect
+            {
+                if (_clients[i].client_id == client_id) // disconnect
+                {
+                    _clients[i].client_id = 0;
+                    _clients[i].client_transaction_id = 0;
+                    _clients[i].time_ms = 0;
+                    _clients[i].max_service_time_ms = 0;
+                    disconnect_ok = true;
+                    // if (GetNumberOfConnectedClients() == 0)
+                    //     _isconnected == false;
+                    break;
+                }
+            }
 
-            if (get_client_id == false)
-                _alpaca_server->ThrowRspStatusClientIDNotFound(request, _rsp_status);
-
-            if (client_id <= 0)
-                _alpaca_server->ThrowRspStatusClientIDInvalid(request, _rsp_status, client_id);
-
-            if (get_client_transaction_id == false)
-                _alpaca_server->ThrowRspStatusClientTransactionIDNotFound(request, _rsp_status);
-
-            if (client_transaction_id <= 0)
-                _alpaca_server->ThrowRspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
-
-            if (get_connected == false) // check 'Connected' and Connected value
-                _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Connected");
+            if (disconnect_ok == false) // client not found
+                client_not_found = true;
         }
+        _clients[client_idx].client_id = (get_client_id == true) ? (uint32_t)client_id : 0;
+        _clients[client_idx].client_transaction_id = (get_client_transaction_id == true) ? (uint32_t)client_transaction_id : 0;
+        _clients[client_idx].time_ms = millis();
+
+        if (already_connected == true) // already connected
+            MYTHROW_RspStatusClientAlreadyConnected(request, _rsp_status, client_id);
+
+        if (to_many_clients_connected == true) // to manny clients connected
+            MYTHROW_RspStatusToMannyClients(request, _rsp_status, kAlpacaMaxClients);
     }
-    catch (AlpacaRspStatus_t *rspStatus)
+    else
     {
-        // empty;
+        _clients[client_idx].client_id = (get_client_id == true) ? (uint32_t)get_client_id : 0;
+        _clients[client_idx].client_transaction_id = (get_client_transaction_id == true) ? (uint32_t)client_transaction_id : 0;
+
+        if (get_client_id == false)
+            MYTHROW_RspStatusClientIDNotFound(request, _rsp_status);
+
+        if (client_id <= 0)
+            MYTHROW_RspStatusClientIDInvalid(request, _rsp_status, client_id);
+
+        if (get_client_transaction_id == false)
+            MYTHROW_RspStatusClientTransactionIDNotFound(request, _rsp_status);
+
+        if (client_transaction_id <= 0)
+            MYTHROW_RspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
+
+        if (get_connected == false) // check 'Connected' and Connected value
+            MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Connected");
     }
+
+mycatch: // empty;
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
@@ -298,7 +285,7 @@ void AlpacaDevice::AlpacaGetDriverInfo(AsyncWebServerRequest *request)
 };
 void AlpacaDevice::AlpacaGetDriverVersion(AsyncWebServerRequest *request)
 {
-    DBG_DEVICE_GET_DRIVER_VERSION     
+    DBG_DEVICE_GET_DRIVER_VERSION
     _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_and_driver_version, JsonValue_t::kAsJsonStringValue);
@@ -443,35 +430,31 @@ int32_t AlpacaDevice::checkClientDataAndConnection(AsyncWebServerRequest *reques
     int32_t client_transaction_id = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    try
+    bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, spelling);
+    bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, spelling);
+
+    if (get_client_id && client_id > 0 && client_id != ALPACA_CONNECTION_LESS_CLIENT_ID)
     {
-        bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, spelling);
-        bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, spelling);
-
-        if (get_client_id && client_id > 0 && client_id != ALPACA_CONNECTION_LESS_CLIENT_ID) {
-            client_idx = getClientIdxByClientID(client_id);    
-        }
-
-        _clients[client_idx].client_id = (client_id >= 0) ? (uint32_t)client_id : 0;
-        _clients[client_idx].client_transaction_id = (client_transaction_id >= 0) ? (uint32_t)client_transaction_id : 0;
-        _clients[client_idx].time_ms = millis();
-
-        if (get_client_id == false)
-            _alpaca_server->ThrowRspStatusClientIDNotFound(request, _rsp_status);
-
-        if (client_id <= 0)
-            _alpaca_server->ThrowRspStatusClientIDInvalid(request, _rsp_status, client_id);
-
-        if (get_client_transaction_id == false)
-            _alpaca_server->ThrowRspStatusClientTransactionIDNotFound(request, _rsp_status);
-
-        if (client_transaction_id <= 0)
-            _alpaca_server->ThrowRspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
-
+        client_idx = getClientIdxByClientID(client_id);
     }
-    catch (AlpacaRspStatus_t *rspStatus)
-    { // empty
-    }
+
+    _clients[client_idx].client_id = (client_id >= 0) ? (uint32_t)client_id : 0;
+    _clients[client_idx].client_transaction_id = (client_transaction_id >= 0) ? (uint32_t)client_transaction_id : 0;
+    _clients[client_idx].time_ms = millis();
+
+    if (get_client_id == false)
+        MYTHROW_RspStatusClientIDNotFound(request, _rsp_status);
+
+    if (client_id <= 0)
+        MYTHROW_RspStatusClientIDInvalid(request, _rsp_status, client_id);
+
+    if (get_client_transaction_id == false)
+        MYTHROW_RspStatusClientTransactionIDNotFound(request, _rsp_status);
+
+    if (client_transaction_id <= 0)
+        MYTHROW_RspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
+
+mycatch:
 
     return client_idx;
 }

@@ -138,7 +138,6 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
             snprintf(&s[len], sizeof(s) - len, " - %s=<%s>", request->argName(i).c_str(), request->arg(i).c_str());                                                                                   \
         }                                                                                                                                                                                             \
         SLOG_INFO_PRINTF("%s\n", s);                                                                                                                                                                  \
-        delay(100);                                                                                                                                                                                   \
     }
 
 #define DBG_RESPOND_VALUE \
