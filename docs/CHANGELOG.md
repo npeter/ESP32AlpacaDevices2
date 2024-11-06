@@ -57,15 +57,18 @@
     - execute "Build Filesystem image" and "Upload Filesystem"
 - Changelog see 2.1.1
 
-## 3.0.1 2024-10-28 in work
+## 3.1.0 2024-11-06 Release
 1. AlpacaSwitch.RegisterCallback() _alpacaPut... HTTP_GET replaced by HTTP_PUT
 2. AlpacaServer.Begin initialize mac_adr wit {0}
 3. AlpacaServer replace std::stoi, std::stoul, std::stof, std::tod by sscanf to avoid exceptions
 4. Exception with Conform Universal ( Alpaca REQ (192.168.178.30) /api/v1/switch/0/connected - ClientID=<> - ClientTransactionID=<67890>) -> try catch removed
 5. Replace try and catch in all source files
 6. Disable try/catch support: Remove build_flags "fexceptions" in platformio.ini
-7. Remove delay() AlpacaDebug.h/DBG_REQ TODO
+7. Remove delay() AlpacaDebug.h/DBG_REQ 
 8. Log library version
+
+## 3.1.1 2024-11-06 in work
+1. Version 3.1.1 
 
 ### Open topics 
 - WebServer tries unexpected filesystem operations (report from rneumait@web.de)  - tbi 
