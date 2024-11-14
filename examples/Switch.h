@@ -9,6 +9,9 @@
 #pragma once
 #include "AlpacaSwitch.h"
 
+// comment/uncomment to enable/disable debugging
+// #define DEBUG_SWITCH
+
 class Switch : public AlpacaSwitch
 {
 private:
@@ -16,6 +19,10 @@ private:
 
     void AlpacaReadJson(JsonObject &root);
     void AlpacaWriteJson(JsonObject &root);
+
+#ifdef DEBUG_SWITCH
+    void DebugSwitchDevice(uint32_t id);
+#endif    
 
 public:
     Switch();

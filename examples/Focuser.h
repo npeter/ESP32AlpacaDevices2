@@ -37,7 +37,7 @@ private:
   const double k_step_size_max = 100.0;
   const double k_step_size_default = k_step_size_min;
 
-  static const char* const _k_sim_state_str[4];
+  static const char *const _k_sim_state_str[4];
 
   int32_t _max_motor_step = k_max_motor_step_default; // Max. motor position / steps
   int32_t _max_focuser_mm = k_max_focuser_mm_default; // Max. focuser position / mm
@@ -57,13 +57,33 @@ private:
   int32_t _sim_target_position_steps = _position_steps;
   uint32_t _sim_last_lopp_time_ms = 0;
 
-
   void AlpacaReadJson(JsonObject &root);
   void AlpacaWriteJson(JsonObject &root);
 
-  const bool _putTempComp(bool temp_comp) { return true; }; 
+  const bool _putTempComp(bool temp_comp) { return true; };
   const bool _putHalt();
   const bool _putMove(int32_t target_position_steps);
+
+#ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
+  const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size)
+  {
+    return false;
+  }
+#endif
+
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+  const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response)
+  {
+    return false;
+  };
+#endif
+
+#ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
+  const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size)
+  {
+    return false;
+  };
+#endif
 
   const bool _getAbsolut() { return _absolut; };
   const bool _getIsMoving() { return _is_moving; };
@@ -75,9 +95,8 @@ private:
   const bool _getTempCompAvailable() { return _temp_comp_available; };
   const double _getTemperature() { return _temperature; };
 
-
   void _simMachine();
-  const char* const _simState2Str(FocuserState_t state) { return _k_sim_state_str[(int)state];}; 
+  const char *const _simState2Str(FocuserState_t state) { return _k_sim_state_str[(int)state]; };
 
 public:
   Focuser();
