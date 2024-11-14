@@ -248,7 +248,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request)
                         _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                         _rsp_status.http_status = HttpStatus_t::kPassed;
                         snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - can't write %f to Switch device <%s>",
-                                 request->url().c_str(), _p_switch_devices[id].value, _p_switch_devices[id].name);
+                                 request->url().c_str(), _boolValueToDoubleValue(id, bool_value), _p_switch_devices[id].name);
                     }
                 }
                 else
@@ -323,7 +323,7 @@ void AlpacaSwitch::_alpacaPutSetSwitchValue(AsyncWebServerRequest *request)
                     if (double_value >= _p_switch_devices[id].min_value && double_value <= _p_switch_devices[id].max_value)
                     {
                         SetSwitchValue(id, double_value);
-                        if (!_writeSwitchValue(id, double_value))
+                        if (!_writeSwitchValue(id, _p_switch_devices[id].value))
                         {
                             _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                             _rsp_status.http_status = HttpStatus_t::kPassed;
@@ -386,6 +386,9 @@ bool AlpacaSwitch::_getAndCheckId(AsyncWebServerRequest *request, uint32_t &id, 
     }
 }
 
+/*
+ * Set switch device value (bool) 
+ */
 const bool AlpacaSwitch::SetSwitch(uint32_t id, bool bool_value)
 {
     if (id < _max_switch_devices)
@@ -396,6 +399,9 @@ const bool AlpacaSwitch::SetSwitch(uint32_t id, bool bool_value)
     return false;
 };
 
+/*
+ * Set switch device value (double) if in range; Consider steps.
+ */
 const bool AlpacaSwitch::SetSwitchValue(uint32_t id, double double_value)
 {
     if (id < _max_switch_devices)

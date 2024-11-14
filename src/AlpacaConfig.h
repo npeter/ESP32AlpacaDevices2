@@ -83,10 +83,10 @@ const char esp32_alpaca_device_library_version[] = "3.1.1";
 #define ALPACA_FOCUSER_DEVICE_TYPE "focuser"                        // don't change
 
 // // CoverCalibrator - Optional Methods
-// #define ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
-// #define ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
-// #define ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
-// #define ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
+#define ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
+#define ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
+//#define ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+//#define ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
 
 // include user config
 #include "UserConfig.h"

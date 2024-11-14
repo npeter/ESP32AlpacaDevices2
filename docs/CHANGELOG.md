@@ -69,8 +69,10 @@
 
 ## 3.1.1 2024-11-06 in work
 1. Version 3.1.1 
+2. Rework serveStatic to avoid unexpected filsystem operations
+3. AlpacaSwitch.GetValue() wrong return type changed from const double to const bool
+4. AlpacaSwitch._alpacaPutSetSwitchValue() error message improved
 
 ### Open topics 
-- WebServer tries unexpected filesystem operations (report from rneumait@web.de)  - tbi 
-- doc -fex
+
 

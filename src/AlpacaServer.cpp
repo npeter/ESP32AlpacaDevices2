@@ -150,10 +150,15 @@ void AlpacaServer::_registerCallbacks()
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
     // setup webpages
-    _server_tcp->serveStatic("/setup", LittleFS, "/www/setup.html");
-    _server_tcp->serveStatic(_settings_file, LittleFS, _settings_file);
-    _server_tcp->serveStatic("/", LittleFS, "/").setCacheControl("max-age=3600");
-
+    // ServeStatic
+#define SERVE_STATIC_LITTLE_FS(url, path)                                    \
+    SLOG_INFO_PRINTF("serveStatic url=%s fs=LittleFS path=%s\n", url, path); \
+    _server_tcp->serveStatic(url, LittleFS, path);
+    SERVE_STATIC_LITTLE_FS("/setup", "/www/setup.html");
+    SERVE_STATIC_LITTLE_FS(_settings_file, _settings_file);
+    SERVE_STATIC_LITTLE_FS("/www/css", "/www/css/");
+    SERVE_STATIC_LITTLE_FS("/www/js", "/www/js/");
+#undef SERVE_STATIC_LITTLE_FS
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
 

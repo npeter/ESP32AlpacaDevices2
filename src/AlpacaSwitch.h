@@ -67,7 +67,7 @@ protected:
     const bool GetSwitchCanWrite(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].can_write; };
     const char *GetSwitchName(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].name; };
     const char *GetSwitchDescription(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].description; };
-    const double GetValue(uint32_t id) { return _doubleValueToBoolValue((id < _max_switch_devices ? id : 0), _p_switch_devices[(id < _max_switch_devices ? id : 0)].value); };
+    const bool GetValue(uint32_t id) { return _doubleValueToBoolValue((id < _max_switch_devices ? id : 0), _p_switch_devices[(id < _max_switch_devices ? id : 0)].value); };
     const double GetSwitchValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].value; };
     const double GetSwitchMinValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].min_value; };
     const double GetSwitchMaxValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].max_value; };
