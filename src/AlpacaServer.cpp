@@ -154,10 +154,10 @@ void AlpacaServer::_registerCallbacks()
 #define SERVE_STATIC_LITTLE_FS(url, path)                                    \
     SLOG_INFO_PRINTF("serveStatic url=%s fs=LittleFS path=%s\n", url, path); \
     _server_tcp->serveStatic(url, LittleFS, path);
-    SERVE_STATIC_LITTLE_FS("/setup", "/www/setup.html");
-    SERVE_STATIC_LITTLE_FS(_settings_file, _settings_file);
-    SERVE_STATIC_LITTLE_FS("/www/css", "/www/css/");
-    SERVE_STATIC_LITTLE_FS("/www/js", "/www/js/");
+    //SERVE_STATIC_LITTLE_FS("/setup", "/www/setup.html");
+    //SERVE_STATIC_LITTLE_FS(_settings_file, _settings_file);
+    //SERVE_STATIC_LITTLE_FS("/www/css", "/www/css/");
+    //SERVE_STATIC_LITTLE_FS("/www/js", "/www/js/");
 #undef SERVE_STATIC_LITTLE_FS
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
@@ -506,6 +506,11 @@ void AlpacaServer::_readJson(JsonObject &root)
     _syslog_host = root["SYSLOG_host"] | _syslog_host;
     _log_level = root["LOG_level"] | SLOG_DEBUG;
     _serial_log = (root["SERIAL_log"] | 1) == 0 ? false : true;
+
+    // activated SLog settings
+    g_Slog.Begin(_syslog_host.c_str());
+    g_Slog.SetLvlMsk(_log_level);
+    g_Slog.SetEnableSerial(_serial_log);
 
     SLOG_PRINTF(SLOG_INFO, "... END _mng_server_name=%s _port_tcp=%d _port_udp=%d _syslog_host=%s _log_level=%d _serial_log=%s\n",
                 _mng_server_name.c_str(), _port_tcp, _port_udp, _syslog_host.c_str(), _log_level, _serial_log == true ? "true" : "false");

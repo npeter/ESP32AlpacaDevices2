@@ -73,8 +73,11 @@
 3. AlpacaSwitch.GetValue() wrong return type changed from const double to const bool
 4. AlpacaSwitch._alpacaPutSetSwitchValue() error message improved
 5. FOCUSER_PUT_ACTION, FOCUSER_PUT_COMMAND_BOOL, FOCUSER_PUT_COMMAND_STRING implemented
+6. Dynamic activation of log settings  
 
 ### Open topics 
+TODO AlpacaDebug aufräumen
+TODO Log Settings dynamische übernahme
 
 
 
