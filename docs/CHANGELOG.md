@@ -76,6 +76,7 @@
 6. Dynamic activation of log settings  
 7. Refactoring registration of urls and handlers for server and device 
 8. Add method to DBG_REQ output
+9. AlpacaServer Typo corrected
 
 ### Open topics 
 

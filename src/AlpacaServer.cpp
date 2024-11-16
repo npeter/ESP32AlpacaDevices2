@@ -179,7 +179,7 @@ void AlpacaServer::RegisterCallbacks()
                 SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::*jsonhandler(%s)\n", request->url().c_str());    
                 DBG_END });
 
-        SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler for %sr\n", url);
+        SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler for %s\n", url);
         _server_tcp->addHandler(jsonhandler);
     }
 
