@@ -128,6 +128,7 @@ private:
     int32_t _paramIndex(AsyncWebServerRequest *request, const char *name, Spelling_t spelling);
     void _readJson(JsonObject &root);
     void _writeJson(JsonObject &root);
+    //void _postJson(AsyncWebServerRequest *request, JsonVariant &json);
     void _getJsondata(AsyncWebServerRequest *request);
     void _getLinks(AsyncWebServerRequest *request);
     void _getSetupPage(AsyncWebServerRequest *request);
@@ -170,6 +171,8 @@ public:
     const bool GetSerialLog() { return _serial_log; };
     const bool GetResetRequest() { return _reset_request; };
     void SetResetRequest() { _reset_request = true; };
+
+    const char* const WebRequestMethod2Str(WebRequestMethodComposite method);
 
     // only for testing
     void RemoveSettingsFile() { LittleFS.remove(kAlpacaSettingsPath); }

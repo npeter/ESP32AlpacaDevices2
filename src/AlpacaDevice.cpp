@@ -46,7 +46,8 @@ void AlpacaDevice::createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMeth
  */
 void AlpacaDevice::_setSetupPage()
 {
-    char url[64];
+    char url[64] = {0};
+
     // HTTP_GET /api/v1/<_device_type>/<_device_number>/jsondata
     snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "jsondata");
     this->createCallBackUrl(LHF(_getJsondata), HTTP_GET, url, "_getJsondata");
@@ -55,10 +56,11 @@ void AlpacaDevice::_setSetupPage()
     snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "setup");
     this->createCallBackUrl(LHF(_getSetupPage), HTTP_GET, url, "_getSetupPage");
 
-    // HTTP_PUT setup json post handler
+    // handler for HTTP_POST /setup/v1/<_device_type>/<_device_number>/jsondata
+    snprintf(url, sizeof(url), kAlpacaDeviceSetup, _device_type, _device_number, "jsondata");
     AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler(url, [this](AsyncWebServerRequest *request, JsonVariant &json)
                                                                                {    
-        SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
+        SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%02x %s) ...\n", (int)request->method(), request->url().c_str());
         //DBG_JSON_PRINTFJ(SLOG_INFO, json, "BEGIN REQ AlpacaDevice::handler(url=%s, json=%s)\n", request->url().c_str(), _ser_json_);
         DBG_REQ
         JsonObject jsonObj = json.as<JsonObject>();
@@ -67,7 +69,7 @@ void AlpacaDevice::_setSetupPage()
         SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaDevice::*jsonhandler(%s)\n", request->url().c_str());          
         DBG_END });
 
-    SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler\n");
+    SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler for %sr\n", url);
     _alpaca_server->getServerTCP()->addHandler(jsonhandler);
 }
 
@@ -75,7 +77,7 @@ void AlpacaDevice::_getSetupPage(AsyncWebServerRequest *request)
 {
     _service_counter++;
     SLOG_PRINTF(SLOG_INFO, "REQ url=%s\n", request->url().c_str());
-    _alpaca_server->GetPath(request, kAlpacaSetupPagePath);  // TODO setup
+    _alpaca_server->GetPath(request, kAlpacaSetupPagePath); // TODO setup
 }
 
 void AlpacaDevice::_addAction(const char *const action)

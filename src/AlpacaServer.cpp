@@ -91,7 +91,7 @@ void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_little
                             {
                                 String url = request->url();
                                 request->send(400, "text/plain", "Not found: '" + url + "'");
-                                SLOG_WARNING_PRINTF("Url (%s) not found\n", url.c_str()); });
+                                SLOG_WARNING_PRINTF("%s Url (%s) not found\n", WebRequestMethod2Str(request->method()), url.c_str()); });
 
 #ifdef ALPACA_ENABLE_OTA_UPDATE
     ElegantOTA.begin(_server_tcp);
@@ -166,19 +166,22 @@ void AlpacaServer::RegisterCallbacks()
     SLOG_INFO_PRINTF("REGISTER handler for \"/setup\" to _getLinks\n");
     _server_tcp->on("/setup", HTTP_GET, LHF(_getSetupPage));
 
-    // HTTP_PUT setup json post handler
-    AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler("/jsondata", [this](AsyncWebServerRequest *request, JsonVariant &json)
-                                                                               {
-    SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
-       DBG_REQ
-       JsonObject jsonObj = json.as<JsonObject>();
-       this->_readJson(jsonObj);
-       request->send(200, F("application/json"), "{\"recieved\":\"true\"}"); 
-        SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::*jsonhandler(%s)\n", request->url().c_str());    
-        DBG_END });
+    // handler for HTTP_POST /jsondata
+    {
+        const char url[] = "/jsondata";
+        AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler(url, [this](AsyncWebServerRequest *request, JsonVariant &json)
+                                                                                   {
+            SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s %s) ...\n", WebRequestMethod2Str(request->method()), request->url().c_str());
+            DBG_REQ
+            JsonObject jsonObj = json.as<JsonObject>();
+            this->_readJson(jsonObj);
+            request->send(200, F("application/json"), "{\"recieved\":\"true\"}"); 
+                SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::*jsonhandler(%s)\n", request->url().c_str());    
+                DBG_END });
 
-    SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler\n");
-    _server_tcp->addHandler(jsonhandler);
+        SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler for %sr\n", url);
+        _server_tcp->addHandler(jsonhandler);
+    }
 
     // HTTP_GET /save_settings
     _server_tcp->on("/save_settings", HTTP_GET, [this](AsyncWebServerRequest *request)
@@ -200,6 +203,17 @@ void AlpacaServer::RegisterCallbacks()
         request->send(200,"application/json","{\"activated\":true}");
         DBG_END; });
 }
+
+// void AlpacaServer::_postJson(AsyncWebServerRequest *request, JsonVariant &json)
+// {
+//     SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%02x %s) ...\n", (int)request->method(), request->url().c_str());
+//     DBG_REQ
+//     JsonObject jsonObj = json.as<JsonObject>();
+//     this->_readJson(jsonObj);
+//     request->send(200, F("application/json"), "{\"recieved\":\"true\"}");
+//     SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::*jsonhandler(%s)\n", request->url().c_str());
+//     DBG_END
+// };
 
 void AlpacaServer::_getApiVersions(AsyncWebServerRequest *request)
 {
@@ -508,7 +522,7 @@ void AlpacaServer::_getLinks(AsyncWebServerRequest *request)
 void AlpacaServer::_getSetupPage(AsyncWebServerRequest *request)
 {
     SLOG_PRINTF(SLOG_INFO, "REQ url=%s\n", request->url().c_str());
-    GetPath(request, kAlpacaSetupPagePath); 
+    GetPath(request, kAlpacaSetupPagePath);
 }
 
 void AlpacaServer::_readJson(JsonObject &root)
@@ -643,3 +657,53 @@ mycatch: // empty
 
     return result;
 }
+
+const char *const k_web_request_methode_str[9] = {"HTTP_GET", "HTTP_POST", "HTTP_DELETE", "HTTP_PUT", "HTTP_PATCH", "HTTP_HEAD", "HTTP_OPTIONS", "HTTP_ANY", "HTTP_BAD"};
+
+const char *const AlpacaServer::WebRequestMethod2Str(WebRequestMethodComposite method)
+{
+    int idx = 8;
+
+    switch ((int)method)
+    {
+    case HTTP_GET:
+        idx = 0;
+        break;
+    case HTTP_POST:
+        idx = 1;
+        break;
+    case HTTP_DELETE:
+        idx = 1;
+        break;
+    case HTTP_PUT:
+        idx = 1;
+        break;
+    case HTTP_PATCH:
+        idx = 1;
+        break;
+    case HTTP_HEAD:
+        idx = 1;
+        break;
+    case HTTP_OPTIONS:
+        idx = 1;
+        break;
+    case HTTP_ANY:
+        idx = 1;
+        break;
+    default:
+        idx = 8;
+        break;
+    }
+    return k_web_request_methode_str[idx];
+}
+
+// typedef enum {
+//   HTTP_GET = 0b00000001,
+//   HTTP_POST = 0b00000010,
+//   HTTP_DELETE = 0b00000100,
+//   HTTP_PUT = 0b00001000,
+//   HTTP_PATCH = 0b00010000,
+//   HTTP_HEAD = 0b00100000,
+//   HTTP_OPTIONS = 0b01000000,
+//   HTTP_ANY = 0b01111111,
+// } WebRequestMethod;
