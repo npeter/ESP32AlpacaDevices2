@@ -75,6 +75,7 @@
 5. FOCUSER_PUT_ACTION, FOCUSER_PUT_COMMAND_BOOL, FOCUSER_PUT_COMMAND_STRING implemented
 6. Dynamic activation of log settings  
 7. Refactoring registration of urls and handlers for server and device 
+8. Add method to DBG_REQ output
 
 ### Open topics 
 

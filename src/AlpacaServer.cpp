@@ -660,7 +660,7 @@ mycatch: // empty
 
 const char *const k_web_request_methode_str[9] = {"HTTP_GET", "HTTP_POST", "HTTP_DELETE", "HTTP_PUT", "HTTP_PATCH", "HTTP_HEAD", "HTTP_OPTIONS", "HTTP_ANY", "HTTP_BAD"};
 
-const char *const AlpacaServer::WebRequestMethod2Str(WebRequestMethodComposite method)
+const char *const WebRequestMethod2Str(uint8_t method)
 {
     int idx = 8;
 
@@ -696,14 +696,3 @@ const char *const AlpacaServer::WebRequestMethod2Str(WebRequestMethodComposite m
     }
     return k_web_request_methode_str[idx];
 }
-
-// typedef enum {
-//   HTTP_GET = 0b00000001,
-//   HTTP_POST = 0b00000010,
-//   HTTP_DELETE = 0b00000100,
-//   HTTP_PUT = 0b00001000,
-//   HTTP_PATCH = 0b00010000,
-//   HTTP_HEAD = 0b00100000,
-//   HTTP_OPTIONS = 0b01000000,
-//   HTTP_ANY = 0b01111111,
-// } WebRequestMethod;

@@ -20,6 +20,9 @@
 #define _ALPACA_INIT_(x) = x
 #endif
 
+// Voreward declaration  
+extern const char *const WebRequestMethod2Str(uint8_t method);
+
 // definition and declaration of global variables; don't touch
 _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
 
@@ -130,8 +133,8 @@ _ALPACA_DECL_ bool gDbg _ALPACA_INIT_(false);
     {                                                                                                                                                                                                 \
         char s[1024];                                                                                                                                                                                 \
         gDbg = true;                                                                                                                                                                                  \
-        snprintf(s, sizeof(s), "Alpaca REQ (%d.%d.%d.%d) %s", request->client()->remoteIP()[0], request->client()->remoteIP()[1], request->client()->remoteIP()[2], request->client()->remoteIP()[3], \
-                 request->url().c_str());                                                                                                                                                             \
+        snprintf(s, sizeof(s), "Alpaca REQ (%d.%d.%d.%d) %s %s", request->client()->remoteIP()[0], request->client()->remoteIP()[1], request->client()->remoteIP()[2], request->client()->remoteIP()[3], \
+                  WebRequestMethod2Str( (uint8_t)request->method()), request->url().c_str());                                                                                                                                                             \
         for (int i = 0; i < request->args(); i++)                                                                                                                                                     \
         {                                                                                                                                                                                             \
             int len = strlen(s);                                                                                                                                                                      \
