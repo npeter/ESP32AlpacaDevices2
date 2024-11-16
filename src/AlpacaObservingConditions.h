@@ -45,7 +45,6 @@ private:
   OCSensor_t _sensors[kOcMaxSensorIdx];
   double _average_period = 0.0;
 
-private:
   void _alpacaGetAveragePeriod(AsyncWebServerRequest *request);
   void _alpacaGetCloudCover(AsyncWebServerRequest *request);
   void _alpacaGetDewPoint(AsyncWebServerRequest *request);
@@ -80,7 +79,7 @@ protected:
   AlpacaObservingConditions();
   void Begin();
   void RegisterCallbacks();
-  void Loop() { ; } // empty
+  //void Loop() { ; } // empty
 
   const bool SetSensorValueByIdx(OCSensorIdx_t idx, double value, uint32_t update_time_ms);
   const bool SetSensorDescriptionByIdx(OCSensorIdx_t idx, const char *description);

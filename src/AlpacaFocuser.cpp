@@ -55,14 +55,14 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move");
 }
 
-void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)
-{
-    _service_counter++;
-    char path[256] = {0};
-    snprintf(path, sizeof(path), "%s.html", page);
-    SLOG_PRINTF(SLOG_INFO, "send(LittleFS, %s)\n", path);
-    request->send(LittleFS, path);
-}
+// void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)
+// {
+//     _service_counter++;
+//     char path[256] = {0};
+//     snprintf(path, sizeof(path), "%s.html", page);
+//     SLOG_PRINTF(SLOG_INFO, "send(LittleFS, %s)\n", path);
+//     request->send(LittleFS, path);
+// }
 
 void AlpacaFocuser::_alpacaGetAbsolut(AsyncWebServerRequest *request)
 {

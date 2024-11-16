@@ -25,6 +25,9 @@
 const char kAlpacaDeviceCommand[] = "/api/v1/%s/%d/%s"; // <device_type>, <device_number>, <command>
 const char kAlpacaDeviceSetup[] = "/setup/v1/%s/%d/%s"; // device_type, device_number, command
 
+const char kAlpacaSettingsPath[] = "/settings.json";     // Path to server and device settings
+const char kAlpacaSetupPagePath[] = "/www/setup.html";  // Path to server and device setup page
+
 const char kAlpacaJsonType[] = "application/json";
 const uint32_t kAlpacaDiscoveryLength = 64;
 const char kAlpacaDiscoveryHeader[] = "alpacadiscovery";
@@ -114,13 +117,11 @@ private:
     AlpacaDevice *_device[kAlpacaMaxDevices];
     int _n_devices = 0;
 
-    char _settings_file[128] = "/settings.json";
     bool _reset_request = false;
 
     AlpacaRspStatus_t _mng_rsp_status;
     AlpacaClient_t _mng_client_id;
 
-    void _registerCallbacks();
     void _getApiVersions(AsyncWebServerRequest *request);
     void _getDescription(AsyncWebServerRequest *request);
     void _getConfiguredDevices(AsyncWebServerRequest *request);
@@ -129,6 +130,7 @@ private:
     void _writeJson(JsonObject &root);
     void _getJsondata(AsyncWebServerRequest *request);
     void _getLinks(AsyncWebServerRequest *request);
+    void _getSetupPage(AsyncWebServerRequest *request);
 
     void _respond(AsyncWebServerRequest *request, AlpacaClient_t &client, AlpacaRspStatus_t &rsp_status, const char *str, JsonValue_t jason_string_value);
 
@@ -139,6 +141,7 @@ public:
                  const String mng_location);
 
     void Begin(uint16_t udp_port = kAlpacaUdpPort, uint16_t tcp_port = kAlpacaTcpPort, bool mount_little_fs = true);
+    void RegisterCallbacks();
     void Loop();
     void AddDevice(AlpacaDevice *device);
     bool GetParam(AsyncWebServerRequest *request, const char *name, bool &value, Spelling_t spelling);
@@ -156,6 +159,7 @@ public:
 
     bool CheckMngClientData(AsyncWebServerRequest *req, Spelling_t spelling);
 
+    void GetPath(AsyncWebServerRequest *request, const char *const path);
     bool LoadSettings();
     bool SaveSettings();
     void OnAlpacaDiscovery(AsyncUDPPacket &udpPacket);
@@ -168,7 +172,7 @@ public:
     void SetResetRequest() { _reset_request = true; };
 
     // only for testing
-    void RemoveSettingsFile() { LittleFS.remove(_settings_file); }
+    void RemoveSettingsFile() { LittleFS.remove(kAlpacaSettingsPath); }
 
     // Alpaca response status helpers ==============================================================================================
     void RspStatusClear(AlpacaRspStatus_t &rsp_status)
@@ -187,7 +191,7 @@ public:
         goto mycatch;                                                                                                        \
     }
 
-#define MYTHROW_RspStatusClientIDInvalid(req, rsp_status, clientID)                                                                \
+#define MYTHROW_RspStatusClientIDInvalid(req, rsp_status, clientID)                                                                     \
     {                                                                                                                                   \
         rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                        \
         rsp_status.http_status = HttpStatus_t::kPassed;                                                                                 \
@@ -211,69 +215,91 @@ public:
         goto mycatch;                                                                                                                                         \
     }
 
-#define MYTHROW_RspStatusParameterNotFound(req, rsp_status, paraName){                                                          \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                     \
-    rsp_status.http_status = HttpStatus_t::kInvalidRequest;                                                                      \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s' not found", req->url().c_str(), paraName); \
-    goto mycatch; }
+#define MYTHROW_RspStatusParameterNotFound(req, rsp_status, paraName)                                                                \
+    {                                                                                                                                \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                     \
+        rsp_status.http_status = HttpStatus_t::kInvalidRequest;                                                                      \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s' not found", req->url().c_str(), paraName); \
+        goto mycatch;                                                                                                                \
+    }
 
-#define MYTHROW_RspStatusParameterInvalidInt32Value(req, rsp_status, paraName, paraValue){                                                      \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                                \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                         \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%d invalid", req->url().c_str(), paraName, paraValue); \
-    goto mycatch; }
+#define MYTHROW_RspStatusParameterInvalidInt32Value(req, rsp_status, paraName, paraValue)                                                       \
+    {                                                                                                                                           \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                                \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                         \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%d invalid", req->url().c_str(), paraName, paraValue); \
+        goto mycatch;                                                                                                                           \
+    }
 
-#define MYTHROW_RspStatusParameterInvalidBoolValue(req, rsp_status, paraName, paraValue){                                                                         \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                                                   \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                                            \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%s invalid", req->url().c_str(), paraName, paraValue ? "true" : "false"); \
-    goto mycatch; }
+#define MYTHROW_RspStatusParameterInvalidBoolValue(req, rsp_status, paraName, paraValue)                                                                           \
+    {                                                                                                                                                              \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                                                   \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                                            \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%s invalid", req->url().c_str(), paraName, paraValue ? "true" : "false"); \
+        goto mycatch;                                                                                                                                              \
+    }
 
-#define MYTHROW_RspStatusParameterInvalidDoubleValue(req, rsp_status, paraName, paraValue){                                                      \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                                \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                         \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%f invalid", req->url().c_str(), paraName, paraValue); \
-    goto mycatch; }
+#define MYTHROW_RspStatusParameterInvalidDoubleValue(req, rsp_status, paraName, paraValue)                                                      \
+    {                                                                                                                                           \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                                \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                         \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Parameter '%s=%f invalid", req->url().c_str(), paraName, paraValue); \
+        goto mycatch;                                                                                                                           \
+    }
 
-#define MYTHROW_RspStatusCommandStringInvalid(req, rsp_status, command_str){                                                        \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                         \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                  \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Command string %s invalid", req->url().c_str(), command_str); \
-    goto mycatch; }
+#define MYTHROW_RspStatusCommandStringInvalid(req, rsp_status, command_str)                                                              \
+    {                                                                                                                                    \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;                                                                         \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                  \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Command string %s invalid", req->url().c_str(), command_str); \
+        goto mycatch;                                                                                                                    \
+    }
 
-#define MYTHROW_RspStatusClientAlreadyConnected(req, rsp_status, clientID){                                                                        \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;                                                                           \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                                 \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Client with 'ClientID=%d' already connected", req->url().c_str(), clientID); \
-    goto mycatch; }
+#define MYTHROW_RspStatusClientAlreadyConnected(req, rsp_status, clientID)                                                                              \
+    {                                                                                                                                                   \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;                                                                           \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                                 \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Client with 'ClientID=%d' already connected", req->url().c_str(), clientID); \
+        goto mycatch;                                                                                                                                   \
+    }
 
-#define MYTHROW_RspStatusToMannyClients(req, rsp_status, maxNumOfClients){                                                                    \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;                                                                      \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                            \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Too many (%d) clients connected", req->url().c_str(), maxNumOfClients); \
-    goto mycatch; }
+#define MYTHROW_RspStatusToMannyClients(req, rsp_status, maxNumOfClients)                                                                          \
+    {                                                                                                                                              \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;                                                                      \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                            \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Too many (%d) clients connected", req->url().c_str(), maxNumOfClients); \
+        goto mycatch;                                                                                                                              \
+    }
 
-#define MYTHROW_RspStatusClientNotConnected(req, rsp_status, clientID){                                                                   \
-    rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;                                                                  \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                        \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Client 'ClientID=%d' not connected", req->url().c_str(), clientID); \
-    goto mycatch; }
+#define MYTHROW_RspStatusClientNotConnected(req, rsp_status, clientID)                                                                         \
+    {                                                                                                                                          \
+        rsp_status.error_code = AlpacaErrorCode_t::InvalidOperationException;                                                                  \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                        \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Client 'ClientID=%d' not connected", req->url().c_str(), clientID); \
+        goto mycatch;                                                                                                                          \
+    }
 
-#define MYTHROW_RspStatusCommandNotImplemented(req, rsp_status, command){                                                          \
-    rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                      \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                 \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Command '%s' not implemented", req->url().c_str(), command); \
-    goto mycatch; }
+#define MYTHROW_RspStatusCommandNotImplemented(req, rsp_status, command)                                                                \
+    {                                                                                                                                   \
+        rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                      \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                 \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Command '%s' not implemented", req->url().c_str(), command); \
+        goto mycatch;                                                                                                                   \
+    }
 
-#define MYTHROW_RspStatusActionNotImplemented(req, rsp_status, action, parameters){                                                                               \
-    rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                                                     \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                                                                \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Action '%s' with Parameters '%s' not implemented", req->url().c_str(), action, parameters); \
-    goto mycatch; }
+#define MYTHROW_RspStatusActionNotImplemented(req, rsp_status, action, parameters)                                                                                     \
+    {                                                                                                                                                                  \
+        rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                                                     \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                                                                \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Action '%s' with Parameters '%s' not implemented", req->url().c_str(), action, parameters); \
+        goto mycatch;                                                                                                                                                  \
+    }
 
-#define MYTHROW_RspStatusDeviceNotImplemented(req, rsp_status, device){                                                          \
-    rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                    \
-    rsp_status.http_status = HttpStatus_t::kPassed;                                                                               \
-    snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Device '%s' not implemented", req->url().c_str(), device); \
-    goto mycatch; }
+#define MYTHROW_RspStatusDeviceNotImplemented(req, rsp_status, device)                                                                \
+    {                                                                                                                                 \
+        rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                    \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                               \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Device '%s' not implemented", req->url().c_str(), device); \
+        goto mycatch;                                                                                                                 \
+    }
 };

@@ -74,10 +74,10 @@
 4. AlpacaSwitch._alpacaPutSetSwitchValue() error message improved
 5. FOCUSER_PUT_ACTION, FOCUSER_PUT_COMMAND_BOOL, FOCUSER_PUT_COMMAND_STRING implemented
 6. Dynamic activation of log settings  
+7. Refactoring registration of urls and handlers for server and device 
 
 ### Open topics 
-TODO AlpacaDebug aufräumen
-TODO Log Settings dynamische übernahme
+
 
 
 

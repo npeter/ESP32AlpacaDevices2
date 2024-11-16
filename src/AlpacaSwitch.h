@@ -29,10 +29,8 @@ class AlpacaSwitch : public AlpacaDevice
 {
 private:
     uint32_t _max_switch_devices = 0;
-    //SwitchDevice_t _switch_devices[kSwitchMaxSwitchDevices];
     SwitchDevice_t *_p_switch_devices;
 
-private:
     void _alpacaGetMaxSwitch(AsyncWebServerRequest *request);
     void _alpacaGetCanWrite(AsyncWebServerRequest *request);
     void _alpacaGetSwitch(AsyncWebServerRequest *request);
