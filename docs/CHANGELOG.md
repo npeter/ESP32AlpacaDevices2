@@ -77,6 +77,10 @@
 7. Refactoring registration of urls and handlers for server and device 
 8. Add method to DBG_REQ output
 9. AlpacaServer Typo corrected
+10. Test with "Conform Universal 4.0.0"
+11. Test with N.I.N.A. 3.1 HF2 
+12. README.md improved
+13. Examples adapted
 
 ### Open topics 
 

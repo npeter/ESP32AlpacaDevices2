@@ -10,6 +10,15 @@ The following devices are supported:
 This library is more or less a new implementation. But it's primary based on the great ideas and work of:
 - https://github.com/agnunez/AlpacaServerESP32.git 
 - https://github.com/elenhinan/ESPAscomAlpacaServer
+
+<br><br>
+Great and important Libraries used in this implementation:
+- Async WebServer for ESP
+    - https://registry.platformio.org/libraries/mathieucarbou/ESP%20Async%20WebServer
+- Json 
+    - https://arduinojson.org/
+- Upload over the air 
+    - https://github.com/ayushsharma82/ElegantOTA
 <br>
 <br>
 
@@ -33,7 +42,7 @@ My primary motivation was:
 - Multi ASCOM devices on one ESP32
 - Support for several client connections per device 
 - Pass ASCOM Conform Universal validation with zero errors and issues (ConformU 3.0.0)
-- Addapted for ArduinoJason V7 (https://github.com/bblanchon/ArduinoJson.git)
+- Addapted for ArduinoJason V7 
 
 - Test with N.I.N.A 3.1 HF2 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
 - Suported ASCOM devices:
@@ -117,7 +126,7 @@ My primary motivation was:
 - Webpage data has to be stored in the LittleFS - Filesystem of the ESP32
     - platformio/Build Filesystem image
 
-        **Example:**<br>
+        **VSCode example output:**<br>
         Building FS image from 'data' directory to .pio\build\wemos_d1_mini32\littlefs.bin
         /www/css/bootstrap.min.css.gz
         /www/css/jquery-ui.min.css.gz
@@ -130,7 +139,8 @@ My primary motivation was:
 
 
     - platformio/Upload Filesystem Image<br>
-        **Example:**<br>
+
+        **VSCode example output:**<br>
         Building in release mode<br>
         Building FS image from 'data' directory to .pio\build\wemos_d1_mini32\littlefs.bin<br>
         /www/css/bootstrap.min.css.gz        
@@ -186,12 +196,67 @@ My primary motivation was:
 
 <br><br>
 <img src="Design.png" width="600">
-ESP32AlpacaDevices class diagram
+<br>ESP32AlpacaDevices class diagram
 
 <br><br>
 <img src="AlpacaDiscoveryMap.png" width="600">
-Demo Application: Alpaca Discovery Map generated with **Conform Universal **
+<br>Demo Application: Alpaca Discovery Map generated with **Conform Universal **
 <br><br>
+
+## Example main.cpp (see ./Examples/*.** for more details)
+The following code block shows the prinziple setup and loop 
+
+    #include <SLog.h>
+    #include <AlpacaDebug.h>
+    #include <AlpacaServer.h>
+    #include <CoverCalibrator.h>
+    #include <Switch.h>
+    ...
+
+    // Create CoverCalibrator, SwitchDevice and AlpacaServer
+    CoverCalibrator coverCalibrator;
+    Switch switchDevice;  
+    AlpacaServer alpaca_server("your server name", "your manufacture", "your version", "your location");
+    ...
+    void setup()
+    {
+        // Setup logging 
+        g_Slog.Begin(Serial, 115200);
+        SLOG_INFO_PRINTF("BigPet ESP32ALPACADeviceDemo started ...\n");
+
+        // Setup WiFi
+        ... 
+
+        // Setup ESP32 Alpaca Server and Devices
+        // 1. Init AlpacaServer
+        alpaca_server.Begin();
+
+        // 2. Init and add devices
+        coverCalibrator.Begin();
+        switch.Begin();
+        alpaca_server.AddDevice(&coverCalibrator);
+        alpaca_server.AddDevice(&switchDevice);
+
+        // 3. Finalize AlpacaServer 
+        alpaca_server.RegisterCallbacks();
+        a lpaca_server.LoadSettings();
+        ...
+
+        g_Slog.SetLvlMsk(SLOG_WARNING);
+        g_Slog.SetEnableSerial(true);
+        ...
+    }
+
+    void loop()
+    {
+        ...
+        alpaca_server.Loop();
+        coverCalibrator.Loop();
+        switchDevice.Loop();
+        ...
+        delay(50);
+    }
+
 
 
 ## Useful Links

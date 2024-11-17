@@ -8,7 +8,7 @@
 **************************************************************************************************/
 #include "ObservingConditions.h"
 
-ObservingConditions::ObservingConditions()
+ObservingConditions::ObservingConditions() : AlpacaObservingConditions()
 {
 }
 
@@ -71,7 +71,7 @@ void ObservingConditions::Loop()
     {
         _refresh();
     }
-    AlpacaObservingConditions::Loop();
+    //AlpacaObservingConditions::Loop();
 }
 
 const bool ObservingConditions::_putAveragePeriodRequest(double average_period)
