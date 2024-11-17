@@ -82,6 +82,9 @@
 12. README.md improved
 13. Examples adapted
 
+## 3.2.1 2024-11-17 in Work
+1. V3.2.1 created
+
 ### Open topics 
 
 
