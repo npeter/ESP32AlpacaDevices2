@@ -13,7 +13,7 @@ class AlpacaFocuser : public AlpacaDevice
 {
 
 public:
-    void _alpacaGetPage(AsyncWebServerRequest *request, const char* const page);
+    //void _alpacaGetPage(AsyncWebServerRequest *request, const char* const page);
 
 private:
     void _alpacaGetAbsolut(AsyncWebServerRequest *request);

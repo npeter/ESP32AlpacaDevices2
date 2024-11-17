@@ -15,7 +15,7 @@ const int k_close_duration_ms = 2000;
 
 const char *const CoverCalibrator::k_device_state_str[7] = {"Init", "Closed", "Opens", "Open", "Closes", "Stopped", "invalid"};
 
-CoverCalibrator::CoverCalibrator()
+CoverCalibrator::CoverCalibrator() : AlpacaCoverCalibrator()
 {
     SetBrightness(0);
     SetMaxBrightness(ALPACA_COVER_CALIBRATOR_MAX_BRIGHTNESS);

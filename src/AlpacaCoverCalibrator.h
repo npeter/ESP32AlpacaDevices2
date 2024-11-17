@@ -86,10 +86,6 @@ private:
   virtual const bool _putCommandString(const char *const command, const char *const raw, char* string_response, size_t string_response_size) = 0;
 #endif
 
-
-
-
-
   virtual const bool _calibratorOff() = 0;
   virtual const bool _calibratorOn(int32_t brightness) = 0;
 

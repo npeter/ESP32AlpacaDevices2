@@ -11,7 +11,7 @@
 #include <Arduino.h>
 
 // Library version see also library.json/version
-const char esp32_alpaca_device_library_version[] = "3.1.1";
+const char esp32_alpaca_device_library_version[] = "3.2.0";
 
 // ALPACA Server
 #define ALPACA_MAX_CLIENTS 8
@@ -82,11 +82,11 @@ const char esp32_alpaca_device_library_version[] = "3.1.1";
 #define ALPACA_FOCUSER_NAME "not used"                              // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_FOCUSER_DEVICE_TYPE "focuser"                        // don't change
 
-// // CoverCalibrator - Optional Methods
-// #define ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
-// #define ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
-// #define ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
-// #define ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
+// // Focuser - Optional Methods
+#define ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
+//#define ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
+#define ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+#define ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
 
 // include user config
 #include "UserConfig.h"

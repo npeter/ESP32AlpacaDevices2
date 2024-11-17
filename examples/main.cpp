@@ -7,6 +7,7 @@
 
   Copyright 2024 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
+//#define CONFIG_ASYNC_TCP_USE_WDT 0
 
 // commend/uncommend to enable/disable device testsing with templates
 #define TEST_COVER_CALIBRATOR     // create CoverCalibrator device
@@ -112,6 +113,9 @@ void setup()
 
 
   // setup ESP32AlpacaDevices
+  // 1. Init AlpacaServer
+  // 2. Init and add devices
+  // 3. Finalize AlpacaServer
   alpaca_server.Begin();
 
 #ifdef TEST_COVER_CALIBRATOR
@@ -129,19 +133,20 @@ void setup()
   alpaca_server.AddDevice(&observingConditions);
 #endif
 
-
 #ifdef TEST_FOCUSER
   focuser.Begin();
   alpaca_server.AddDevice(&focuser);
 #endif
 
+  alpaca_server.RegisterCallbacks();
   alpaca_server.LoadSettings();
 
   // finalize logging setup
   g_Slog.Begin(alpaca_server.GetSyslogHost().c_str());
+  SLOG_INFO_PRINTF("SYSLOG enabled and running log_lvl=%s enable_serial=%s\n", g_Slog.GetLvlMskStr().c_str(), alpaca_server.GetSerialLog() ? "true" : "false"); 
   g_Slog.SetLvlMsk(alpaca_server.GetLogLvl());
   g_Slog.SetEnableSerial(alpaca_server.GetSerialLog());
-  SLOG_INFO_PRINTF("SYSLOG enabled and running log_lvl=%s enable_serial=%s\n", g_Slog.GetLvlMskStr().c_str(), alpaca_server.GetSerialLog() ? "true" : "false");
+
 }
 
 void loop()
@@ -154,20 +159,24 @@ void loop()
 
 #ifdef TEST_COVER_CALIBRATOR
   coverCalibrator.Loop();
+  delay(50);
 #endif
 
 #ifdef TEST_SWITCH
   switchDevice.Loop();
+  delay(50);
 #endif
 
 #ifdef TEST_OBSERVING_CONDITIONS
   observingConditions.Loop();
+  delay(10);
 #endif
 
 #ifdef TEST_FOCUSER
   focuser.Loop();
+  delay(10);
 #endif
 
-  delay(50);
+  delay(10);
 
 }

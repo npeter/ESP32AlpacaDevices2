@@ -55,14 +55,14 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move");
 }
 
-void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)
-{
-    _service_counter++;
-    char path[256] = {0};
-    snprintf(path, sizeof(path), "%s.html", page);
-    SLOG_PRINTF(SLOG_INFO, "send(LittleFS, %s)\n", path);
-    request->send(LittleFS, path);
-}
+// void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)
+// {
+//     _service_counter++;
+//     char path[256] = {0};
+//     snprintf(path, sizeof(path), "%s.html", page);
+//     SLOG_PRINTF(SLOG_INFO, "send(LittleFS, %s)\n", path);
+//     request->send(LittleFS, path);
+// }
 
 void AlpacaFocuser::_alpacaGetAbsolut(AsyncWebServerRequest *request)
 {
@@ -352,13 +352,13 @@ void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
         throw(&_rsp_status);
 
     if (_alpaca_server->GetParam(request, "Command", command_str, sizeof(command_str), Spelling_t::kStrict) == false)
-        _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Command");
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Command");
 
     if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
-        _alpaca_server->ThrowRspStatusParameterNotFound(request, _rsp_status, "Raw");
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
 
     if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
-        _alpaca_server->ThrowRspStatusCommandStringInvalid(request, _rsp_status, command_str);
+       MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command_str);
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
 
@@ -366,7 +366,6 @@ void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
     return;
     
 mycatch:
-
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };

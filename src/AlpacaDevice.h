@@ -43,7 +43,8 @@ protected:
     void _getJsondata(AsyncWebServerRequest *request);
     void _putJsondata(AsyncWebServerRequest *request);
     void createCallBack(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char command[]);
-    void createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[]);
+    void createCallBackUrl(ArRequestHandlerFunction fn, WebRequestMethodComposite type, const char url[], const char handler_name[]);
+    void _getSetupPage(AsyncWebServerRequest *request);
     void _addAction(const char *const action);
 
     // alpaca commands

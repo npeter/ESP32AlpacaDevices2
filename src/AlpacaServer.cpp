@@ -91,9 +91,8 @@ void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_little
                             {
                                 String url = request->url();
                                 request->send(400, "text/plain", "Not found: '" + url + "'");
-                                SLOG_WARNING_PRINTF("Url (%s) not found\n", url.c_str()); });
+                                SLOG_WARNING_PRINTF("%s Url (%s) not found\n", WebRequestMethod2Str(request->method()), url.c_str()); });
 
-    _registerCallbacks();
 #ifdef ALPACA_ENABLE_OTA_UPDATE
     ElegantOTA.begin(_server_tcp);
 #endif
@@ -138,10 +137,16 @@ void AlpacaServer::AddDevice(AlpacaDevice *device)
     SLOG_INFO_PRINTF("ADD deviceType=%s deviceNumber=%d\n", deviceType, deviceNumber);
 }
 
-// register callbacks for REST API
-void AlpacaServer::_registerCallbacks()
+/*
+ * Setup Server REST API
+ */
+void AlpacaServer::RegisterCallbacks()
 {
-    // setup rest api
+    // ServeStatic settings
+    SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", kAlpacaSettingsPath, kAlpacaSettingsPath);
+    _server_tcp->serveStatic(kAlpacaSettingsPath, LittleFS, kAlpacaSettingsPath);
+
+    // HTTP_GET /management/*
     SLOG_INFO_PRINTF("REGISTER handler for \"/management/apiversions\" to _getApiVersions\n");
     _server_tcp->on("/management/apiversions", HTTP_GET, LHF(_getApiVersions));
     SLOG_INFO_PRINTF("REGISTER handler for \"/management/v1/description\" to _getDescription\n");
@@ -149,30 +154,36 @@ void AlpacaServer::_registerCallbacks()
     SLOG_INFO_PRINTF("REGISTER handler for \"/management/v1/configureddevices\" to _getConfiguredDevices\n");
     _server_tcp->on("/management/v1/configureddevices", HTTP_GET, LHF(_getConfiguredDevices));
 
-    // setup webpages
-    _server_tcp->serveStatic("/setup", LittleFS, "/www/setup.html");
-    _server_tcp->serveStatic(_settings_file, LittleFS, _settings_file);
-    _server_tcp->serveStatic("/", LittleFS, "/").setCacheControl("max-age=3600");
-
+    // HTTP_GET /jsondata
     SLOG_INFO_PRINTF("REGISTER handler for \"/jsondata\" to _getJsondata\n");
     _server_tcp->on("/jsondata", HTTP_GET, LHF(_getJsondata));
 
+    // HTTP_GET /links
     SLOG_INFO_PRINTF("REGISTER handler for \"/links\" to _getLinks\n");
     _server_tcp->on("/links", HTTP_GET, LHF(_getLinks));
 
-    // jsonhandler
-    AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler("/jsondata", [this](AsyncWebServerRequest *request, JsonVariant &json)
-                                                                               {
-    SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());
-       DBG_REQ
-       JsonObject jsonObj = json.as<JsonObject>();
-       this->_readJson(jsonObj);
-       request->send(200, F("application/json"), "{\"recieved\":\"true\"}"); 
-        SLOG_PRINTF(SLOG_INFO, "... END REQ (%s)\n", request->url().c_str());    
-        DBG_END });
-    _server_tcp->addHandler(jsonhandler);
+    // HTTP_GET /setup
+    SLOG_INFO_PRINTF("REGISTER handler for \"/setup\" to _getLinks\n");
+    _server_tcp->on("/setup", HTTP_GET, LHF(_getSetupPage));
 
-    // /save_settings  handler
+    // handler for HTTP_POST /jsondata
+    {
+        const char url[] = "/jsondata";
+        AsyncCallbackJsonWebHandler *jsonhandler = new AsyncCallbackJsonWebHandler(url, [this](AsyncWebServerRequest *request, JsonVariant &json)
+                                                                                   {
+            SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s %s) ...\n", WebRequestMethod2Str(request->method()), request->url().c_str());
+            DBG_REQ
+            JsonObject jsonObj = json.as<JsonObject>();
+            this->_readJson(jsonObj);
+            request->send(200, F("application/json"), "{\"recieved\":\"true\"}"); 
+                SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::*jsonhandler(%s)\n", request->url().c_str());    
+                DBG_END });
+
+        SLOG_PRINTF(SLOG_INFO, "ADD HANDLER jsonhandler for %s\n", url);
+        _server_tcp->addHandler(jsonhandler);
+    }
+
+    // HTTP_GET /save_settings
     _server_tcp->on("/save_settings", HTTP_GET, [this](AsyncWebServerRequest *request)
                     {
         SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%s) ...\n", request->url().c_str());               
@@ -183,7 +194,7 @@ void AlpacaServer::_registerCallbacks()
         SLOG_PRINTF(SLOG_INFO, "... END REQ (%s)\n", request->url().c_str());                    
         DBG_END });
 
-    // /reset handler
+    // HTTP_GET /reset
     _server_tcp->on("/reset", HTTP_GET, [this](AsyncWebServerRequest *request)
                     {
         SLOG_PRINTF(SLOG_INFO,"BEGIN REQ (%s) ... RESET\n", request->url().c_str());
@@ -191,6 +202,20 @@ void AlpacaServer::_registerCallbacks()
         _reset_request = true;
         request->send(200,"application/json","{\"activated\":true}");
         DBG_END; });
+
+    // ServeStatic settings
+    {
+        const char url[] = "/www/js/";
+        const char path[] = "/www/js";
+        SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);
+        getServerTCP()->serveStatic(url, LittleFS, path).setCacheControl("max-age=600");
+    }
+    {
+        const char url[] = "/www/css/";
+        const char path[] = "/www/css";
+        SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);
+        getServerTCP()->serveStatic(url, LittleFS, path).setCacheControl("max-age=600");
+    }
 }
 
 void AlpacaServer::_getApiVersions(AsyncWebServerRequest *request)
@@ -458,9 +483,15 @@ void AlpacaServer::OnAlpacaDiscovery(AsyncUDPPacket &udpPacket)
     SLOG_PRINTF(SLOG_NOTICE, "... END rsp=%s\n", resp_buf);
 }
 
+void AlpacaServer::GetPath(AsyncWebServerRequest *request, const char *const path)
+{
+    SLOG_PRINTF(SLOG_INFO, "REQ url=%s send(LittleFS, %s)\n", request->url().c_str(), path);
+    request->send(LittleFS, path);
+}
+
 void AlpacaServer::_getJsondata(AsyncWebServerRequest *request)
 {
-    SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
+    SLOG_PRINTF(SLOG_INFO, "BEGIN REQ %s...\n", request->url().c_str());
     DBG_REQ
     JsonDocument doc;
     JsonObject root = doc.to<JsonObject>();
@@ -474,7 +505,7 @@ void AlpacaServer::_getJsondata(AsyncWebServerRequest *request)
 
 void AlpacaServer::_getLinks(AsyncWebServerRequest *request)
 {
-    SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
+    SLOG_PRINTF(SLOG_INFO, "BEGIN REQ %s...\n", request->url().c_str());
     DBG_REQ
     JsonDocument doc;
     JsonObject root = doc.to<JsonObject>();
@@ -491,6 +522,12 @@ void AlpacaServer::_getLinks(AsyncWebServerRequest *request)
     DBG_END
 }
 
+void AlpacaServer::_getSetupPage(AsyncWebServerRequest *request)
+{
+    SLOG_PRINTF(SLOG_INFO, "REQ url=%s\n", request->url().c_str());
+    GetPath(request, kAlpacaSetupPagePath);
+}
+
 void AlpacaServer::_readJson(JsonObject &root)
 {
     DBG_JSON_PRINTFJ(SLOG_INFO, root, "BEGIN (root=<%s>) ...\n", _ser_json_);
@@ -501,6 +538,11 @@ void AlpacaServer::_readJson(JsonObject &root)
     _syslog_host = root["SYSLOG_host"] | _syslog_host;
     _log_level = root["LOG_level"] | SLOG_DEBUG;
     _serial_log = (root["SERIAL_log"] | 1) == 0 ? false : true;
+
+    // activated SLog settings
+    g_Slog.Begin(_syslog_host.c_str());
+    g_Slog.SetLvlMsk(_log_level);
+    g_Slog.SetEnableSerial(_serial_log);
 
     SLOG_PRINTF(SLOG_INFO, "... END _mng_server_name=%s _port_tcp=%d _port_udp=%d _syslog_host=%s _log_level=%d _serial_log=%s\n",
                 _mng_server_name.c_str(), _port_tcp, _port_udp, _syslog_host.c_str(), _log_level, _serial_log == true ? "true" : "false");
@@ -535,22 +577,22 @@ bool AlpacaServer::SaveSettings()
     }
     DBG_JSON_PRINTFJ(SLOG_NOTICE, root, "... root=<%s> ...\n", _ser_json_);
 
-    LittleFS.remove(_settings_file);
-    File file = LittleFS.open(_settings_file, FILE_WRITE);
+    LittleFS.remove(kAlpacaSettingsPath);
+    File file = LittleFS.open(kAlpacaSettingsPath, FILE_WRITE);
     if (!file)
     {
-        SLOG_PRINTF(SLOG_WARNING, "... END LittleFS could not create %s\n", _settings_file);
+        SLOG_PRINTF(SLOG_WARNING, "... END LittleFS could not create %s\n", kAlpacaSettingsPath);
         return false;
     }
     if (serializeJson(doc, file) == 0)
     {
-        SLOG_PRINTF(SLOG_WARNING, "... END ArduinoJson failed to write %s\n", _settings_file);
+        SLOG_PRINTF(SLOG_WARNING, "... END ArduinoJson failed to write %s\n", kAlpacaSettingsPath);
         file.close();
         return false;
     }
     else
     {
-        SLOG_PRINTF(SLOG_INFO, "... END ArduinoJson wrote to %s succesfully\n", _settings_file);
+        SLOG_PRINTF(SLOG_INFO, "... END ArduinoJson wrote to %s succesfully\n", kAlpacaSettingsPath);
     }
     file.close();
     return true;
@@ -561,10 +603,10 @@ bool AlpacaServer::LoadSettings()
     SLOG_PRINTF(SLOG_INFO, "BEGIN ...\n");
     JsonDocument doc;
 
-    File file = LittleFS.open(_settings_file, FILE_READ);
+    File file = LittleFS.open(kAlpacaSettingsPath, FILE_READ);
     if (!file)
     {
-        SLOG_WARNING_PRINTF("LittleFS: %s could not open\n", _settings_file);
+        SLOG_WARNING_PRINTF("LittleFS: %s could not open\n", kAlpacaSettingsPath);
         return false;
     }
     DeserializationError error = deserializeJson(doc, file);
@@ -576,7 +618,7 @@ bool AlpacaServer::LoadSettings()
         return false;
     }
 
-    SLOG_PRINTF(SLOG_INFO, "... LittleFS: %s loaded ...\n", _settings_file);
+    SLOG_PRINTF(SLOG_INFO, "... LittleFS: %s loaded ...\n", kAlpacaSettingsPath);
     _readJson(root);
 
     for (int i = 0; i < _n_devices; i++)
@@ -617,4 +659,43 @@ bool AlpacaServer::CheckMngClientData(AsyncWebServerRequest *req, Spelling_t spe
 mycatch: // empty
 
     return result;
+}
+
+const char *const k_web_request_methode_str[9] = {"HTTP_GET", "HTTP_POST", "HTTP_DELETE", "HTTP_PUT", "HTTP_PATCH", "HTTP_HEAD", "HTTP_OPTIONS", "HTTP_ANY", "HTTP_BAD"};
+
+const char *const WebRequestMethod2Str(uint8_t method)
+{
+    int idx = 8;
+
+    switch ((int)method)
+    {
+    case HTTP_GET:
+        idx = 0;
+        break;
+    case HTTP_POST:
+        idx = 1;
+        break;
+    case HTTP_DELETE:
+        idx = 1;
+        break;
+    case HTTP_PUT:
+        idx = 1;
+        break;
+    case HTTP_PATCH:
+        idx = 1;
+        break;
+    case HTTP_HEAD:
+        idx = 1;
+        break;
+    case HTTP_OPTIONS:
+        idx = 1;
+        break;
+    case HTTP_ANY:
+        idx = 1;
+        break;
+    default:
+        idx = 8;
+        break;
+    }
+    return k_web_request_methode_str[idx];
 }
