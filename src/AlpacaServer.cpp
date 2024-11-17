@@ -202,18 +202,21 @@ void AlpacaServer::RegisterCallbacks()
         _reset_request = true;
         request->send(200,"application/json","{\"activated\":true}");
         DBG_END; });
-}
 
-// void AlpacaServer::_postJson(AsyncWebServerRequest *request, JsonVariant &json)
-// {
-//     SLOG_PRINTF(SLOG_INFO, "BEGIN REQ (%02x %s) ...\n", (int)request->method(), request->url().c_str());
-//     DBG_REQ
-//     JsonObject jsonObj = json.as<JsonObject>();
-//     this->_readJson(jsonObj);
-//     request->send(200, F("application/json"), "{\"recieved\":\"true\"}");
-//     SLOG_PRINTF(SLOG_INFO, "... END REQ AlpacaServer::*jsonhandler(%s)\n", request->url().c_str());
-//     DBG_END
-// };
+    // ServeStatic settings
+    {
+        const char url[] = "/www/js/";
+        const char path[] = "/www/js";
+        SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);
+        getServerTCP()->serveStatic(url, LittleFS, path).setCacheControl("max-age=600");
+    }
+    {
+        const char url[] = "/www/css/";
+        const char path[] = "/www/css";
+        SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);
+        getServerTCP()->serveStatic(url, LittleFS, path).setCacheControl("max-age=600");
+    }
+}
 
 void AlpacaServer::_getApiVersions(AsyncWebServerRequest *request)
 {

@@ -113,6 +113,9 @@ void setup()
 
 
   // setup ESP32AlpacaDevices
+  // 1. Init AlpacaServer
+  // 2. Init and add devices
+  // 3. Finalize AlpacaServer
   alpaca_server.Begin();
 
 #ifdef TEST_COVER_CALIBRATOR
@@ -130,12 +133,12 @@ void setup()
   alpaca_server.AddDevice(&observingConditions);
 #endif
 
-
 #ifdef TEST_FOCUSER
   focuser.Begin();
   alpaca_server.AddDevice(&focuser);
 #endif
 
+  alpaca_server.RegisterCallbacks();
   alpaca_server.LoadSettings();
 
   // finalize logging setup
