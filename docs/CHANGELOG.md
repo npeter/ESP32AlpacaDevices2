@@ -67,20 +67,21 @@
 7. Remove delay() AlpacaDebug.h/DBG_REQ 
 8. Log library version
 
-## 3.1.1 2024-11-06 in work
-1. Version 3.1.1 
+## 3.2.0 2024-11-17 Release 
+1. Version 3.1.1 in work
 2. Rework serveStatic to avoid unexpected filsystem operations
 3. AlpacaSwitch.GetValue() wrong return type changed from const double to const bool
 4. AlpacaSwitch._alpacaPutSetSwitchValue() error message improved
 5. FOCUSER_PUT_ACTION, FOCUSER_PUT_COMMAND_BOOL, FOCUSER_PUT_COMMAND_STRING implemented
 6. Dynamic activation of log settings  
 7. Refactoring registration of urls and handlers for server and device 
-8. Add method to DBG_REQ output
+8. Add request.method to DBG_REQ output
 9. AlpacaServer Typo corrected
 10. Test with "Conform Universal 4.0.0"
 11. Test with N.I.N.A. 3.1 HF2 
 12. README.md improved
 13. Examples adapted
+
 
 ### Open topics 
 
