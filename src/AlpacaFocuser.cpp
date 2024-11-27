@@ -235,14 +235,16 @@ void AlpacaFocuser::_alpacaPutHalt(AsyncWebServerRequest *request)
 {
     DBG_FOCUSER_PUT_HALT;
     _service_counter++;
+    uint32_t client_idx = 0;    
     _alpaca_server->RspStatusClear(_rsp_status);
-    // uint32_t id = 0;
 
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-    if (client_idx > 0)
-    {
-        _putHalt();
-    }
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
+        
+    _putHalt();
+
+mycatch:
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };

@@ -85,6 +85,8 @@
 ## 3.2.1 2024-11-17 in Work
 1. V3.2.1 created
 2. Example/Switch.cpp ReadJson/WriteJson spaces in section names removed
+3. Example/main.cpp delays adapted
+4. AlpacaFocuser issue with ConformUniversal Test Case: "Bad ClientTransactionID casing" solved
 
 ### Open topics 
 TODO concept for usr settings
