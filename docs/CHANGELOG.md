@@ -84,8 +84,10 @@
 
 ## 3.2.1 2024-11-17 in Work
 1. V3.2.1 created
+2. Example/Switch.cpp ReadJson/WriteJson spaces in section names removed
 
 ### Open topics 
+TODO concept for usr settings
 
 
 

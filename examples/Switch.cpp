@@ -130,7 +130,7 @@ void Switch::AlpacaWriteJson(JsonObject &root)
   {
     if (GetSwitchInitBySetup(u))
     {
-      snprintf(title, sizeof(title), "Configuration Device %d", u);
+      snprintf(title, sizeof(title), "Configuration_Device_%d", u);
       JsonObject obj_config = root[title].to<JsonObject>();
       {
         char s[128];
