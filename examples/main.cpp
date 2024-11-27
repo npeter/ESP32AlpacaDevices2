@@ -42,9 +42,7 @@ ObservingConditions observingConditions;
 Focuser focuser;
 #endif
 
-#define PIN_WIFI_LED 15 // if lolin_s2_mini
-
-#define VERSION "2.0.1"
+#define VERSION "2.1.0"
 
 // ASCOM Alpaca server with discovery
 AlpacaServer alpaca_server(ALPACA_MNG_SERVER_NAME, ALPACA_MNG_MANUFACTURE, ALPACA_MNG_MANUFACTURE_VERSION, ALPACA_MNG_LOCATION);
@@ -159,12 +157,12 @@ void loop()
 
 #ifdef TEST_COVER_CALIBRATOR
   coverCalibrator.Loop();
-  delay(50);
+  delay(10);
 #endif
 
 #ifdef TEST_SWITCH
   switchDevice.Loop();
-  delay(50);
+  delay(10);
 #endif
 
 #ifdef TEST_OBSERVING_CONDITIONS
@@ -178,5 +176,4 @@ void loop()
 #endif
 
   delay(10);
-
 }
