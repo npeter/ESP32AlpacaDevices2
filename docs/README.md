@@ -32,18 +32,16 @@ My primary motivation was:
 
 ## Features
 - Easy to use platform for Alpaca Self Contained Device & Driver
-- Templates for CoverCalibrator, Switch and ObservingConditions (Focuser in future)
+- Templates for CoverCalibrator, Switch, ObservingConditions and Focuser
 - Support ASCOM auto discovery
-- Optimized for ESP32
-- Improved robustness, error handling and debugging
+- Optimized for ESP32 (ESP286 not supported!)
+- Improved robustness, logging, error handling and debugging
 - Device service counter for diagnosis
 - Published as library
-
-- Multi ASCOM devices on one ESP32
-- Support for several client connections per device 
-- Pass ASCOM Conform Universal validation with zero errors and issues (ConformU 3.0.0)
+- Several and different ASCOM devices on one ESP32 possible
+- Several client connections per device supported
+- Pass ASCOM Conform Universal validation with zero errors and zerro issues (ConformU 3.0.0)
 - Addapted for ArduinoJason V7 
-
 - Test with N.I.N.A 3.1 HF2 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
 - Suported ASCOM devices:
     - CoverCalibrator, ObservingConditions, Switch, Focuser
@@ -52,14 +50,26 @@ My primary motivation was:
     - ObservingConditions.h, ObservingConditions.cpp
     - Switch.h, Switch.cpp
     - Focuser.h, Focuser.cpp
-- Support of ASCOM Methods: action, commandblind, commandbool, commandstring
+- Support of optional ASCOM Methods: action, commandblind, commandbool, commandstring
     - Full implementation for CoverCalibrator
-- Logging using SLog: "https://github.com/npeter/SLog"
-- Configuration via dynamicaly created webpages as developed by (https://github.com/elenhinan/ESPAscomAlpacaServer)
+- Serial and network based logging using SLog: "https://github.com/npeter/SLog"
+- Manage persistant device data
+    - stored with Setup/button "Save" in LittleFS:/settins.json
+    - read (only) at device boot
+
+- Configure persistant data via dynamicaly created webpages (based on the ideas from (https://github.com/elenhinan/ESPAscomAlpacaServer))
 <br>
 <br>
 <img src="AlpacaAscomDriverSetup.png" width="600">
-<br><br>
+<br>
+    - Buttons:
+        - Refresh: Refresh web page with current device data
+        - Update: Write web page data to device
+        - Save: Store device data to LittleFS:/settings.json
+        - Reset: Reset device after 10 seconds
+    - Tabs:
+        - Server: Server settings
+        - Dynamic created device specific settings tabs
 
 ## Remarks
 - For this project "platformio" (https://platformio.org/) is used as development system.
@@ -189,10 +199,12 @@ My primary motivation was:
 <br><br>
 
 ## Usage
-- Let your class inherit the relevant AscomDevice-derived class (e.c. AscomSwitch, AscomCoverCalibrator, AscomObservingConditions)
+- Let your class inherit the relevant AscomDevice-derived class (e.c. AscomSwitch, AscomCoverCalibrator, AscomObservingConditions, AscomFocuser)
 - Implement all pure virtual functions
-- Implement all your device specific functions
-- See demo application  .\Examples\*
+- Implement all your device/hardware specific functions
+- Adapt AlpacaReadJson/AlpacaWriteJson if needed
+- Implement main.cpp/setup() and loop() (see example below)
+- See also demo application  .\Examples\*
 
 <br><br>
 <img src="Design.png" width="600">
@@ -239,7 +251,7 @@ The following code block shows the prinziple setup and loop
 
         // 3. Finalize AlpacaServer 
         alpaca_server.RegisterCallbacks();
-        a lpaca_server.LoadSettings();
+        alpaca_server.LoadSettings();
         ...
 
         g_Slog.SetLvlMsk(SLOG_WARNING);

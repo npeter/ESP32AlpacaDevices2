@@ -89,6 +89,7 @@
 4. AlpacaFocuser issue with ConformUniversal Test Case: "Bad ClientTransactionID casing" solved
 5. AlpacaFocuser/AlpacaPutCommandString "throw/catch" replaced by "goto mycatch"
 6. Data/favicon.ico added
+7. docs/README.md improved
 
 ### Open topics 
 TODO concept for usr settings
