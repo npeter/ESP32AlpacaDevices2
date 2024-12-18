@@ -351,7 +351,7 @@ void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
     char str_response[64] = {0};
 
     if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-        throw(&_rsp_status);
+        goto mycatch;
 
     if (_alpaca_server->GetParam(request, "Command", command_str, sizeof(command_str), Spelling_t::kStrict) == false)
         MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Command");

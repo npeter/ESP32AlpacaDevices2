@@ -205,6 +205,12 @@ void AlpacaServer::RegisterCallbacks()
 
     // ServeStatic settings
     {
+        const char url[] = "/favicon.ico";
+        const char path[] = "/favicon.ico";
+        SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);
+        getServerTCP()->serveStatic(url, LittleFS, path).setCacheControl("max-age=600");
+    }    
+    {
         const char url[] = "/www/js/";
         const char path[] = "/www/js";
         SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);

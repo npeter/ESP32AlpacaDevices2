@@ -87,6 +87,8 @@
 2. Example/Switch.cpp ReadJson/WriteJson spaces in section names removed
 3. Example/main.cpp delays adapted
 4. AlpacaFocuser issue with ConformUniversal Test Case: "Bad ClientTransactionID casing" solved
+5. AlpacaFocuser/AlpacaPutCommandString "throw/catch" replaced by "goto mycatch"
+6. Data/favicon.ico added
 
 ### Open topics 
 TODO concept for usr settings
