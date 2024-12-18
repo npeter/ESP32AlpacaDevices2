@@ -102,7 +102,7 @@ void Switch::AlpacaReadJson(JsonObject &root)
   {
     if (GetSwitchInitBySetup(u))
     {
-      snprintf(title, sizeof(title), "Configuration Device %d", u);
+      snprintf(title, sizeof(title), "Configuration_Device_%d", u);
       if (JsonObject obj_config = root[title])
       {
         InitSwitchName(u, obj_config["Name"] | GetSwitchName(u));
