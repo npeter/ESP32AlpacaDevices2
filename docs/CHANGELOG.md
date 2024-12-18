@@ -82,7 +82,7 @@
 12. README.md improved
 13. Examples adapted
 
-## 3.2.1 2024-11-17 in Work
+## 3.3.0 2024-12-18 Release
 1. V3.2.1 created
 2. Example/Switch.cpp ReadJson/WriteJson spaces in section names removed
 3. Example/main.cpp delays adapted
