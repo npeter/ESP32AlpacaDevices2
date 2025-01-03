@@ -4,7 +4,7 @@
   Revision:       $Revision: 01 $
   Description:    Common ASCOM Alpaca Focuser V3
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #pragma once
 #include "AlpacaDevice.h"
@@ -30,18 +30,15 @@ private:
     void _alpacaPutHalt(AsyncWebServerRequest *request);
     void _alpacaPutMove(AsyncWebServerRequest *request);
 
-#ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
     void AlpacaPutAction(AsyncWebServerRequest *request);
-    virtual const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size)=0;
-#endif
-#ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
+    void AlpacaPutCommandBlind(AsyncWebServerRequest *request);
     void AlpacaPutCommandBool(AsyncWebServerRequest *request);
-    virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response)=0;
-#endif
-#ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
     void AlpacaPutCommandString(AsyncWebServerRequest *request);
+
+    virtual const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size)=0;
+    virtual const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response)=0;
+    virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response)=0;
     virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size)=0;
-#endif
 
     virtual const char* const _getFirmwareVersion() { return "-"; };
     virtual const bool _putTempComp(bool temp_comp) = 0;

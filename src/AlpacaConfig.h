@@ -5,7 +5,7 @@
 
   Description:    Config for Alpac Lib
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #pragma once
 #include <Arduino.h>
@@ -46,12 +46,6 @@ const char esp32_alpaca_device_library_version[] = "3.3.0";
 #define ALPACA_COVER_CALIBRATOR_NAME "not used"                                      // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_COVER_CALIBRATOR_DEVICE_TYPE "covercalibrator"                        // don't change
 
-// // CoverCalibrator - Optional Methods
-#define ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
-#define ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
-#define ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
-#define ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
-
 // CoverCalibrator - Specific Properties
 #define ALPACA_COVER_CALIBRATOR_MAX_BRIGHTNESS 1023 // init; managed by setup
 
@@ -74,6 +68,7 @@ const char esp32_alpaca_device_library_version[] = "3.3.0";
 #define ALPACA_OBSERVING_CONDITIONS_NAME "not used"                                          // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_OBSERVING_CONDITIONS_DEVICE_TYPE "observingconditions"                        // don't change
 
+
 // =======================================================================================================
 // Focuser - Comon Properties
 #define ALPACA_FOCUSER_DESCRIPTION "Alpaca Focuser Template"        // init value; managed by config
@@ -81,12 +76,6 @@ const char esp32_alpaca_device_library_version[] = "3.3.0";
 #define ALPACA_FOCUSER_INTERFACE_VERSION 3                          // don't change
 #define ALPACA_FOCUSER_NAME "not used"                              // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_FOCUSER_DEVICE_TYPE "focuser"                        // don't change
-
-// // Focuser - Optional Methods
-#define ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
-//#define ALPACA_FOCUSER_PUT_COMMAND_BLIND_IMPLEMENTED
-#define ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
-#define ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
 
 // include user config
 #include "UserConfig.h"

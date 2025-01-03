@@ -4,7 +4,7 @@
   Revision:       $Revision: 01 $
   Description:    ASCOM Observing Conditions Device Template
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #include "ObservingConditions.h"
 

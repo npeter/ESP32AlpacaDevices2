@@ -4,7 +4,7 @@
   Revision:       $Revision: 01 $
   Description:    Common ASCOM Alpaca CoverCalibrator V1
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #include "AlpacaCoverCalibrator.h"
 
@@ -50,7 +50,7 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutOpenCover), HTTP_PUT, "opencover");
 }
 
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
+
 void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
 {
 
@@ -59,6 +59,7 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
     uint32_t client_idx = 0;
     char action[128] = {0};
     char parameters[128] = {0};
+    char str_response[1024] = {0};    
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
@@ -71,7 +72,7 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
     if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
         MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-    if (!_putAction(action, parameters))
+    if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
         MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, action, parameters);
 
 mycatch:
@@ -79,9 +80,8 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-#endif
 
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
+
 void AlpacaCoverCalibrator::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
 
@@ -90,6 +90,7 @@ void AlpacaCoverCalibrator::AlpacaPutCommandBlind(AsyncWebServerRequest *request
     uint32_t client_idx = 0;
     char command[128] = {0};
     char raw[16] = {0};
+    bool bool_response = false;
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
@@ -102,7 +103,7 @@ void AlpacaCoverCalibrator::AlpacaPutCommandBlind(AsyncWebServerRequest *request
     if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
         MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Parameters");
 
-    if (!_putCommandBlind(command, raw))
+    if (!_putCommandBlind(command, raw, bool_response))
         MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, command, raw);
 
 mycatch:
@@ -110,9 +111,8 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-#endif
 
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
+
 void AlpacaCoverCalibrator::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
 
@@ -146,9 +146,8 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-#endif
 
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
+
 void AlpacaCoverCalibrator::AlpacaPutCommandString(AsyncWebServerRequest *request)
 {
 
@@ -182,7 +181,7 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-#endif
+
 
 void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 {

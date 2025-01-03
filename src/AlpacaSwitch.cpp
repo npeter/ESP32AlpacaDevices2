@@ -1,10 +1,6 @@
 /**************************************************************************************************
-  Filename:       AlpacaSwitch.cpp
-  Revised:        $Date: 2024-01-28$
-  Revision:       $Revision: 01 $
   Description:    Common ASCOM Alpaca Switch V2
-
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #include "AlpacaSwitch.h"
 
@@ -42,6 +38,11 @@ void AlpacaSwitch::RegisterCallbacks()
 {
     AlpacaDevice::RegisterCallbacks();
 
+    this->createCallBack(LHF(AlpacaPutAction), HTTP_PUT, "action");
+    this->createCallBack(LHF(AlpacaPutCommandBlind), HTTP_PUT, "commandblind");
+    this->createCallBack(LHF(AlpacaPutCommandBool), HTTP_PUT, "commandbool");
+    this->createCallBack(LHF(AlpacaPutCommandString), HTTP_PUT, "commandstring");
+
     this->createCallBack(LHF(_alpacaGetMaxSwitch), HTTP_GET, "maxswitch");
     this->createCallBack(LHF(_alpacaGetCanWrite), HTTP_GET, "canwrite");
     this->createCallBack(LHF(_alpacaGetSwitch), HTTP_GET, "getswitch");
@@ -56,6 +57,140 @@ void AlpacaSwitch::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutSetSwitchName), HTTP_PUT, "setswitchname");
     this->createCallBack(LHF(_alpacaPutSetSwitchValue), HTTP_PUT, "setswitchvalue");
 }
+
+
+void AlpacaSwitch::AlpacaPutAction(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    //_service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char action[64] = {0};
+    char parameters[128] = {0};
+    char str_response[1024] = {0};
+
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0 && _clients[client_idx].client_id != ALPACA_CONNECTION_LESS_CLIENT_ID)
+        goto mycatch;
+
+    if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
+
+    if (_alpaca_server->GetParam(request, "Parameters", parameters, sizeof(parameters), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Action");
+
+    if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, parameters);
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response, JsonValue_t::kAsPlainStringValue);
+
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+};
+ 
+
+void AlpacaSwitch::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    _service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char command[64] = {0};
+    char raw[16] = "true";
+    bool bool_response = false;
+
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
+
+    if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Command");
+
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
+
+    if (_putCommandBlind(command, raw, bool_response) == false)
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command);
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)bool_response);
+
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+
+    DBG_END
+};
+
+
+void AlpacaSwitch::AlpacaPutCommandBool(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    _service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char command[64] = {0};
+    char raw[16] = "true";
+    bool bool_response = false;
+
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
+
+    if (_alpaca_server->GetParam(request, "Command", command, sizeof(command), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Command");
+
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
+
+    if (_putCommandBool(command, raw, bool_response) == false)
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command);
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (bool)bool_response);
+
+    DBG_END;
+    return;
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+
+    DBG_END
+};
+
+
+void AlpacaSwitch::AlpacaPutCommandString(AsyncWebServerRequest *request)
+{
+    DBG_DEVICE_PUT_ACTION_REQ;
+    _service_counter++;
+    uint32_t client_idx = 0;
+    _alpaca_server->RspStatusClear(_rsp_status);
+    char command_str[256] = {0};
+    char raw[16] = "true";
+    char str_response[64] = {0};
+
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
+
+    if (_alpaca_server->GetParam(request, "Command", command_str, sizeof(command_str), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Command");
+
+    if (_alpaca_server->GetParam(request, "Raw", raw, sizeof(raw), Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
+
+    if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
+       MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command_str);
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
+
+    DBG_END;
+    return;
+    
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
+    DBG_END
+};
+
 
 void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
 {
@@ -359,6 +494,8 @@ void AlpacaSwitch::_alpacaPutSetSwitchValue(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
+
+
 
 bool AlpacaSwitch::_getAndCheckId(AsyncWebServerRequest *request, uint32_t &id, Spelling_t spelling)
 {

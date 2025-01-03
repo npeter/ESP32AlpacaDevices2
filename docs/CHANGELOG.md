@@ -91,8 +91,13 @@
 6. Data/favicon.ico added
 7. docs/README.md improved
 
+## 3.3.1 2025-01-03
+1. V3.3.1 created
+2. optional alpaca services **put action/commandblind/commandbool/commandstring** implemented
+3. Copyright info modified
+
 ### Open topics 
-TODO concept for usr settings
+
 
 
 

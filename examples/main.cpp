@@ -5,7 +5,7 @@
 
   Description:    ASCOM Alpaca ESP32 Server Test
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 //#define CONFIG_ASYNC_TCP_USE_WDT 0
 

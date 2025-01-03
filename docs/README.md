@@ -51,7 +51,7 @@ My primary motivation was:
     - Switch.h, Switch.cpp
     - Focuser.h, Focuser.cpp
 - Support of optional ASCOM Methods: action, commandblind, commandbool, commandstring
-    - Full implementation for CoverCalibrator
+    - 
 - Serial and network based logging using SLog: "https://github.com/npeter/SLog"
 - Manage persistant device data
     - stored with Setup/button "Save" in LittleFS:/settins.json

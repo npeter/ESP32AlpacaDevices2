@@ -5,7 +5,7 @@
 
   Description:    User Config for Alpac Lib
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #pragma once
 #include <Arduino.h>

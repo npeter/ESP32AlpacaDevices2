@@ -5,7 +5,7 @@
 
   Description:    ASCOM Alpaca Device
 
-  Copyright 2024 peter_n@gmx.de. All rights reserved.
+  Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
             based on https://github.com/elenhinan/ESPAscomAlpacaServer
 **************************************************************************************************/
 #include "AlpacaDevice.h"
