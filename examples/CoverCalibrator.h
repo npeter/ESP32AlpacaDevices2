@@ -1,9 +1,5 @@
 /**************************************************************************************************
-  Filename:       CoverCalibrator.h
-  Revised:        $Date: 2024-01-14$
-  Revision:       $Revision: 01 $
   Description:    ASCOM CoverCalibrator Device Teplate with Simulation
-
   Copyright 2024-2025 peter_n@gmx.de. All rights reserved.
 **************************************************************************************************/
 #pragma once
@@ -29,18 +25,11 @@ private:
   const bool _openCover();
   const bool _haltCover();
 
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_ACTION_IMPLEMENTED
-  const bool _putAction(const char *const action, const char *const parameters);
-#endif
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BLIND_IMPLEMENTED
-  const bool _putCommandBlind(const char *const command, const char *const raw);
-#endif
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_BOOL_IMPLEMENTED
-  const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response);
-#endif
-#ifdef ALPACA_COVER_CALIBRATOR_PUT_COMMAND_STRING_IMPLEMENTED
-  const bool _putCommandString(const char *const command, const char *const raw, char *string_response, size_t string_response_size);
-#endif
+  // optional Alpaca service: to be implemented if needed
+  const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size) { return false; }
+  const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response) { return false; };
+  const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response) { return false; };
+  const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) { return false; };
 
   void AlpacaReadJson(JsonObject &root);
   void AlpacaWriteJson(JsonObject &root);

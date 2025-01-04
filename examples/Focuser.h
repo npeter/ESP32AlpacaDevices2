@@ -64,26 +64,11 @@ private:
   const bool _putHalt();
   const bool _putMove(int32_t target_position_steps);
 
-#ifdef ALPACA_FOCUSER_PUT_ACTION_IMPLEMENTED
-  const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size)
-  {
-    return false;
-  }
-#endif
-
-#ifdef ALPACA_FOCUSER_PUT_COMMAND_BOOL_IMPLEMENTED
-  const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response)
-  {
-    return false;
-  };
-#endif
-
-#ifdef ALPACA_FOCUSER_PUT_COMMAND_STRING_IMPLEMENTED
-  const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size)
-  {
-    return false;
-  };
-#endif
+  // optional Alpaca service: to be implemented if needed
+  const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size) { return false; }
+  const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response) { return false; };
+  const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response) { return false; };
+  const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) { return false; };
 
   const bool _getAbsolut() { return _absolut; };
   const bool _getIsMoving() { return _is_moving; };

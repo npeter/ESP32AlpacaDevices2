@@ -96,9 +96,9 @@
 2. optional alpaca services **put action/commandblind/commandbool/commandstring** implemented
 3. Copyright info modified
 
-### Open topics 
+<br>
 
-
+# Open topics 
 
 
 

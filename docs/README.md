@@ -51,7 +51,15 @@ My primary motivation was:
     - Switch.h, Switch.cpp
     - Focuser.h, Focuser.cpp
 - Support of optional ASCOM Methods: action, commandblind, commandbool, commandstring
-    - 
+    - See declaration in e.c. Switch.h. Customize methode if needed.
+    ```
+        // optional Alpaca service: to be implemented if needed
+        const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size) { return false; }
+        const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response) { return false; };
+        const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response) { return false; };
+        const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) { return false; };
+    ```
+    - Don't forget to add _addAction("myaction") in e.c. Switch.cpp
 - Serial and network based logging using SLog: "https://github.com/npeter/SLog"
 - Manage persistant device data
     - stored with Setup/button "Save" in LittleFS:/settins.json
