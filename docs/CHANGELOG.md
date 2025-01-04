@@ -99,6 +99,7 @@
 <br>
 
 # Open topics 
-
+- Release as 4.0.0 
+    - Info: Add declarations for pure virtual methodes _putAction(), _putCommandBlind(), _putCommandBool(), _putCommandString() (see e.c. AlpacaSwitch.h and Switch.h)
 
 
