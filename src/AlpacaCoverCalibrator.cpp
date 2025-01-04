@@ -50,20 +50,18 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutOpenCover), HTTP_PUT, "opencover");
 }
 
-
 void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
 {
-
     DBG_DEVICE_PUT_ACTION_REQ
     _service_counter++;
     uint32_t client_idx = 0;
     char action[128] = {0};
     char parameters[128] = {0};
-    char str_response[1024] = {0};    
+    char str_response[1024] = {0};
 
     _alpaca_server->RspStatusClear(_rsp_status);
 
-    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0 && _clients[client_idx].client_id != ALPACA_CONNECTION_LESS_CLIENT_ID)
         goto mycatch;
 
     if (_alpaca_server->GetParam(request, "Action", action, sizeof(action), Spelling_t::kStrict) == false)
@@ -75,12 +73,15 @@ void AlpacaCoverCalibrator::AlpacaPutAction(AsyncWebServerRequest *request)
     if (_putAction(action, parameters, str_response, sizeof(str_response)) == false)
         MYTHROW_RspStatusActionNotImplemented(request, _rsp_status, action, parameters);
 
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response, JsonValue_t::kAsPlainStringValue);
+
+    DBG_END;
+    return;
 mycatch:
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-
 
 void AlpacaCoverCalibrator::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
@@ -111,7 +112,6 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-
 
 void AlpacaCoverCalibrator::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
@@ -147,7 +147,6 @@ mycatch:
     DBG_END
 };
 
-
 void AlpacaCoverCalibrator::AlpacaPutCommandString(AsyncWebServerRequest *request)
 {
 
@@ -181,7 +180,6 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-
 
 void AlpacaCoverCalibrator::_alpacaGetBrightness(AsyncWebServerRequest *request)
 {
