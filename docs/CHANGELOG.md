@@ -98,7 +98,7 @@
 4. Dependencies mathieucarbou/ESP32AsyncWebserver changed to ESP32Async/ESP32AsyncWebServer 
 5. Dependencies ayushsharma82/ElegantOTA changed to fork npeter/ElegantOTA to sync ESP32AsyncWebServer versions
 
-## 3.3.2 created
+## 3.3.2 2025-01-26 created
 
 <br>
 
