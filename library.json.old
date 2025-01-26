@@ -31,9 +31,9 @@
     ],
     "dependencies": [
         {
-            "owner": "ESP32Async",
+            "owner": "mathieucarbou",
             "name": "ESPAsyncWebServer",
-            "version": "^3.6.2",
+            "version": "^3.3.11",
             "platforms": [
                 "espressif8266",
                 "espressif32"
@@ -45,8 +45,9 @@
             "version": "^7.0.2"
         },
         {
+            "owner": "ayushsharma82",
             "name": "ElegantOTA",
-            "version": "https://github.com/npeter/ElegantOTA"
+            "version": "^3.1.6"
         },
         {
             "name": "SLog",
