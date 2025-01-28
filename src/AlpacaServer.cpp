@@ -84,7 +84,7 @@ void AlpacaServer::Begin(uint16_t udp_port, uint16_t tcp_port, bool mount_little
 
     SLOG_INFO_PRINTF("Ascom Alpaca server TCP port %d\n", _port_tcp)
 
-    _server_tcp = new AsyncWebServer(_port_tcp);
+    assert(_server_tcp = new AsyncWebServer(_port_tcp));
     _server_tcp->begin();
 
     _server_tcp->onNotFound([this](AsyncWebServerRequest *request)

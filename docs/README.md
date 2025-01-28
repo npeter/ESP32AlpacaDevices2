@@ -15,6 +15,9 @@ This library is more or less a new implementation. But it's primary based on the
 Great and important Libraries used in this implementation:
 - Async WebServer for ESP
     - https://registry.platformio.org/libraries/mathieucarbou/ESP%20Async%20WebServer
+
+TODO https://github.com/ESP32Async/ESPAsyncWebServer
+
 - Json 
     - https://arduinojson.org/
 - Upload over the air 

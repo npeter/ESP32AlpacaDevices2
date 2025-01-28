@@ -99,6 +99,7 @@
 5. Dependencies ayushsharma82/ElegantOTA changed to fork npeter/ElegantOTA to sync ESP32AsyncWebServer versions
 
 ## 3.3.2 2025-01-26 created
+1. AlpacaServer/Begin() assert added 
 
 <br>
 
