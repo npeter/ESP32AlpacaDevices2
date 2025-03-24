@@ -106,6 +106,9 @@
     - _alpacaPutSetSwitch()
 3. Improve ErrMsg in Alpaca RSP
 <br>
+## 3.3.4 2025-03-24
+1. Prepare for Alpaca ASCOM 7
+2. AlpacaServer/WebRequestMethod2Str() corrected
 
 # Open topics 
 - Release as 4.0.0 

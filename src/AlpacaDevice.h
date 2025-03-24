@@ -55,8 +55,12 @@ protected:
     virtual void AlpacaPutCommandBool(AsyncWebServerRequest *request);
     virtual void AlpacaPutCommandString(AsyncWebServerRequest *request);
 
-    virtual void AlpacaGetConnected(AsyncWebServerRequest *request);
     virtual void AlpacaPutConnected(AsyncWebServerRequest *request);
+    virtual void AlpacaPutConnect(AsyncWebServerRequest *request);
+    virtual void AlpacaPutDisconnect(AsyncWebServerRequest *request);   
+    
+    virtual void AlpacaGetConnected(AsyncWebServerRequest *request);
+    virtual void AlpacaGetConnecting(AsyncWebServerRequest *request);
     void AlpacaGetDescription(AsyncWebServerRequest *request);
     void AlpacaGetDriverInfo(AsyncWebServerRequest *request);
     void AlpacaGetDriverVersion(AsyncWebServerRequest *request);

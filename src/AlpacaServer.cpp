@@ -682,22 +682,22 @@ const char *const WebRequestMethod2Str(uint8_t method)
         idx = 1;
         break;
     case HTTP_DELETE:
-        idx = 1;
+        idx = 2;
         break;
     case HTTP_PUT:
-        idx = 1;
+        idx = 3;
         break;
     case HTTP_PATCH:
-        idx = 1;
+        idx = 4;
         break;
     case HTTP_HEAD:
-        idx = 1;
+        idx = 5;
         break;
     case HTTP_OPTIONS:
-        idx = 1;
+        idx = 6;
         break;
     case HTTP_ANY:
-        idx = 1;
+        idx = 7;
         break;
     default:
         idx = 8;
