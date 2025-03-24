@@ -398,7 +398,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request)
             {
                 _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                 _rsp_status.http_status = HttpStatus_t::kPassed;
-                snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \"State\" not found or invalid",
+                snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \'State\' not found or invalid",
                          request->url().c_str());
             }
         }
@@ -428,7 +428,7 @@ void AlpacaSwitch::_alpacaPutSetSwitchName(AsyncWebServerRequest *request)
             {
                 _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                 _rsp_status.http_status = HttpStatus_t::kPassed;
-                snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \"Name\" not found or invalid",
+                snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \'Name\' not found or invalid",
                          request->url().c_str());
             }
         }
@@ -470,7 +470,7 @@ void AlpacaSwitch::_alpacaPutSetSwitchValue(AsyncWebServerRequest *request)
                     {
                         _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                         _rsp_status.http_status = HttpStatus_t::kPassed;
-                        snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \"Value\" %f not inside range (%f,..%f)",
+                        snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \'Value\' %f not inside range (%f,..%f)",
                                  request->url().c_str(), double_value, _p_switch_devices[id].min_value, _p_switch_devices[id].max_value);
                     }
                 }
@@ -486,7 +486,7 @@ void AlpacaSwitch::_alpacaPutSetSwitchValue(AsyncWebServerRequest *request)
             {
                 _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                 _rsp_status.http_status = HttpStatus_t::kPassed;
-                snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \"Value\" not found or invalid",
+                snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \'Value\' not found or invalid",
                          request->url().c_str());
             }
         }

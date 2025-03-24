@@ -100,7 +100,11 @@
 
 ## 3.3.2 2025-01-26 created
 1. AlpacaServer/Begin() assert added 
-
+2. AlpacaSwitch.cpp/...:  invalid json error text in _rsp_status.err_msg
+    - _alpacaPutSetSwitchValue()
+    - _alpacaPutSetSwitchName() 
+    - _alpacaPutSetSwitch()
+3. Improve ErrMsg in Alpaca RSP
 <br>
 
 # Open topics 
