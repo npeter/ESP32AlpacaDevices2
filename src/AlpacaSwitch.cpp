@@ -361,30 +361,30 @@ void AlpacaSwitch::_alpacaGetDevicestate(AsyncWebServerRequest *request)
     DBG_SWITCH_GET_DEVICE_STATES
     _service_counter++;
 
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);    
+    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
 
-    strcpy(&_device_states[0], "[]");
+    strcpy(&_device_states[0], "[");
     int len = 1;
 
     for (unsigned id = 0; id < GetMaxSwitch(); id++)
     {
-        // TODO check overflow
-        len = strlen(_device_states); // TODO 
-        snprintf(&_device_states[len - 1], sizeof(_device_states)-len-1,"{\"Name\":\"%s\",\"Value\":%d},", GetDeviceName(), GetSwitchValue(id) );
+        snprintf(&_device_states[len], sizeof(_device_states) - len - 1, "{\"Name\":\"%s\",\"Value\":%d},", GetDeviceName(), GetSwitchValue(id));
+        len = strlen(_device_states); // TODO
     }
 
-    // replace last ',' by '}' and terminate string  
+    // replace last ',' by '}' and terminate string
     len = strlen(_device_states);
-    if ( len < sizeof(_device_states)) {
-        _device_states[len-1] = '}';
-        _device_states[len] = '\0';        
+    if (len < sizeof(_device_states)-1)
+    {
+        _device_states[len-1] = ']';
+        _device_states[len] = '\0';
     }
-    else {
+    else
+    {
         // TODO manage error
     }
 
-
-   _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_states, JsonValue_t::kAsPlainStringValue);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_states, JsonValue_t::kAsPlainStringValue);
 
     DBG_END
 };
