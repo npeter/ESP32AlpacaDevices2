@@ -108,7 +108,10 @@
 <br>
 ## 3.3.4 2025-03-24
 1. Prepare for Alpaca ASCOM 7
-2. AlpacaServer/WebRequestMethod2Str() corrected
+2. AlpacaServer::WebRequestMethod2Str() corrected
+3. AlpacaServer::GetParam() stati_cast added in ..arg() call
+4. AlpacaDevice::createCallBack() Debug output: type added
+
 
 # Open topics 
 - Release as 4.0.0 

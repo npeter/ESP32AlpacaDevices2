@@ -336,7 +336,7 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, do
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        return sscanf(request->arg(index).c_str(), "%lf", &value) == 1;
+        return sscanf(request->arg(static_cast<int32_t>(index)).c_str(), "%lf", &value) == 1;
     }
     return false;
 }
@@ -347,7 +347,7 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, fl
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        return sscanf(request->arg(index).c_str(), "%f", &value) == 1;
+        return sscanf(request->arg(static_cast<int32_t>(index)).c_str(), "%f", &value) == 1;
     }
     return false;
 }

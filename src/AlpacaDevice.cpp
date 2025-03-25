@@ -26,7 +26,7 @@ void AlpacaDevice::createCallBack(ArRequestHandlerFunction fn, WebRequestMethodC
 {
     char url[64];
     snprintf(url, sizeof(url), kAlpacaDeviceCommand, _device_type, _device_number, command);
-    SLOG_PRINTF(SLOG_INFO, "REGISTER handler for \"%s\" to %s\n", url, command);
+    SLOG_PRINTF(SLOG_INFO, "REGISTER \"%s\" handler for \"%s\" to %s\n", WebRequestMethod2Str(type), url, command);
 
     // register handler for generated URI
     _alpaca_server->getServerTCP()->on(url, type, fn);
