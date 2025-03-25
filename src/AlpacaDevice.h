@@ -30,6 +30,7 @@ protected:
     char _driver_info[64] = "";
 
     char _supported_actions[512] = "[]";
+    char _device_states[1024] = "[]";
     AlpacaClient_t _clients[kAlpacaMaxClients + 1]; // manage clients; [0] - unconnected client; [1,...] connected client
     AlpacaRspStatus_t _rsp_status;
 
@@ -67,6 +68,8 @@ protected:
     void AlpacaGetInterfaceVersion(AsyncWebServerRequest *request);
     void AlpacaGetName(AsyncWebServerRequest *request);
     void AlpacaGetSupportedActions(AsyncWebServerRequest *request);
+
+
 
     // helpers
     int32_t checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &clientIdx, Spelling_t spelling);

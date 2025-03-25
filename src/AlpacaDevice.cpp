@@ -463,7 +463,7 @@ void AlpacaDevice::AlpacaGetConnecting(AsyncWebServerRequest *request)
 
 mycatch:
 
-    _alpaca_server->Respond(request, _clients[0], _rsp_status);
+    _alpaca_server->Respond(request, _clients[0], _rsp_status, false);  // connecting always false!!!
     DBG_END
 };
 
