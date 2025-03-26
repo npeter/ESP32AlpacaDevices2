@@ -23,6 +23,8 @@ struct SwitchDevice_t
     double min_value;
     double max_value;
     double step;
+    bool can_async;
+    bool state_change_complete;
 };
 
 class AlpacaSwitch : public AlpacaDevice
@@ -41,11 +43,17 @@ private:
     void _alpacaGetMaxSwitchValue(AsyncWebServerRequest *request);
     void _alpacaGetSwitchStep(AsyncWebServerRequest *request);
     void _alpacaGetDevicestate(AsyncWebServerRequest *request);
+    void _alpacaGetCanAsync(AsyncWebServerRequest *request);
+    void _alpacaGetStateChangeComplete(AsyncWebServerRequest *request);
 
-    void _alpacaPutSetSwitch(AsyncWebServerRequest *request);
+    void _alpacaPutSet(AsyncWebServerRequest *request, bool async);
+    void _alpacaPutSetSwitch(AsyncWebServerRequest *request, bool async);
+
+    void _alpacaPutSetSwitch(AsyncWebServerRequest *request) { _alpacaPutSet(request, false); };
+    void _alpacaPutSetAsync(AsyncWebServerRequest *request) { _alpacaPutSet(request, true); };
     void _alpacaPutSetSwitchName(AsyncWebServerRequest *request);
-    void _alpacaPutSetSwitchValue(AsyncWebServerRequest *request);
-
+    void _alpacaPutSetSwitchValue(AsyncWebServerRequest *request) { _alpacaPutSet(request, false); };
+    void _alpacaPutSetAsyncValue(AsyncWebServerRequest *request) { _alpacaPutSet(request, true); };
     void AlpacaPutAction(AsyncWebServerRequest *request);
     void AlpacaPutCommandBlind(AsyncWebServerRequest *request);
     void AlpacaPutCommandBool(AsyncWebServerRequest *request);
@@ -63,7 +71,7 @@ private:
 
     // virtual function
     virtual const char *const _getFirmwareVersion() { return "-"; };
-    virtual const bool _writeSwitchValue(uint32_t id, double value) = 0;
+    virtual const bool _writeSwitchValue(uint32_t id, double value, bool async) = 0;
 
 protected:
     AlpacaSwitch(uint32_t num_of_switch_devices = 8);
@@ -81,6 +89,8 @@ protected:
     const double GetSwitchMinValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].min_value; };
     const double GetSwitchMaxValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].max_value; };
     const double GetSwitchStep(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].step; };
+    const bool GetCanAsync(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].can_async; };
+    const bool GetStateChangeComplete(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].state_change_complete; };
 
     // setters ... only for initialization
     void InitSwitchInitBySetup(uint32_t id, bool init_by_setup) { _p_switch_devices[id].init_by_setup = init_by_setup; };
@@ -91,11 +101,15 @@ protected:
     void InitSwitchMinValue(uint32_t id, double min_value) { _p_switch_devices[id].min_value = min_value; };
     void InitSwitchMaxValue(uint32_t id, double max_value) { _p_switch_devices[id].max_value = max_value; };
     void InitSwitchStep(uint32_t id, double step) { _p_switch_devices[id].step = step; };
+    void InitSwitchCanSync(uint32_t id, bool can_async) { _p_switch_devices[id].can_async = can_async; };
 
     // setter
     const bool SetSwitch(uint32_t id, bool bool_value);
+    // const bool SetSwitchAsync(uint32_t id, bool bool_value);
     const bool SetSwitchValue(uint32_t id, double double_value);
+    // const bool SetSwitchAsyncValue(uint32_t id, double double_value);
     const bool SetSwitchName(uint32_t id, char *name);
+    const bool SetStateChangeComplete(uint32_t id, bool state_change_complete);
 
 public:
 };
