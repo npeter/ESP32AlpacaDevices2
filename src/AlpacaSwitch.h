@@ -12,6 +12,17 @@
 const size_t kSwitchNameSize = 32;
 const size_t kSwitchDescriptionSize = 128;
 // const size_t kSwitchMaxSwitchDevices = 4;
+enum struct SwitchAsyncType_t
+{
+    kAsyncType,
+    kNoAsyncType
+};
+
+enum struct SwitchValueType_t
+{
+    kBool,
+    kDouble
+};
 
 struct SwitchDevice_t
 {
@@ -23,7 +34,7 @@ struct SwitchDevice_t
     double min_value;
     double max_value;
     double step;
-    bool can_async;
+    SwitchAsyncType_t async_type;
     bool state_change_complete;
 };
 
@@ -46,14 +57,13 @@ private:
     void _alpacaGetCanAsync(AsyncWebServerRequest *request);
     void _alpacaGetStateChangeComplete(AsyncWebServerRequest *request);
 
-    void _alpacaPutSet(AsyncWebServerRequest *request, bool async);
-    void _alpacaPutSetSwitch(AsyncWebServerRequest *request, bool async);
+    void _alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchValueType_t value_type, SwitchAsyncType_t async_type);
 
-    void _alpacaPutSetSwitch(AsyncWebServerRequest *request) { _alpacaPutSet(request, false); };
-    void _alpacaPutSetAsync(AsyncWebServerRequest *request) { _alpacaPutSet(request, true); };
+    void _alpacaPutSetSwitch(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kBool, SwitchAsyncType_t::kNoAsyncType); };
+    void _alpacaPutSetAsync(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kBool, SwitchAsyncType_t::kAsyncType); };
     void _alpacaPutSetSwitchName(AsyncWebServerRequest *request);
-    void _alpacaPutSetSwitchValue(AsyncWebServerRequest *request) { _alpacaPutSet(request, false); };
-    void _alpacaPutSetAsyncValue(AsyncWebServerRequest *request) { _alpacaPutSet(request, true); };
+    void _alpacaPutSetSwitchValue(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kDouble, SwitchAsyncType_t::kNoAsyncType); };
+    void _alpacaPutSetAsyncValue(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kDouble, SwitchAsyncType_t::kAsyncType); };
     void AlpacaPutAction(AsyncWebServerRequest *request);
     void AlpacaPutCommandBlind(AsyncWebServerRequest *request);
     void AlpacaPutCommandBool(AsyncWebServerRequest *request);
@@ -71,7 +81,7 @@ private:
 
     // virtual function
     virtual const char *const _getFirmwareVersion() { return "-"; };
-    virtual const bool _writeSwitchValue(uint32_t id, double value, bool async) = 0;
+    virtual const bool _writeSwitchValue(uint32_t id, double value, SwitchAsyncType_t async_type) = 0;
 
 protected:
     AlpacaSwitch(uint32_t num_of_switch_devices = 8);
@@ -89,7 +99,7 @@ protected:
     const double GetSwitchMinValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].min_value; };
     const double GetSwitchMaxValue(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].max_value; };
     const double GetSwitchStep(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].step; };
-    const bool GetCanAsync(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].can_async; };
+    const bool GetCanAsync(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].async_type == SwitchAsyncType_t::kAsyncType; };
     const bool GetStateChangeComplete(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].state_change_complete; };
 
     // setters ... only for initialization
@@ -101,7 +111,7 @@ protected:
     void InitSwitchMinValue(uint32_t id, double min_value) { _p_switch_devices[id].min_value = min_value; };
     void InitSwitchMaxValue(uint32_t id, double max_value) { _p_switch_devices[id].max_value = max_value; };
     void InitSwitchStep(uint32_t id, double step) { _p_switch_devices[id].step = step; };
-    void InitSwitchCanSync(uint32_t id, bool can_async) { _p_switch_devices[id].can_async = can_async; };
+    void InitSwitchCanAsync(uint32_t id, SwitchAsyncType_t async_type) { _p_switch_devices[id].async_type = async_type; };
 
     // setter
     const bool SetSwitch(uint32_t id, bool bool_value);
