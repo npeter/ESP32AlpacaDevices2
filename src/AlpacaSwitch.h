@@ -53,7 +53,7 @@ private:
     void _alpacaGetMinSwitchValue(AsyncWebServerRequest *request);
     void _alpacaGetMaxSwitchValue(AsyncWebServerRequest *request);
     void _alpacaGetSwitchStep(AsyncWebServerRequest *request);
-    void _alpacaGetDevicestate(AsyncWebServerRequest *request);
+    void _alpacaGetDeviceState(AsyncWebServerRequest *request);
     void _alpacaGetCanAsync(AsyncWebServerRequest *request);
     void _alpacaGetStateChangeComplete(AsyncWebServerRequest *request);
 

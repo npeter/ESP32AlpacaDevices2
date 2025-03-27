@@ -42,7 +42,7 @@ const char esp32_alpaca_device_library_version[] = "3.3.3";
 // CoverCalibrator - Comon Properties
 #define ALPACA_COVER_CALIBRATOR_DESCRIPTION "Alpaca CoverCalibrator Template"        // init value; managed by config
 #define ALPACA_COVER_CALIBRATOR_DRIVER_INFO "ESP32 CoverCalibrator driver by BigPet" // init value; managed by config
-#define ALPACA_COVER_CALIBRATOR_INTERFACE_VERSION 1                                  // don't change
+#define ALPACA_COVER_CALIBRATOR_INTERFACE_VERSION 2                                 // don't change
 #define ALPACA_COVER_CALIBRATOR_NAME "not used"                                      // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_COVER_CALIBRATOR_DEVICE_TYPE "covercalibrator"                        // don't change
 

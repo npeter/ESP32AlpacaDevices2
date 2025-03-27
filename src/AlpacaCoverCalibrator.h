@@ -51,6 +51,8 @@ private:
   void _alpacaGetCalibratorState(AsyncWebServerRequest *request);
   void _alpacaGetCoverState(AsyncWebServerRequest *request);
   void _alpacaGetMaxBrightness(AsyncWebServerRequest *request);
+  void _alpacaGetCalibratorChanging(AsyncWebServerRequest *request);
+  void _alpacaGetCoverMoving(AsyncWebServerRequest *request);
 
   void _alpacaPutCalibratorOff(AsyncWebServerRequest *request);
   void _alpacaPutCalibratorOn(AsyncWebServerRequest *request);

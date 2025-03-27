@@ -42,6 +42,8 @@ void AlpacaCoverCalibrator::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaGetCalibratorState), HTTP_GET, "calibratorstate");
     this->createCallBack(LHF(_alpacaGetCoverState), HTTP_GET, "coverstate");
     this->createCallBack(LHF(_alpacaGetMaxBrightness), HTTP_GET, "maxbrightness");
+    this->createCallBack(LHF(_alpacaGetCalibratorChanging), HTTP_GET, "calibratorchanging");
+    this->createCallBack(LHF(_alpacaGetCoverMoving), HTTP_GET, "covermoving");
 
     this->createCallBack(LHF(_alpacaPutCalibratorOff), HTTP_PUT, "calibratoroff");
     this->createCallBack(LHF(_alpacaPutCalibratorOn), HTTP_PUT, "calibratoron");
@@ -205,6 +207,28 @@ void AlpacaCoverCalibrator::_alpacaGetCoverState(AsyncWebServerRequest *request)
     _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, (int32_t)GetCoverState());
+    DBG_END
+}
+
+void AlpacaCoverCalibrator::_alpacaGetCalibratorChanging(AsyncWebServerRequest *request)
+{
+    DBG_CC_GET_CALIBRATOR_CHANGING
+    _service_counter++;
+    AlpacaCalibratorStatus_t calibrator_state = GetCalibratorState();    
+    bool calibrator_changig = calibrator_state == AlpacaCalibratorStatus_t::kNotReady || calibrator_state == AlpacaCalibratorStatus_t::kUnknown ? true : false;
+    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, calibrator_changig);
+    DBG_END
+}
+
+void AlpacaCoverCalibrator::_alpacaGetCoverMoving(AsyncWebServerRequest *request)
+{
+    DBG_CC_GET_COVER_MOVING
+    _service_counter++;
+    AlpacaCoverStatus_t cover_state = GetCoverState();    
+    bool cover_moving = (cover_state == AlpacaCoverStatus_t::kMoving || cover_state == AlpacaCoverStatus_t::kUnknown) ? true : false;
+    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, cover_moving);
     DBG_END
 }
 

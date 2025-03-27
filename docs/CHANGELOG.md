@@ -111,6 +111,7 @@
 2. AlpacaServer::WebRequestMethod2Str() corrected
 3. AlpacaServer::GetParam() stati_cast added in ..arg() call
 4. AlpacaDevice::createCallBack() Debug output: type added
+5. CoverCalibrator: implement interface version 2
 
 
 # Open topics 
