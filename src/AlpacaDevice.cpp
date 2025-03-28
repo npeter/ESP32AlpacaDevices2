@@ -90,7 +90,7 @@ void AlpacaDevice::_addAction(const char *const action)
 void AlpacaDevice::RegisterCallbacks()
 {
     this->createCallBack(LHF(AlpacaGetConnected), HTTP_GET, "connected");
-    this->createCallBack(LHF(AlpacaGetConnecting), HTTP_GET, "connecting");    
+    this->createCallBack(LHF(AlpacaGetConnecting), HTTP_GET, "connecting");
     this->createCallBack(LHF(AlpacaPutConnected), HTTP_PUT, "connected");
     this->createCallBack(LHF(AlpacaPutConnect), HTTP_PUT, "connect");
     this->createCallBack(LHF(AlpacaPutDisconnect), HTTP_PUT, "disconnect");
@@ -101,6 +101,7 @@ void AlpacaDevice::RegisterCallbacks()
     this->createCallBack(LHF(AlpacaGetInterfaceVersion), HTTP_GET, "interfaceversion");
     this->createCallBack(LHF(AlpacaGetName), HTTP_GET, "name");
     this->createCallBack(LHF(AlpacaGetSupportedActions), HTTP_GET, "supportedactions");
+    this->createCallBack(LHF(AlpacaGetDeviceState), HTTP_GET, "devicestate");
 
     _setSetupPage();
 }
@@ -300,7 +301,7 @@ void AlpacaDevice::AlpacaPutConnect(AsyncWebServerRequest *request)
     if (get_client_id == true && get_client_transaction_id == true &&
         client_id > 0 && client_transaction_id > 0)
     {
-        //if (connected) // names and values correct - try to connectd
+        // if (connected) // names and values correct - try to connectd
         {
             for (int i = 1; i <= kAlpacaMaxClients; i++)
             {
@@ -379,9 +380,9 @@ void AlpacaDevice::AlpacaPutDisconnect(AsyncWebServerRequest *request)
     bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, Spelling_t::kStrict);
 
     if (get_client_id == true && get_client_transaction_id == true &&
-        client_id > 0 && client_transaction_id > 0 )
+        client_id > 0 && client_transaction_id > 0)
     {
-        //else // names and values correct - try to disconnect
+        // else // names and values correct - try to disconnect
         {
             for (int i = 1; i <= kAlpacaMaxClients; i++) // search client to disconnect
             {
@@ -404,7 +405,6 @@ void AlpacaDevice::AlpacaPutDisconnect(AsyncWebServerRequest *request)
         _clients[0].client_id = (get_client_id == true) ? (uint32_t)client_id : 0;
         _clients[0].client_transaction_id = (get_client_transaction_id == true) ? (uint32_t)client_transaction_id : 0;
         _clients[0].time_ms = millis();
-
     }
     else
     {
@@ -443,8 +443,6 @@ void AlpacaDevice::AlpacaGetConnecting(AsyncWebServerRequest *request)
     bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, spelling);
     bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, spelling);
 
-
-
     _clients[0].client_id = (client_id >= 0) ? (uint32_t)client_id : 0;
     _clients[0].client_transaction_id = (client_transaction_id >= 0) ? (uint32_t)client_transaction_id : 0;
     _clients[0].time_ms = millis();
@@ -463,7 +461,7 @@ void AlpacaDevice::AlpacaGetConnecting(AsyncWebServerRequest *request)
 
 mycatch:
 
-    _alpaca_server->Respond(request, _clients[0], _rsp_status, false);  // connecting always false!!!
+    _alpaca_server->Respond(request, _clients[0], _rsp_status, false); // connecting always false!!!
     DBG_END
 };
 
@@ -521,6 +519,38 @@ void AlpacaDevice::AlpacaGetSupportedActions(AsyncWebServerRequest *request)
     _service_counter++;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _supported_actions, JsonValue_t::kAsPlainStringValue);
+    DBG_END
+};
+
+void AlpacaDevice::AlpacaGetDeviceState(AsyncWebServerRequest *request)
+{
+    DBG_SWITCH_GET_DEVICE_STATES
+    _service_counter++;
+    size_t len = 0;
+    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
+
+    if (client_idx > 0)
+    {
+        strcpy(&_device_states[0], "[");
+
+        len = strlen(_device_states);
+        getDeviceStates(sizeof(_device_states) - len - 2, &_device_states[len]);
+
+        // add ']' and '\0'
+        len = strlen(_device_states);
+        if (len < sizeof(_device_states) - 2)
+        {
+            _device_states[len] = ']';
+            _device_states[len+1] = '\0';
+        }
+        else
+        {
+            // TODO manage error
+        }
+    }
+
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_states, JsonValue_t::kAsPlainStringValue);
+
     DBG_END
 };
 

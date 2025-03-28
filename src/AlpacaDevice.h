@@ -62,15 +62,16 @@ protected:
     
     virtual void AlpacaGetConnected(AsyncWebServerRequest *request);
     virtual void AlpacaGetConnecting(AsyncWebServerRequest *request);
+
     void AlpacaGetDescription(AsyncWebServerRequest *request);
     void AlpacaGetDriverInfo(AsyncWebServerRequest *request);
     void AlpacaGetDriverVersion(AsyncWebServerRequest *request);
     void AlpacaGetInterfaceVersion(AsyncWebServerRequest *request);
     void AlpacaGetName(AsyncWebServerRequest *request);
     void AlpacaGetSupportedActions(AsyncWebServerRequest *request);
+    void AlpacaGetDeviceState(AsyncWebServerRequest *request);
 
-
-
+    virtual const bool getDeviceStates(size_t buf_len, char* buf) = 0;
     // helpers
     int32_t checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &clientIdx, Spelling_t spelling);
     uint32_t getClientIdxByClientID(uint32_t clientID);

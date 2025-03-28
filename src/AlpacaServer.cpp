@@ -209,7 +209,7 @@ void AlpacaServer::RegisterCallbacks()
         const char path[] = "/favicon.ico";
         SLOG_INFO_PRINTF("REGISTER serveStatic url=%s fs=LittleFS path=%s\n", url, path);
         getServerTCP()->serveStatic(url, LittleFS, path).setCacheControl("max-age=600");
-    }    
+    }
     {
         const char url[] = "/www/js/";
         const char path[] = "/www/js";
@@ -370,7 +370,16 @@ bool AlpacaServer::GetParam(AsyncWebServerRequest *request, const char *name, ui
     int32_t index = _paramIndex(request, name, spelling);
     if (index >= 0)
     {
-        return sscanf(request->arg(static_cast<int>(index)).c_str(), "%u", &value) == 1;
+        int32_t int_value = 0;
+        if (sscanf(request->arg(static_cast<int>(index)).c_str(), "%d", &int_value) == 1)
+        {
+            //SLOG_INFO_PRINTF("scanf()=%d c_str()==1 int_value=%d\n", request->arg(static_cast<int>(index)).c_str(), int_value); 
+            if (int_value >= 0)
+            {
+                value = int_value;
+                return true;
+            }
+        }
     }
     return false;
 }
