@@ -53,7 +53,7 @@ const char esp32_alpaca_device_library_version[] = "3.3.3";
 // Switch - Comon Properties
 #define ALPACA_SWITCH_DESCRIPTION "Alpaca Switch Template"        // init value; managed by config
 #define ALPACA_SWITCH_DRIVER_INFO "ESP32 Switch driver by BigPet" // init value; managed by config
-#define ALPACA_SWITCH_INTERFACE_VERSION 2                         // don't change
+#define ALPACA_SWITCH_INTERFACE_VERSION 3                         // don't change
 #define ALPACA_SWITCH_NAME "not used"                             // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_SWITCH_DEVICE_TYPE "switch"                        // don't change
 

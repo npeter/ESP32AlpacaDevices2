@@ -34,6 +34,7 @@ struct SwitchDevice_t
     double min_value;
     double max_value;
     double step;
+    bool is_bool;
     SwitchAsyncType_t async_type;
     bool state_change_complete;
 };
@@ -53,7 +54,6 @@ private:
     void _alpacaGetMinSwitchValue(AsyncWebServerRequest *request);
     void _alpacaGetMaxSwitchValue(AsyncWebServerRequest *request);
     void _alpacaGetSwitchStep(AsyncWebServerRequest *request);
-    void _alpacaGetDeviceState(AsyncWebServerRequest *request);
     void _alpacaGetCanAsync(AsyncWebServerRequest *request);
     void _alpacaGetStateChangeComplete(AsyncWebServerRequest *request);
 
@@ -69,10 +69,13 @@ private:
     void AlpacaPutCommandBool(AsyncWebServerRequest *request);
     void AlpacaPutCommandString(AsyncWebServerRequest *request);
 
+    const bool getDeviceStates(size_t buf_len, char* buf);
+
     virtual const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size) = 0;
     virtual const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response) = 0;
     virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response) = 0;
     virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) = 0;
+
 
     // private helpers
     bool _getAndCheckId(AsyncWebServerRequest *request, uint32_t &id, Spelling_t spelling);
@@ -101,6 +104,7 @@ protected:
     const double GetSwitchStep(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].step; };
     const bool GetCanAsync(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].async_type == SwitchAsyncType_t::kAsyncType; };
     const bool GetStateChangeComplete(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].state_change_complete; };
+    const bool GetIsBool(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].is_bool; };
 
     // setters ... only for initialization
     void InitSwitchInitBySetup(uint32_t id, bool init_by_setup) { _p_switch_devices[id].init_by_setup = init_by_setup; };
@@ -112,6 +116,8 @@ protected:
     void InitSwitchMaxValue(uint32_t id, double max_value) { _p_switch_devices[id].max_value = max_value; };
     void InitSwitchStep(uint32_t id, double step) { _p_switch_devices[id].step = step; };
     void InitSwitchCanAsync(uint32_t id, SwitchAsyncType_t async_type) { _p_switch_devices[id].async_type = async_type; };
+    void InitStateChangeComplete(uint32_t id, bool state_change_complete) { _p_switch_devices[id].state_change_complete = state_change_complete; };
+    void InitSwitchIsBool(uint32_t id, bool is_bool) { _p_switch_devices[id].is_bool = is_bool; };
 
     // setter
     const bool SetSwitch(uint32_t id, bool bool_value);

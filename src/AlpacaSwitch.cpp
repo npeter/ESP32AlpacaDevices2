@@ -52,7 +52,6 @@ void AlpacaSwitch::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaGetMinSwitchValue), HTTP_GET, "minswitchvalue");
     this->createCallBack(LHF(_alpacaGetMaxSwitchValue), HTTP_GET, "maxswitchvalue");
     this->createCallBack(LHF(_alpacaGetSwitchStep), HTTP_GET, "switchstep");
-    this->createCallBack(LHF(_alpacaGetDeviceState), HTTP_GET, "devicestate");
     this->createCallBack(LHF(_alpacaGetCanAsync), HTTP_GET, "canasync");
     this->createCallBack(LHF(_alpacaGetStateChangeComplete), HTTP_GET, "statechangecomplete");
 
@@ -398,38 +397,33 @@ void AlpacaSwitch::_alpacaGetStateChangeComplete(AsyncWebServerRequest *request)
     DBG_END
 }
 
-void AlpacaSwitch::_alpacaGetDeviceState(AsyncWebServerRequest *request)
+bool const AlpacaSwitch::getDeviceStates(size_t buf_len, char *buf)
 {
-    DBG_SWITCH_GET_DEVICE_STATES
-    _service_counter++;
-
-    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
-
-    strcpy(&_device_states[0], "[");
-    int len = 1;
-
+    bool snprintf_result = 0;
+    size_t len = 0;
     for (unsigned id = 0; id < GetMaxSwitch(); id++)
     {
-        snprintf(&_device_states[len], sizeof(_device_states) - len - 1, "{\"Name\":\"%s\",\"Value\":%d},", GetDeviceName(), GetSwitchValue(id));
-        len = strlen(_device_states); // TODO
+        if (GetStateChangeComplete(id))
+        {
+            len = strlen(buf);
+            if (len < buf_len - 34) // <{"Name":"x","Value":"GetSwitch0},>+'\0'
+            {
+                if (GetIsBool(id))
+                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
+                else
+                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitchValue%d\",\"Value\":%f},", id, GetSwitchValue(id));
+            }
+            else
+            {
+                break;
+            }
+        }
     }
+    len = strlen(buf);
+    *(buf + len - 1) = '\0'; // replace ',' by '\0'
 
-    // replace last ',' by '}' and terminate string
-    len = strlen(_device_states);
-    if (len < sizeof(_device_states) - 1)
-    {
-        _device_states[len - 1] = ']';
-        _device_states[len] = '\0';
-    }
-    else
-    {
-        // TODO manage error
-    }
-
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, _device_states, JsonValue_t::kAsPlainStringValue);
-
-    DBG_END
-};
+    return (snprintf_result > 0 && snprintf_result <= buf_len);
+}
 
 void AlpacaSwitch::_alpacaPutSetSwitchName(AsyncWebServerRequest *request)
 {
@@ -475,7 +469,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
     {
         if (_getAndCheckId(request, id, Spelling_t::kStrict))
         {
-            if (async_type == SwitchAsyncType_t::kNoAsyncType || 
+            if (async_type == SwitchAsyncType_t::kNoAsyncType ||
                 async_type == SwitchAsyncType_t::kAsyncType && (_p_switch_devices[id].async_type == SwitchAsyncType_t::kAsyncType))
             {
                 if (_p_switch_devices[id].can_write)

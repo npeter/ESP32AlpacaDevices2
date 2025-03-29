@@ -113,6 +113,8 @@
 4. AlpacaDevice::createCallBack() Debug output: type added
 5. CoverCalibrator: implement interface version 2
 
+TODO
+AlpacaSwitch: SwitchDevice_t is_bool, async_type, state_change_complete;
 
 # Open topics 
 - Release as 4.0.0 
