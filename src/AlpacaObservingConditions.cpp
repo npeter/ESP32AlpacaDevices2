@@ -89,7 +89,6 @@ void AlpacaObservingConditions::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutRefresh), HTTP_PUT, "refresh");
 };
 
-
 void AlpacaObservingConditions::AlpacaPutAction(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_ACTION_REQ;
@@ -120,7 +119,6 @@ void AlpacaObservingConditions::AlpacaPutAction(AsyncWebServerRequest *request)
 mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
 };
-
 
 void AlpacaObservingConditions::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
@@ -154,7 +152,6 @@ mycatch:
 
     DBG_END
 };
-
 
 void AlpacaObservingConditions::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
@@ -209,18 +206,17 @@ void AlpacaObservingConditions::AlpacaPutCommandString(AsyncWebServerRequest *re
         MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
 
     if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
-       MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command_str);
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command_str);
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
 
     DBG_END;
     return;
-    
+
 mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-
 
 void AlpacaObservingConditions::_alpacaGetAveragePeriod(AsyncWebServerRequest *request)
 {
@@ -322,6 +318,35 @@ mycatch: // empty
     DBG_END
 }
 
+bool const AlpacaObservingConditions::getDeviceStates(size_t buf_len, char *buf)
+{
+    size_t snprintf_result = 0;
+    size_t len = 0;
+    for (int i = 0; i < static_cast<int>(OCSensorIdx_t::kOcMaxSensorIdx); i++)
+    {
+        OCSensorIdx_t idx = static_cast<OCSensorIdx_t>(i);
+        if (GetSensorImplementedByIdx(idx))
+        {
+            len = strlen(buf);
+            if (len < buf_len - 64) // <{"Name":"x","Value":"GetSwitch0},>+'\0'
+            {
+                snprintf_result =
+                    snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"%s\",\"Value\":%f},",
+                             GetSensorNameByIdx(idx), GetSensorValueByIdx(idx));
+            }
+            else
+            {
+                snprintf_result = 0;
+                break;
+            }
+        }
+    }
+    len = strlen(buf);
+    *(buf + len - 1) = '\0'; // replace ',' by '\0'
+
+    return (snprintf_result > 0 && snprintf_result <= buf_len);
+}
+
 void AlpacaObservingConditions::_alpacaPutAveragePeriod(AsyncWebServerRequest *request)
 {
     DBG_OBSERVING_CONDITIONS_GET_PUT_AVERAGE_PERIOD
@@ -330,17 +355,17 @@ void AlpacaObservingConditions::_alpacaPutAveragePeriod(AsyncWebServerRequest *r
     double average_period = 0.0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
-        if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
-            goto mycatch;
+    if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
+        goto mycatch;
 
-        if (_alpaca_server->GetParam(request, "AveragePeriod", average_period, Spelling_t::kStrict) == false)
-            MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "AvaragePeriod");
+    if (_alpaca_server->GetParam(request, "AveragePeriod", average_period, Spelling_t::kStrict) == false)
+        MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "AvaragePeriod");
 
-        if (_putAveragePeriodRequest(average_period) == false)
-            MYTHROW_RspStatusParameterInvalidDoubleValue(request, _rsp_status, "AvaragePeriod", average_period);
-    
-    mycatch: // empty
- 
+    if (_putAveragePeriodRequest(average_period) == false)
+        MYTHROW_RspStatusParameterInvalidDoubleValue(request, _rsp_status, "AvaragePeriod", average_period);
+
+mycatch: // empty
+
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }

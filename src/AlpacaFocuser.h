@@ -35,10 +35,13 @@ private:
     void AlpacaPutCommandBool(AsyncWebServerRequest *request);
     void AlpacaPutCommandString(AsyncWebServerRequest *request);
 
+
     virtual const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size)=0;
     virtual const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response)=0;
     virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response)=0;
     virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size)=0;
+    
+    const bool getDeviceStates(size_t buf_len, char* buf);
 
     virtual const char* const _getFirmwareVersion() { return "-"; };
     virtual const bool _putTempComp(bool temp_comp) = 0;

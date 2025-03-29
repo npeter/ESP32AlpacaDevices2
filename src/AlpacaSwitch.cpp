@@ -399,8 +399,9 @@ void AlpacaSwitch::_alpacaGetStateChangeComplete(AsyncWebServerRequest *request)
 
 bool const AlpacaSwitch::getDeviceStates(size_t buf_len, char *buf)
 {
-    bool snprintf_result = 0;
+    size_t snprintf_result = 0;
     size_t len = 0;
+    
     for (unsigned id = 0; id < GetMaxSwitch(); id++)
     {
         if (GetStateChangeComplete(id))
@@ -415,6 +416,7 @@ bool const AlpacaSwitch::getDeviceStates(size_t buf_len, char *buf)
             }
             else
             {
+                snprintf_result = 0;
                 break;
             }
         }

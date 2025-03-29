@@ -64,7 +64,7 @@ const char esp32_alpaca_device_library_version[] = "3.3.3";
 // ObservingConditions - Comon Properties
 #define ALPACA_OBSERVING_CONDITIONS_DESCRIPTION "Alpaca ObservingConditions Template"        // init value; managed by config
 #define ALPACA_OBSERVING_CONDITIONS_DRIVER_INFO "ESP32 ObservingConditions driver by BigPet" // init value; managed by config
-#define ALPACA_OBSERVING_CONDITIONS_INTERFACE_VERSION 1                                      // don't change
+#define ALPACA_OBSERVING_CONDITIONS_INTERFACE_VERSION 2                                      // don't change
 #define ALPACA_OBSERVING_CONDITIONS_NAME "not used"                                          // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_OBSERVING_CONDITIONS_DEVICE_TYPE "observingconditions"                        // don't change
 
@@ -73,7 +73,7 @@ const char esp32_alpaca_device_library_version[] = "3.3.3";
 // Focuser - Comon Properties
 #define ALPACA_FOCUSER_DESCRIPTION "Alpaca Focuser Template"        // init value; managed by config
 #define ALPACA_FOCUSER_DRIVER_INFO "ESP32 Focuser driver by BigPet" // init value; managed by config
-#define ALPACA_FOCUSER_INTERFACE_VERSION 3                          // don't change
+#define ALPACA_FOCUSER_INTERFACE_VERSION 4                          // don't change
 #define ALPACA_FOCUSER_NAME "not used"                              // init with <deviceType>-<deviceNumber>; managed by config
 #define ALPACA_FOCUSER_DEVICE_TYPE "focuser"                        // don't change
 

@@ -111,7 +111,7 @@
 2. AlpacaServer::WebRequestMethod2Str() corrected
 3. AlpacaServer::GetParam() stati_cast added in ..arg() call
 4. AlpacaDevice::createCallBack() Debug output: type added
-5. CoverCalibrator: implement interface version 2
+5. Interface updates as indroduced in ASCOM Plattform 7
 
 TODO
 AlpacaSwitch: SwitchDevice_t is_bool, async_type, state_change_complete;

@@ -47,7 +47,6 @@ void AlpacaFocuser::RegisterCallbacks()
     this->createCallBack(LHF(_alpacaPutMove), HTTP_PUT, "move");
 }
 
-
 void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_PUT_ACTION_REQ;
@@ -78,7 +77,6 @@ void AlpacaFocuser::AlpacaPutAction(AsyncWebServerRequest *request)
 mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
 };
-
 
 void AlpacaFocuser::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
@@ -112,7 +110,6 @@ mycatch:
 
     DBG_END
 };
-
 
 void AlpacaFocuser::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
@@ -167,18 +164,28 @@ void AlpacaFocuser::AlpacaPutCommandString(AsyncWebServerRequest *request)
         MYTHROW_RspStatusParameterNotFound(request, _rsp_status, "Raw");
 
     if (_putCommandString(command_str, raw, str_response, sizeof(str_response)) == false)
-       MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command_str);
+        MYTHROW_RspStatusCommandStringInvalid(request, _rsp_status, command_str);
 
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, str_response);
 
     DBG_END;
     return;
-    
+
 mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
 
+bool const AlpacaFocuser::getDeviceStates(size_t buf_len, char *buf)
+{
+    size_t snprintf_result =
+        snprintf(buf, buf_len, "{\"Name\":\"IsMoving\",\"Value\":%s},{\"Name\":\"Position\",\"Value\":%d},{\"Name\":\"Temperature\",\"Value\":%f}",
+                 _getIsMoving() ? "true" : "false",
+                 _getPosition(),
+                 _getTemperature());
+
+    return (snprintf_result > 0 && snprintf_result <= buf_len);
+}
 
 // void AlpacaFocuser::_alpacaGetPage(AsyncWebServerRequest *request, const char *const page)
 // {
@@ -360,12 +367,12 @@ void AlpacaFocuser::_alpacaPutHalt(AsyncWebServerRequest *request)
 {
     DBG_FOCUSER_PUT_HALT;
     _service_counter++;
-    uint32_t client_idx = 0;    
+    uint32_t client_idx = 0;
     _alpaca_server->RspStatusClear(_rsp_status);
 
     if ((client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kStrict)) == 0)
         goto mycatch;
-        
+
     _putHalt();
 
 mycatch:
@@ -395,4 +402,3 @@ mycatch:
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 };
-

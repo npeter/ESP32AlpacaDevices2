@@ -75,6 +75,8 @@ private:
   virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response) = 0;
   virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) = 0;
 
+  const bool getDeviceStates(size_t buf_len, char* buf);
+
   // private helpers
   AlpacaRspStatus_t &_rspStatusSensorNotImplemented(AsyncWebServerRequest *request, AlpacaRspStatus_t &rsp_status, const char *sensor_name);
   const bool _getSensorIdxByName(const char *sensor_name, OCSensorIdx_t &sensor_idx);
