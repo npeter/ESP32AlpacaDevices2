@@ -78,7 +78,7 @@ private:
   virtual const bool _haltCover() = 0;
 
   // CoverCalibrator
-  const bool getDeviceStates(size_t buf_len, char* buf);
+  const bool _getDeviceStateList(size_t buf_len, char* buf);
 protected:
   AlpacaCoverCalibrator();
   void Begin();

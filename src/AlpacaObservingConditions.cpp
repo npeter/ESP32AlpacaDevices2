@@ -318,7 +318,7 @@ mycatch: // empty
     DBG_END
 }
 
-bool const AlpacaObservingConditions::getDeviceStates(size_t buf_len, char *buf)
+bool const AlpacaObservingConditions::_getDeviceStateList(size_t buf_len, char *buf)
 {
     size_t snprintf_result = 0;
     size_t len = 0;

@@ -534,7 +534,7 @@ void AlpacaDevice::AlpacaGetDeviceState(AsyncWebServerRequest *request)
         strcpy(&_device_states[0], "[");
 
         len = strlen(_device_states);
-        getDeviceStates(sizeof(_device_states) - len - 2, &_device_states[len]);
+        _getDeviceStateList(sizeof(_device_states) - len - 2, &_device_states[len]);
 
         // add ']' and '\0'
         len = strlen(_device_states);

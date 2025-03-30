@@ -9,34 +9,49 @@
 #pragma once
 #include "AlpacaDevice.h"
 
-const size_t kSwitchNameSize = 32;
-const size_t kSwitchDescriptionSize = 128;
-// const size_t kSwitchMaxSwitchDevices = 4;
+const size_t kSwitchNameSize = 32;         // Max. size of switch device name incl. '\0'
+const size_t kSwitchDescriptionSize = 128; // Max. size of switch description incl. '\0'
+
+/**
+ * @brief Switch device change type: Asynchron/synchron
+ */
 enum struct SwitchAsyncType_t
 {
     kAsyncType,
     kNoAsyncType
 };
 
+/**
+ * @brief Primary switch device data type
+ */
 enum struct SwitchValueType_t
 {
     kBool,
     kDouble
 };
 
+/**
+ * @brief Switch device description and states. Maintained by AlpacaSwitch
+ *        Firmware  - Fix; Defined by firmware
+ *        Init      - Defined by setup page or firmware (see init_by_setup)
+ *        Operation - Modified at runtime
+ *        Driver    - Impliziet maintaine by the driver
+ */
 struct SwitchDevice_t
 {
-    bool init_by_setup; // init via setup web page / init with const values ... Begin()
-    bool can_write;
-    char name[kSwitchNameSize];
-    char description[kSwitchDescriptionSize];
-    double value;
-    double min_value;
-    double max_value;
-    double step;
-    bool is_bool;
-    SwitchAsyncType_t async_type;
-    bool state_change_complete;
+    bool init_by_setup;                       // Firmware  - init via setup web page / init with const values ... Begin()
+    bool can_write;                           // Init      - switch is read_only / read_write
+    char name[kSwitchNameSize];               // Operation - switch name
+    char description[kSwitchDescriptionSize]; // Init      - switch description
+    double value;                             // Operation - switch value; 0.0 or 1.0 if boolean
+    double min_value;                         //Init       - min switch value; 0.0 if boolean
+    double max_value;                         //Init       - max switch value; 1.0 if boolean
+    double step;                              //Init       - switch steps; 1.0 if boolean
+    SwitchAsyncType_t async_type;             //Init       - switch set type is AsyncType / NoAsyncType
+    bool is_bool;                             // Driver    - switch type flag for fast access
+    bool state_change_complete;               // Driver    - Switch async change state; Always true if NoAsyncType
+    bool has_been_cancled;                    // Driver    - Async switch has been cancled; Always false if NoAsyncType
+    uint32_t set_time_stamp_ms;               // Driver    - Timestamp [ms] of set/setasync/compleeted
 };
 
 class AlpacaSwitch : public AlpacaDevice
@@ -59,33 +74,34 @@ private:
 
     void _alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchValueType_t value_type, SwitchAsyncType_t async_type);
 
-    void _alpacaPutSetSwitch(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kBool, SwitchAsyncType_t::kNoAsyncType); };
-    void _alpacaPutSetAsync(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kBool, SwitchAsyncType_t::kAsyncType); };
+    void _alpacaPutSetSwitchWrapper(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kBool, SwitchAsyncType_t::kNoAsyncType); };
+    void _alpacaPutSetAsyncWrapper(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kBool, SwitchAsyncType_t::kAsyncType); };
+    void _alpacaPutSetSwitchValueWrapper(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kDouble, SwitchAsyncType_t::kNoAsyncType); };
+    void _alpacaPutSetAsyncValueWrapper(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kDouble, SwitchAsyncType_t::kAsyncType); };
+
+    void _alpacaPutCancleAsync(AsyncWebServerRequest *request);
     void _alpacaPutSetSwitchName(AsyncWebServerRequest *request);
-    void _alpacaPutSetSwitchValue(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kDouble, SwitchAsyncType_t::kNoAsyncType); };
-    void _alpacaPutSetAsyncValue(AsyncWebServerRequest *request) { _alpacaPutSetSwitch(request, SwitchValueType_t::kDouble, SwitchAsyncType_t::kAsyncType); };
+
     void AlpacaPutAction(AsyncWebServerRequest *request);
     void AlpacaPutCommandBlind(AsyncWebServerRequest *request);
     void AlpacaPutCommandBool(AsyncWebServerRequest *request);
     void AlpacaPutCommandString(AsyncWebServerRequest *request);
 
-    const bool getDeviceStates(size_t buf_len, char* buf);
-
+    /* devices specific handlers and helpers */
     virtual const bool _putAction(const char *const action, const char *const parameters, char *string_response, size_t string_response_size) = 0;
     virtual const bool _putCommandBlind(const char *const command, const char *const raw, bool &bool_response) = 0;
     virtual const bool _putCommandBool(const char *const command, const char *const raw, bool &bool_response) = 0;
     virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) = 0;
 
+    virtual const char *const _getFirmwareVersion() { return "-"; };
+    virtual const bool _writeSwitchValue(uint32_t id, double value, SwitchAsyncType_t async_type) = 0;
 
     // private helpers
     bool _getAndCheckId(AsyncWebServerRequest *request, uint32_t &id, Spelling_t spelling);
     const bool _doubleValueToBoolValue(uint32_t id, double double_value) { return (double_value != _p_switch_devices[id].min_value); };
     const double _boolValueToDoubleValue(uint32_t id, bool bool_value) { return (bool_value ? _p_switch_devices[id].max_value : _p_switch_devices[id].min_value); };
-
-    // virtual function
-    virtual const char *const _getFirmwareVersion() { return "-"; };
-    virtual const bool _writeSwitchValue(uint32_t id, double value, SwitchAsyncType_t async_type) = 0;
-
+    const bool _getDeviceStateList(size_t buf_len, char *buf);
+    void  _InitSwitchDevicesInternals(uint32_t id);
 protected:
     AlpacaSwitch(uint32_t num_of_switch_devices = 8);
     void Begin();
@@ -121,9 +137,7 @@ protected:
 
     // setter
     const bool SetSwitch(uint32_t id, bool bool_value);
-    // const bool SetSwitchAsync(uint32_t id, bool bool_value);
     const bool SetSwitchValue(uint32_t id, double double_value);
-    // const bool SetSwitchAsyncValue(uint32_t id, double double_value);
     const bool SetSwitchName(uint32_t id, char *name);
     const bool SetStateChangeComplete(uint32_t id, bool state_change_complete);
 

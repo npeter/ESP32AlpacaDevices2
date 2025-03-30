@@ -176,7 +176,7 @@ mycatch:
     DBG_END
 };
 
-bool const AlpacaFocuser::getDeviceStates(size_t buf_len, char *buf)
+bool const AlpacaFocuser::_getDeviceStateList(size_t buf_len, char *buf)
 {
     size_t snprintf_result =
         snprintf(buf, buf_len, "{\"Name\":\"IsMoving\",\"Value\":%s},{\"Name\":\"Position\",\"Value\":%d},{\"Name\":\"Temperature\",\"Value\":%f}",

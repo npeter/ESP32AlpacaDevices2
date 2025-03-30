@@ -71,7 +71,7 @@ protected:
     void AlpacaGetSupportedActions(AsyncWebServerRequest *request);
     void AlpacaGetDeviceState(AsyncWebServerRequest *request);
 
-    virtual const bool getDeviceStates(size_t buf_len, char* buf) = 0;
+    virtual const bool _getDeviceStateList(size_t buf_len, char* buf) = 0;
     // helpers
     int32_t checkClientDataAndConnection(AsyncWebServerRequest *request, uint32_t &clientIdx, Spelling_t spelling);
     uint32_t getClientIdxByClientID(uint32_t clientID);

@@ -183,7 +183,7 @@ mycatch:
     DBG_END
 };
 
-bool const AlpacaCoverCalibrator::getDeviceStates(size_t buf_len, char *buf)
+bool const AlpacaCoverCalibrator::_getDeviceStateList(size_t buf_len, char *buf)
 {
     int return_value = snprintf(buf, buf_len, "{\"Name\":\"Brightness\",\"Value\":%d},{\"Name\":\"CalibratorState\",\"Value\":%d},{\"Name\":\"CoverState\",\"Value\":%d}",
              GetBrightness(), GetCalibratorState(), GetCoverState());
