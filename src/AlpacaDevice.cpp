@@ -430,38 +430,47 @@ mycatch: // empty;
     DBG_END
 };
 
+// void AlpacaDevice::AlpacaGetConnecting(AsyncWebServerRequest *request)
+// {
+//     DBG_DEVICE_GET_CONNECTING
+//     _service_counter++;
+
+//     int32_t client_id = 0;
+//     int32_t client_transaction_id = 0;
+//     _alpaca_server->RspStatusClear(_rsp_status);
+//     Spelling_t spelling = Spelling_t::kStrict;
+
+//     bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, spelling);
+//     bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, spelling);
+
+//     _clients[0].client_id = (client_id >= 0) ? (uint32_t)client_id : 0;
+//     _clients[0].client_transaction_id = (client_transaction_id >= 0) ? (uint32_t)client_transaction_id : 0;
+//     _clients[0].time_ms = millis();
+
+//     if (get_client_id == false)
+//         MYTHROW_RspStatusClientIDNotFound(request, _rsp_status);
+
+//     if (client_id <= 0)
+//         MYTHROW_RspStatusClientIDInvalid(request, _rsp_status, client_id);
+
+//     if (get_client_transaction_id == false)
+//         MYTHROW_RspStatusClientTransactionIDNotFound(request, _rsp_status);
+
+//     if (client_transaction_id <= 0)
+//         MYTHROW_RspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
+
+// mycatch:
+
+//     _alpaca_server->Respond(request, _clients[0], _rsp_status, false); // connecting always false!!!
+//     DBG_END
+// };
+
 void AlpacaDevice::AlpacaGetConnecting(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_CONNECTING
     _service_counter++;
-
-    int32_t client_id = 0;
-    int32_t client_transaction_id = 0;
-    _alpaca_server->RspStatusClear(_rsp_status);
-    Spelling_t spelling = Spelling_t::kStrict;
-
-    bool get_client_id = _alpaca_server->GetParam(request, "ClientID", client_id, spelling);
-    bool get_client_transaction_id = _alpaca_server->GetParam(request, "ClientTransactionID", client_transaction_id, spelling);
-
-    _clients[0].client_id = (client_id >= 0) ? (uint32_t)client_id : 0;
-    _clients[0].client_transaction_id = (client_transaction_id >= 0) ? (uint32_t)client_transaction_id : 0;
-    _clients[0].time_ms = millis();
-
-    if (get_client_id == false)
-        MYTHROW_RspStatusClientIDNotFound(request, _rsp_status);
-
-    if (client_id <= 0)
-        MYTHROW_RspStatusClientIDInvalid(request, _rsp_status, client_id);
-
-    if (get_client_transaction_id == false)
-        MYTHROW_RspStatusClientTransactionIDNotFound(request, _rsp_status);
-
-    if (client_transaction_id <= 0)
-        MYTHROW_RspStatusClientTransactionIDInvalid(request, _rsp_status, client_transaction_id);
-
-mycatch:
-
-    _alpaca_server->Respond(request, _clients[0], _rsp_status, false); // connecting always false!!!
+    uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, false);
     DBG_END
 };
 
@@ -473,6 +482,7 @@ void AlpacaDevice::AlpacaGetConnected(AsyncWebServerRequest *request)
     _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, client_idx > 0);
     DBG_END
 };
+
 void AlpacaDevice::AlpacaGetDescription(AsyncWebServerRequest *request)
 {
     DBG_DEVICE_GET_DESCRIPTION

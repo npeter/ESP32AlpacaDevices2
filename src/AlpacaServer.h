@@ -22,8 +22,8 @@
 const char kAlpacaDeviceCommand[] = "/api/v1/%s/%d/%s"; // <device_type>, <device_number>, <command>
 const char kAlpacaDeviceSetup[] = "/setup/v1/%s/%d/%s"; // device_type, device_number, command
 
-const char kAlpacaSettingsPath[] = "/settings.json";     // Path to server and device settings
-const char kAlpacaSetupPagePath[] = "/www/setup.html";  // Path to server and device setup page
+const char kAlpacaSettingsPath[] = "/settings.json";   // Path to server and device settings
+const char kAlpacaSetupPagePath[] = "/www/setup.html"; // Path to server and device setup page
 
 const char kAlpacaJsonType[] = "application/json";
 const uint32_t kAlpacaDiscoveryLength = 64;
@@ -78,6 +78,7 @@ enum struct AlpacaErrorCode_t : int32_t
     NotConnected = (int32_t)0x00000407,                  // used to indicate that the communications channel is not connected.
     NotImplemented = (int32_t)0x00000400,                // for property or method not implemented.
     NotInCacheException = (int)0x0000040D,               // to indicate that the requested item is not present in the ASCOM cache.
+    OperationCancelled = (int)0x0000040E,                // an (asynchronous) in-progress operation has been cancelled
     SettingsProviderError = (int)0x0000040A,             // related to settings.
     UnspecifiedError = (int)0x000004FF,                  // used when nothing else was specified.
     ValueNotSet = (int)0x00000402                        // for reporting that a value has not been set.
@@ -297,6 +298,14 @@ public:
         rsp_status.error_code = AlpacaErrorCode_t::NotImplemented;                                                                    \
         rsp_status.http_status = HttpStatus_t::kPassed;                                                                               \
         snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Device '%s' not implemented", req->url().c_str(), device); \
+        goto mycatch;                                                                                                                 \
+    }
+
+#define MYTHROW_RspStatusOperationCancelled(req, rsp_status, device)                                                                  \
+    {                                                                                                                                 \
+        rsp_status.error_code = AlpacaErrorCode_t::OperationCancelled;                                                                    \
+        rsp_status.http_status = HttpStatus_t::kPassed;                                                                               \
+        snprintf(rsp_status.error_msg, sizeof(rsp_status.error_msg), "%s - Device '%s' asynchronuous operation has been cancelled", req->url().c_str(), device); \
         goto mycatch;                                                                                                                 \
     }
 };

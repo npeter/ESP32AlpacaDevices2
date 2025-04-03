@@ -15,7 +15,7 @@ AlpacaSwitch::AlpacaSwitch(uint32_t num_of_switch_devices)
     strlcpy(_device_and_driver_version, esp32_alpaca_device_library_version, sizeof(_device_and_driver_version));
     _device_interface_version = ALPACA_SWITCH_INTERFACE_VERSION;
 
-    // Switch device description - First initialization 
+    // Switch device description - First initialization
     for (uint32_t u = 0; u < _max_switch_devices; u++)
     {
         _p_switch_devices[u].can_write = false;
@@ -34,9 +34,9 @@ void AlpacaSwitch::_InitSwitchDevicesInternals(uint32_t id)
     if (id >= 0 && id <= _max_switch_devices)
     {
         _p_switch_devices[id].is_bool = (_p_switch_devices[id].min_value == 0.0 &&
-                                        _p_switch_devices[id].max_value == 1.0 &&
-                                        _p_switch_devices[id].step == 1.0);
-        _p_switch_devices[id].has_been_cancled = false;
+                                         _p_switch_devices[id].max_value == 1.0 &&
+                                         _p_switch_devices[id].step == 1.0);
+        _p_switch_devices[id].has_been_cancelled = false;
         _p_switch_devices[id].state_change_complete = true;
         _p_switch_devices[id].set_time_stamp_ms = millis();
     }
@@ -85,7 +85,7 @@ void AlpacaSwitch::RegisterCallbacks()
 }
 
 /**
- * Handler for maxswitch
+ * @brief Handler for maxswitch
  */
 void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
 {
@@ -104,7 +104,7 @@ void AlpacaSwitch::_alpacaGetMaxSwitch(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for canwrite
+ * @brief Handler for canwrite
  */
 void AlpacaSwitch::_alpacaGetCanWrite(AsyncWebServerRequest *request)
 {
@@ -126,29 +126,38 @@ void AlpacaSwitch::_alpacaGetCanWrite(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for getswitch
+ * @brief Handler for getswitch
  */
 void AlpacaSwitch::_alpacaGetSwitch(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH
     _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
-    bool switch_value = false;
+    bool bool_value = false;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            switch_value = _doubleValueToBoolValue(id, _p_switch_devices[id].value);
+            if (_p_switch_devices[id].has_been_cancelled == true)
+            {
+                MYTHROW_RspStatusOperationCancelled(request, _rsp_status, GetSwitchName(id));
+            }
+            bool_value = _doubleValueToBoolValue(id, _p_switch_devices[id].value);
+            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, bool_value);
+            DBG_END;
+            return;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, switch_value);
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, bool_value);
     DBG_END
 }
 
 /**
- * Handler for getswitchdescription
+ * @brief Handler for getswitchdescription
  */
 void AlpacaSwitch::_alpacaGetSwitchDescription(AsyncWebServerRequest *request)
 {
@@ -170,7 +179,7 @@ void AlpacaSwitch::_alpacaGetSwitchDescription(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for getswitchname
+ * @brief Handler for getswitchname
  */
 void AlpacaSwitch::_alpacaGetSwitchName(AsyncWebServerRequest *request)
 {
@@ -192,29 +201,38 @@ void AlpacaSwitch::_alpacaGetSwitchName(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for getswitchvalue
+ * @brief Handler for getswitchvalue
  */
 void AlpacaSwitch::_alpacaGetSwitchValue(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_SWITCH_VALUE;
     _service_counter++;
     _alpaca_server->RspStatusClear(_rsp_status);
-    double value = 0.0;
+    double double_value = 0.0;
     uint32_t id = 0;
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            value = _p_switch_devices[id].value;
+            if (_p_switch_devices[id].has_been_cancelled == true)
+            {
+                MYTHROW_RspStatusOperationCancelled(request, _rsp_status, GetSwitchName(id));
+            }
+            double_value = _p_switch_devices[id].value;
+            _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, double_value);
+            DBG_END;
+            return;
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, value);
+
+mycatch:
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, double_value);
     DBG_END
 }
 
 /**
- * Handler for minswitchvalue
+ * @brief Handler for minswitchvalue
  */
 void AlpacaSwitch::_alpacaGetMinSwitchValue(AsyncWebServerRequest *request)
 {
@@ -236,7 +254,7 @@ void AlpacaSwitch::_alpacaGetMinSwitchValue(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for maxswitchvalue
+ * @brief Handler for maxswitchvalue
  */
 void AlpacaSwitch::_alpacaGetMaxSwitchValue(AsyncWebServerRequest *request)
 {
@@ -258,7 +276,7 @@ void AlpacaSwitch::_alpacaGetMaxSwitchValue(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for switchstep
+ * @brief Handler for switchstep
  */
 void AlpacaSwitch::_alpacaGetSwitchStep(AsyncWebServerRequest *request)
 {
@@ -280,7 +298,7 @@ void AlpacaSwitch::_alpacaGetSwitchStep(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for canasync
+ * @brief Handler for canasync
  */
 void AlpacaSwitch::_alpacaGetCanAsync(AsyncWebServerRequest *request)
 {
@@ -303,7 +321,7 @@ void AlpacaSwitch::_alpacaGetCanAsync(AsyncWebServerRequest *request)
 }
 
 /**
- * Handler for statechangecomplete
+ * @brief Handler for statechangecomplete
  */
 void AlpacaSwitch::_alpacaGetStateChangeComplete(AsyncWebServerRequest *request)
 {
@@ -345,7 +363,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
                 async_type == SwitchAsyncType_t::kAsyncType && (_p_switch_devices[id].async_type == SwitchAsyncType_t::kAsyncType))
             {
                 if (_p_switch_devices[id].can_write)
-                { // get_param = _alpaca_server->GetParam(request, "State", bool_value, Spelling_t::kStrict);
+                { 
                     if (value_type == SwitchValueType_t::kDouble)
                     {
 
@@ -356,16 +374,19 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
                             {
                                 if (double_value >= _p_switch_devices[id].min_value && double_value <= _p_switch_devices[id].max_value)
                                 {
-
-                                    SetSwitchValue(id, double_value);
                                     _p_switch_devices[id].state_change_complete = async_type == SwitchAsyncType_t::kNoAsyncType;
-
-                                    if (!_writeSwitchValue(id, _p_switch_devices[id].value, async_type))
-                                    {
+                                    if (_writeSwitchValue(id, double_value, async_type))
+                                    { // physical set was OK
+                                        _p_switch_devices[id].value = double_value;
+                                        _p_switch_devices[id].has_been_cancelled = false;
+                                        _p_switch_devices[id].set_time_stamp_ms = millis();
+                                    }
+                                    else
+                                    { // exc can't write
                                         _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                                         _rsp_status.http_status = HttpStatus_t::kPassed;
                                         snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - can't write %f to Switch device <%s>",
-                                                 request->url().c_str(), double_value, _p_switch_devices[id].name);
+                                                 request->url().c_str(), _boolValueToDoubleValue(id, bool_value), _p_switch_devices[id].name);
                                     }
                                 }
 
@@ -391,12 +412,16 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
                     {
                         if (_alpaca_server->GetParam(request, "State", bool_value, Spelling_t::kStrict))
                         {
-
-                            _p_switch_devices[id].value = _boolValueToDoubleValue(id, bool_value);
+                            bool bool_value = _boolValueToDoubleValue(id, bool_value);
                             _p_switch_devices[id].state_change_complete = async_type == SwitchAsyncType_t::kNoAsyncType;
-
-                            if (!_writeSwitchValue(id, _p_switch_devices[id].value, async_type))
-                            {
+                            if (_writeSwitchValue(id,bool_value, async_type))
+                            { // physical set was OK
+                                _p_switch_devices[id].value = bool_value;
+                                _p_switch_devices[id].has_been_cancelled = false;
+                                _p_switch_devices[id].set_time_stamp_ms = millis();
+                            }
+                            else
+                            { // exc can't write
                                 _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                                 _rsp_status.http_status = HttpStatus_t::kPassed;
                                 snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - can't write %f to Switch device <%s>",
@@ -404,7 +429,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
                             }
                         }
                         else
-                        {
+                        { // exc invalid
                             _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                             _rsp_status.http_status = HttpStatus_t::kInvalidRequest;
                             snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - parameter \'State\' not found or invalid",
@@ -413,7 +438,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
                     }
                 }
                 else
-                {
+                { // exc read only
                     _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                     _rsp_status.http_status = HttpStatus_t::kInvalidRequest;
                     snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Switch device <%s> is read only",
@@ -421,7 +446,7 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
                 }
             }
             else
-            {
+            { // exc async not allowed
                 _rsp_status.error_code = AlpacaErrorCode_t::InvalidValue;
                 _rsp_status.http_status = HttpStatus_t::kPassed;
                 snprintf(_rsp_status.error_msg, sizeof(_rsp_status.error_msg), "%s - Switch device <%s> async not allowed",
@@ -434,30 +459,31 @@ void AlpacaSwitch::_alpacaPutSetSwitch(AsyncWebServerRequest *request, SwitchVal
 };
 
 /**
- * Handler for cancleasync
+ * @brief Handler for cancleasync
  */
 void AlpacaSwitch::_alpacaPutCancleAsync(AsyncWebServerRequest *request)
 {
     DBG_SWITCH_GET_CANCLE_ASYNC
-    _service_counter++; // TODO
+    _service_counter++; 
     _alpaca_server->RspStatusClear(_rsp_status);
-    bool can_async = false;
     uint32_t id = 0;
+
     uint32_t client_idx = checkClientDataAndConnection(request, client_idx, Spelling_t::kIgnoreCase);
     if (client_idx > 0)
     {
         if (_getAndCheckId(request, id, Spelling_t::kIgnoreCase))
         {
-            
-            can_async = _p_switch_devices[id].async_type == SwitchAsyncType_t::kAsyncType;
+            if (GetStateChangeComplete(id) == false) {
+                _p_switch_devices[id].has_been_cancelled = true;
+            }
         }
     }
-    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status, can_async);
+    _alpaca_server->Respond(request, _clients[client_idx], _rsp_status);
     DBG_END
 }
 
 /**
- * Handler for setswitchname
+ * @brief Handler for setswitchname
  */
 void AlpacaSwitch::_alpacaPutSetSwitchName(AsyncWebServerRequest *request)
 {
@@ -490,7 +516,7 @@ void AlpacaSwitch::_alpacaPutSetSwitchName(AsyncWebServerRequest *request)
 };
 
 /**
- * Handler for action
+ * @brief Handler for action
  */
 void AlpacaSwitch::AlpacaPutAction(AsyncWebServerRequest *request)
 {
@@ -524,7 +550,7 @@ mycatch:
 };
 
 /**
- * Handler for commandblind
+ * @brief Handler for commandblind
  */
 void AlpacaSwitch::AlpacaPutCommandBlind(AsyncWebServerRequest *request)
 {
@@ -560,7 +586,7 @@ mycatch:
 };
 
 /**
- * Handler for commandbool
+ * @brief Handler for commandbool
  */
 void AlpacaSwitch::AlpacaPutCommandBool(AsyncWebServerRequest *request)
 {
@@ -596,7 +622,7 @@ mycatch:
 };
 
 /**
- * Handler for commandstring
+ * @brief Handler for commandstring
  */
 void AlpacaSwitch::AlpacaPutCommandString(AsyncWebServerRequest *request)
 {
@@ -694,6 +720,9 @@ const bool AlpacaSwitch::SetSwitch(uint32_t id, bool bool_value)
     if (id < _max_switch_devices)
     {
         _p_switch_devices[id].value = bool_value ? _p_switch_devices[id].max_value : _p_switch_devices[id].min_value;
+        _p_switch_devices[id].has_been_cancelled = false;
+        _p_switch_devices[id].state_change_complete = true;
+        _p_switch_devices[id].set_time_stamp_ms = millis();
         return true;
     }
     return false;
@@ -711,6 +740,9 @@ const bool AlpacaSwitch::SetSwitchValue(uint32_t id, double double_value)
             int32_t steps = (double_value - _p_switch_devices[id].min_value) / _p_switch_devices[id].step + 0.5 * _p_switch_devices[id].step;
             _p_switch_devices[id].value = _p_switch_devices[id].min_value + (double)steps * _p_switch_devices[id].step;
             _p_switch_devices[id].value = _p_switch_devices[id].value <= _p_switch_devices[id].max_value ? _p_switch_devices[id].value : _p_switch_devices[id].max_value;
+            _p_switch_devices[id].has_been_cancelled = false;
+            _p_switch_devices[id].state_change_complete = true;
+            _p_switch_devices[id].set_time_stamp_ms = millis();            
             return true;
         }
     }

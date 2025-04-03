@@ -50,7 +50,7 @@ struct SwitchDevice_t
     SwitchAsyncType_t async_type;             //Init       - switch set type is AsyncType / NoAsyncType
     bool is_bool;                             // Driver    - switch type flag for fast access
     bool state_change_complete;               // Driver    - Switch async change state; Always true if NoAsyncType
-    bool has_been_cancled;                    // Driver    - Async switch has been cancled; Always false if NoAsyncType
+    bool has_been_cancelled;                    // Driver    - Async switch has been cancled; Always false if NoAsyncType
     uint32_t set_time_stamp_ms;               // Driver    - Timestamp [ms] of set/setasync/compleeted
 };
 
@@ -94,6 +94,10 @@ private:
     virtual const bool _putCommandString(const char *const command_str, const char *const raw, char *string_response, size_t string_response_size) = 0;
 
     virtual const char *const _getFirmwareVersion() { return "-"; };
+    /**
+     * @brief Write to physical device
+     * @return true/false - write was succesful/not succesfull
+     */
     virtual const bool _writeSwitchValue(uint32_t id, double value, SwitchAsyncType_t async_type) = 0;
 
     // private helpers
@@ -121,6 +125,7 @@ protected:
     const bool GetCanAsync(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].async_type == SwitchAsyncType_t::kAsyncType; };
     const bool GetStateChangeComplete(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].state_change_complete; };
     const bool GetIsBool(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].is_bool; };
+    const uint32_t GetSetTimeStampMs(uint32_t id) { return _p_switch_devices[id < _max_switch_devices ? id : 0].set_time_stamp_ms; };
 
     // setters ... only for initialization
     void InitSwitchInitBySetup(uint32_t id, bool init_by_setup) { _p_switch_devices[id].init_by_setup = init_by_setup; };
@@ -140,6 +145,7 @@ protected:
     const bool SetSwitchValue(uint32_t id, double double_value);
     const bool SetSwitchName(uint32_t id, char *name);
     const bool SetStateChangeComplete(uint32_t id, bool state_change_complete);
+    void SetTimeStampMs(uint32_t id, uint32_t set_time_stamp_ms) { _p_switch_devices[id].set_time_stamp_ms = set_time_stamp_ms;}
 
 public:
 };
