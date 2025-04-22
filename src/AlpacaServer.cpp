@@ -557,6 +557,7 @@ void AlpacaServer::_readJson(JsonObject &root)
     // activated SLog settings
     g_Slog.Begin(_syslog_host.c_str());
     g_Slog.SetLvlMsk(_log_level);
+    _log_level = g_Slog.GetLvlMsk();
     g_Slog.SetEnableSerial(_serial_log);
 
     SLOG_PRINTF(SLOG_INFO, "... END _mng_server_name=%s _port_tcp=%d _port_udp=%d _syslog_host=%s _log_level=%d _serial_log=%s\n",

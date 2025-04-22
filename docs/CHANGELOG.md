@@ -106,12 +106,16 @@
     - _alpacaPutSetSwitch()
 3. Improve ErrMsg in Alpaca RSP
 <br>
-## 3.3.4 2025-03-24
+## 3.3.4 / 3.3.5 2025-03-24 / 2025-04-22
 1. Prepare for Alpaca ASCOM 7
 2. AlpacaServer::WebRequestMethod2Str() corrected
 3. AlpacaServer::GetParam() stati_cast added in ..arg() call
 4. AlpacaDevice::createCallBack() Debug output: type added
 5. Interface updates as indroduced in ASCOM Plattform 7
+6. AlpacaServer::_readJson() SetLvlMsk(_log_level); _log_level=GetLvlMsk()
+7. Change to ESPAsyncWebServer V3.7.7 and AsyncTCP V3.4.0
+
+
 
 TODO
 AlpacaSwitch: SwitchDevice_t is_bool, async_type, state_change_complete;
