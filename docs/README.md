@@ -11,18 +11,6 @@ This library is more or less a new implementation. But it's primary based on the
 - https://github.com/agnunez/AlpacaServerESP32.git 
 - https://github.com/elenhinan/ESPAscomAlpacaServer
 
-<br><br>
-Great and important Libraries used in this implementation:
-- Async WebServer for ESP
-    - https://registry.platformio.org/libraries/mathieucarbou/ESP%20Async%20WebServer
-
-TODO https://github.com/ESP32Async/ESPAsyncWebServer
-
-- Json 
-    - https://arduinojson.org/
-- Upload over the air 
-    - https://github.com/ayushsharma82/ElegantOTA
-<br>
 <br>
 
 ## Motivation
@@ -289,16 +277,6 @@ The following code block shows the prinziple setup and loop
 - [platformio](https://docs.platformio.org/en/latest/what-is-platformio.html)
 - [ArduinoJson](https://arduinojson.org/)
 <br><br>
-
-## Open Topics
-- Concept for AlpacaConfig.h
-- Test device specific interface with real device implementation
-    - Already done for 
-        - CoverCalibrator [CoFlat](https://github.com/npeter/CoFlat)
-        - Focuser MoFo4
-- Connection watch dog 
-    - if no request for a certain time (ALPACA_CLIENT_CONNECTION_TIMEOUT_SEC)
-    - impliziet device specific disconnect         
 
     
 

@@ -120,12 +120,10 @@
 
 ## 4.2.0 2025-09-07 Public Release Alpaca ASCOM 7 
 
-1. See changelog 3.3.1 ...
+1. See changelog 3.3.1 ... 3.3.5
 2. Examples removed. See demo project [ESP32AlpacaDeviceDemo](https://github.com/npeter/)
-<br>
+3. README.md adapted
 
-# Open topics 
-- None
 
 
 
