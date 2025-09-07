@@ -106,7 +106,7 @@
     - _alpacaPutSetSwitch()
 3. Improve ErrMsg in Alpaca RSP
 <br>
-## 3.3.4 / 3.3.5 2025-03-24 / 2025-04-22
+## 3.3.4 / 3.3.5 2025-03-24 / 2025-04-22 / 2025-09-07
 1. Prepare for Alpaca ASCOM 7
 2. AlpacaServer::WebRequestMethod2Str() corrected
 3. AlpacaServer::GetParam() stati_cast added in ..arg() call
@@ -114,15 +114,18 @@
 5. Interface updates as indroduced in ASCOM Plattform 7
 6. AlpacaServer::_readJson() SetLvlMsk(_log_level); _log_level=GetLvlMsk()
 7. Change to ESPAsyncWebServer V3.7.7 and AsyncTCP V3.4.0
+8. AlpacaSwitch.h/SwitchDevice_t is_bool, is_bool, async_type, state_change_complete added (needed for ASCOM 7)
+9. Alpaca\<DeviceType\>.h: Declarations for pure virtual methodes _putAction(), _putCommandBlind(), _putCommandBool(), _putCommandString() added
+10. Remark: This methodes have to be implemented in your <DeviceType>.h files (see examples)
 
+## 4.2.0 2025-09-07 Public Release Alpaca ASCOM 7 
 
-
-TODO
-AlpacaSwitch: SwitchDevice_t is_bool, async_type, state_change_complete;
+1. See changelog 3.3.1 ...
+2. Examples removed. See demo project [ESP32AlpacaDeviceDemo](https://github.com/npeter/)
+<br>
 
 # Open topics 
-- Release as 4.0.0 
-    - Info: Add declarations for pure virtual methodes _putAction(), _putCommandBlind(), _putCommandBool(), _putCommandString() (see e.c. AlpacaSwitch.h and Switch.h)
+- None
 
 
 
