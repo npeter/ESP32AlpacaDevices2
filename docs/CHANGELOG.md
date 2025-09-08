@@ -127,7 +127,10 @@
 ## 4.2.1-Dev 2025-09-08
 
 1. AlpacaFocuser.cpp/_getDeviceStateList() TempCompAvailable and Connected added
-2. AlpacaSwitch.cpp/_getDeviceStateList() GetSwitchX, GSwitchValueX, StateChangeCompleteX added, refactored
+2. AlpacaSwitch.cpp/_getDeviceStateList() GetSwitchX, GetSwitchValueX, StateChangeCompleteX added, method refactored
+    Remark: TimeStamp not supported
+3. AlpacaCoverCalibrator.cpp refactoring _getDeviceStateList() - Brightness, CalibratorChanging, CalibratorState, CoverMoving, CoverState
+    Remark: TimeStamp not supported!
 
 
 

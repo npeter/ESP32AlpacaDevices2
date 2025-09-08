@@ -185,8 +185,12 @@ mycatch:
 
 bool const AlpacaCoverCalibrator::_getDeviceStateList(size_t buf_len, char *buf)
 {
-    int return_value = snprintf(buf, buf_len, "{\"Name\":\"Brightness\",\"Value\":%d},{\"Name\":\"CalibratorState\",\"Value\":%d},{\"Name\":\"CoverState\",\"Value\":%d}",
-             GetBrightness(), GetCalibratorState(), GetCoverState());
+    int return_value = snprintf(buf, buf_len, "{\"Name\":\"Brightness\",\"Value\":%d},{\"Name\":\"CalibratorChanging\",\"Value\":%s},{\"Name\":\"CalibratorState\",\"Value\":%d},{\"Name\":\"CoverMoving\",\"Value\":%s},{\"Name\":\"CoverState\",\"Value\":%d}",
+             GetBrightness(), 
+             GetCalibratorChanging() ? "true" : "false",
+             GetCalibratorState(), 
+             GetCoverMoving() ? "true" : "false",
+             GetCoverState());
 
     return (return_value > 0 && return_value <= buf_len);
 }
