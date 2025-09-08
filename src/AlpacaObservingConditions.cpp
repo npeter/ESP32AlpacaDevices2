@@ -28,7 +28,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcDewPointSensorIdx].sensor_name, "DewPoint", kMaxSensorName);
     strlcpy(_sensors[kOcHumiditySensorIdx].sensor_name, "Humidity", kMaxSensorName);
     strlcpy(_sensors[kOcPressureSensorIdx].sensor_name, "Pressure", kMaxSensorName);
-    strlcpy(_sensors[kOcRainRateSensorIdx].sensor_name, "Rain", kMaxSensorName);
+    strlcpy(_sensors[kOcRainRateSensorIdx].sensor_name, "RainRate", kMaxSensorName);
     strlcpy(_sensors[kOcSkyBrightnessSensorIdx].sensor_name, "SkyBrightness", kMaxSensorName);
     strlcpy(_sensors[kOcSkyQualitySensorIdx].sensor_name, "SkyQuality", kMaxSensorName);
     strlcpy(_sensors[kOcSkyTemperatureSensorIdx].sensor_name, "SkyTemperature", kMaxSensorName);
@@ -43,7 +43,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcDewPointSensorIdx].description, "DewPoint Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcHumiditySensorIdx].description, "Humidity Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcPressureSensorIdx].description, "Pressure Description", kMaxSensorDescription);
-    strlcpy(_sensors[kOcRainRateSensorIdx].description, "Rain Description", kMaxSensorDescription);
+    strlcpy(_sensors[kOcRainRateSensorIdx].description, "RainRate Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcSkyBrightnessSensorIdx].description, "SkyBrightness Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcSkyQualitySensorIdx].description, "SkyQuality  Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcSkyTemperatureSensorIdx].description, "SkyTemperature  Description", kMaxSensorDescription);

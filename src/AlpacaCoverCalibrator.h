@@ -9,7 +9,7 @@
 #pragma once
 #include "AlpacaDevice.h"
 
-// ASCOM  / ALPACA CalobratorStatus Enumeration
+// ASCOM  / ALPACA CalibratorStatus Enumeration
 enum struct AlpacaCalibratorStatus_t
 {
   kNotPresent = 0,
