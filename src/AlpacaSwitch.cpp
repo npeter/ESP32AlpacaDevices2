@@ -668,6 +668,7 @@ bool const AlpacaSwitch::_getDeviceStateList(size_t buf_len, char *buf)
         {
             len = strlen(buf);
             if (buf_len - len > max_json_len) 
+            {
                 if (GetIsBool(id))
                     snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"Switch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
                 else
