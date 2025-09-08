@@ -660,14 +660,14 @@ bool const AlpacaSwitch::_getDeviceStateList(size_t buf_len, char *buf)
 {
     size_t snprintf_result = 0;
     size_t len = 0;
+    const size_t max_json_len = 128;    // max len of one json element
 
     for (unsigned id = 0; id < GetMaxSwitch(); id++)
     {
         if (GetStateChangeComplete(id))
         {
             len = strlen(buf);
-            if (len < buf_len - 34) // <{"Name":"x","Value":"GetSwitch0},>+'\0'
-            {
+            if (len < buf_len - max_json_len) 
                 if (GetIsBool(id))
                     snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
                 else
@@ -678,7 +678,20 @@ bool const AlpacaSwitch::_getDeviceStateList(size_t buf_len, char *buf)
                 snprintf_result = 0;
                 break;
             }
+
+            len = strlen(buf); 
+            if (len < buf_len - max_json_len)
+            {
+                snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"SwitchName%d\",\"Value\":\"%s\"},", id, GetSwitchName(id));
+            }
+            else
+            {
+                snprintf_result = 0;
+                break;
+            } 
+
         }
+
     }
     len = strlen(buf);
     *(buf + len - 1) = '\0'; // replace ',' by '\0'
