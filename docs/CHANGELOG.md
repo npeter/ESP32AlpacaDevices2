@@ -124,6 +124,9 @@
 2. Examples removed. See demo project [ESP32AlpacaDeviceDemo](https://github.com/npeter/)
 3. README.md adapted
 
+## 4.2.1-Dev 2025-09-08
+
+1. AlpacaFocuser.cpp/_getDeviceStateList_getDeviceStateList() TempCompAvailable and Connected added
 
 
 
