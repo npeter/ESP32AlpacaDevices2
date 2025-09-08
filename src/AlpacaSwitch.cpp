@@ -667,11 +667,11 @@ bool const AlpacaSwitch::_getDeviceStateList(size_t buf_len, char *buf)
         if (GetStateChangeComplete(id))
         {
             len = strlen(buf);
-            if (len < buf_len - max_json_len) 
+            if (buf_len - len > max_json_len) 
                 if (GetIsBool(id))
-                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
+                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"Switch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
                 else
-                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitchValue%d\",\"Value\":%f},", id, GetSwitchValue(id));
+                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"SwitchValue%d\",\"Value\":%f},", id, GetSwitchValue(id));
             }
             else
             {
@@ -680,7 +680,7 @@ bool const AlpacaSwitch::_getDeviceStateList(size_t buf_len, char *buf)
             }
 
             len = strlen(buf); 
-            if (len < buf_len - max_json_len)
+            if (buf_len - len > max_json_len) 
             {
                 snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"SwitchName%d\",\"Value\":\"%s\"},", id, GetSwitchName(id));
             }
