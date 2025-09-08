@@ -127,7 +127,7 @@
 ## 4.2.1-Dev 2025-09-08
 
 1. AlpacaFocuser.cpp/_getDeviceStateList() TempCompAvailable and Connected added
-2. AlpacaSwitch.cpp/_getDeviceStateList() SwitchName added, refactored
+2. AlpacaSwitch.cpp/_getDeviceStateList() GetSwitchX, GSwitchValueX, StateChangeCompleteX added, refactored
 
 
 
