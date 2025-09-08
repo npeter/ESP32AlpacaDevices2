@@ -87,9 +87,9 @@ protected:
   const int32_t GetBrightness() { return _brightness; };
   const int32_t GetMaxBrightness() { return _max_brightness; };
   const AlpacaCalibratorStatus_t GetCalibratorState() { return _calibrator_state; };
-  const bool CalibratorChanging() { return _calibrator_state == AlpacaCalibratorStatus_t::kNotReady || _calibrator_state == AlpacaCalibratorStatus_t::kUnknown ? true : false; };
+  const bool GetCalibratorChanging() { return _calibrator_state == AlpacaCalibratorStatus_t::kNotReady || _calibrator_state == AlpacaCalibratorStatus_t::kUnknown ? true : false; };
   const AlpacaCoverStatus_t GetCoverState() { return _cover_state; };
-  const bool CoverMoving() { return _cover_state == AlpacaCoverStatus_t::kMoving || _cover_state == AlpacaCoverStatus_t::kUnknown ? true : false; };
+  const bool GetCoverMoving() { return _cover_state == AlpacaCoverStatus_t::kMoving || _cover_state == AlpacaCoverStatus_t::kUnknown ? true : false; };
 
   void SetCoverState(AlpacaCoverStatus_t cover_state) { _cover_state = cover_state; };
   void SetCalibratorState(AlpacaCalibratorStatus_t calibrator_state) { _calibrator_state = calibrator_state; };
