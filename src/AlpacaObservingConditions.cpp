@@ -35,7 +35,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcStarFwhmSensorIdx].sensor_name, "StarFWHM", kMaxSensorName);
     strlcpy(_sensors[kOcTemperatureSensorIdx].sensor_name, "Temperature", kMaxSensorName);
     strlcpy(_sensors[kOcWindDirectionSensorIdx].sensor_name, "WindDirection", kMaxSensorName);
-    strlcpy(_sensors[kOcWindGuestSensorIdx].sensor_name, "WindGuest", kMaxSensorName);
+    strlcpy(_sensors[kOcWindGustSensorIdx].sensor_name, "WindGust", kMaxSensorName);
     strlcpy(_sensors[kOcWindSpeedSensorIdx].sensor_name, "WindSpeed", kMaxSensorName);
 
     // adapt the sensor description
@@ -50,7 +50,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcStarFwhmSensorIdx].description, "StarFwhm  Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcTemperatureSensorIdx].description, "Temperature  Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcWindDirectionSensorIdx].description, "WindDirection  Description", kMaxSensorDescription);
-    strlcpy(_sensors[kOcWindGuestSensorIdx].description, "WindGuest  Description", kMaxSensorDescription);
+    strlcpy(_sensors[kOcWindGustSensorIdx].description, "WindGust  Description", kMaxSensorDescription);
     strlcpy(_sensors[kOcWindSpeedSensorIdx].description, "windSpeed  Description", kMaxSensorDescription);
 }
 
@@ -253,7 +253,7 @@ METHODE(_alpacaGetSkyTemperature, DBG_OBSERVING_CONDITIONS_GET_SKY_TEMPERATURE, 
 METHODE(_alpacaGetStarFwhm, DBG_OBSERVING_CONDITIONS_GET_STAR_FWHM, kOcStarFwhmSensorIdx)
 METHODE(_alpacaGetTemperature, DBG_OBSERVING_CONDITIONS_GET_TEMPERATURE, kOcTemperatureSensorIdx)
 METHODE(_alpacaGetWindDirection, DBG_OBSERVING_CONDITIONS_GET_WIND_DIRECTION, kOcWindDirectionSensorIdx)
-METHODE(_alpacaGetWindGust, DBG_OBSERVING_CONDITIONS_GET_WIND_GUES, kOcWindGuestSensorIdx)
+METHODE(_alpacaGetWindGust, DBG_OBSERVING_CONDITIONS_GET_WIND_GUST, kOcWindGustSensorIdx)
 METHODE(_alpacaGetWindSpeed, DBG_OBSERVING_CONDITIONS_GET_WIND_SPEED, kOcWindSpeedSensorIdx)
 #undef METHODE
 

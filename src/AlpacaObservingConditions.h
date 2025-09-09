@@ -34,7 +34,7 @@ enum OCSensorIdx_t // Sensor indices (0,...,max-1) - don't change
   kOcStarFwhmSensorIdx,
   kOcTemperatureSensorIdx,
   kOcWindDirectionSensorIdx,
-  kOcWindGuestSensorIdx,
+  kOcWindGustSensorIdx,
   kOcWindSpeedSensorIdx,
   kOcMaxSensorIdx
 };

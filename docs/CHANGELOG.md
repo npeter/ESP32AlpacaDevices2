@@ -134,5 +134,6 @@
     Remark: TimeStamp not supported!
 4. ObservingConditions.cpp: refactoring _getDeviceStateList() - CloudCover, DewPoint, Humidity, Pressure, RainRate,SkyBrightness, SkyQuality, SkyTemperature, StarFWHM, Temperature, WindDirection, WindGust, WindSpeed
     Remark: TimeStamp not supported
+5. Spelling: Guest -> Gust corrected
 
 
