@@ -32,7 +32,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcSkyBrightnessSensorIdx].sensor_name, "SkyBrightness", kMaxSensorName);
     strlcpy(_sensors[kOcSkyQualitySensorIdx].sensor_name, "SkyQuality", kMaxSensorName);
     strlcpy(_sensors[kOcSkyTemperatureSensorIdx].sensor_name, "SkyTemperature", kMaxSensorName);
-    strlcpy(_sensors[kOcStarFwhmSensorIdx].sensor_name, "StarFwhm", kMaxSensorName);
+    strlcpy(_sensors[kOcStarFwhmSensorIdx].sensor_name, "StarFWHM", kMaxSensorName);
     strlcpy(_sensors[kOcTemperatureSensorIdx].sensor_name, "Temperature", kMaxSensorName);
     strlcpy(_sensors[kOcWindDirectionSensorIdx].sensor_name, "WindDirection", kMaxSensorName);
     strlcpy(_sensors[kOcWindGuestSensorIdx].sensor_name, "WindGuest", kMaxSensorName);
