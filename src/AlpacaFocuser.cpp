@@ -179,13 +179,10 @@ mycatch:
 bool const AlpacaFocuser::_getDeviceStateList(size_t buf_len, char *buf)
 {
     size_t snprintf_result =
-        snprintf(buf, buf_len, "{\"Name\":\"IsMoving\",\"Value\":%s},{\"Name\":\"TempCompAvailable\",\"Value\":%s},{\"Name\":\"Position\",\"Value\":%d},{\"Name\":\"Temperature\",\"Value\":%f}",
-        //snprintf(buf, buf_len, "{\"Name\":\"IsMoving\",\"Value\":%s},{\"Name\":\"Position\",\"Value\":%d},{\"Name\":\"Temperature\",\"Value\":%f}",
+        snprintf(buf, buf_len, "{\"Name\":\"IsMoving\",\"Value\":%s},{\"Name\":\"Position\",\"Value\":%d},{\"Name\":\"Temperature\",\"Value\":%f}",
                  _getIsMoving() ? "true" : "false",
-                _getTempCompAvailable() ? "true" : "false",
                  _getPosition(),
-                 _getTemperature()
-);
+                 _getTemperature());
 
     return (snprintf_result > 0 && snprintf_result <= buf_len);
 }

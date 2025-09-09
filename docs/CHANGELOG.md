@@ -126,12 +126,13 @@
 
 ## 4.2.1-Dev 2025-09-08
 
-1. AlpacaFocuser.cpp/_getDeviceStateList() TempCompAvailable and Connected added
-2. AlpacaSwitch.cpp/_getDeviceStateList() GetSwitchX, GetSwitchValueX, StateChangeCompleteX added, method refactored
+1. AlpacaFocuser.cpp: refactoring _getDeviceStateList() - IsMoving, Position, Temperature 
     Remark: TimeStamp not supported
-3. AlpacaCoverCalibrator.cpp refactoring _getDeviceStateList() - Brightness, CalibratorChanging, CalibratorState, CoverMoving, CoverState
+2. AlpacaSwitch.cpp: refactoring _getDeviceStateList() - GetSwitchX, GetSwitchValueX, StateChangeCompleteX added
+    Remark: TimeStamp not supported
+3. AlpacaCoverCalibrator.cpp: refactoring _getDeviceStateList() - Brightness, CalibratorChanging, CalibratorState, CoverMoving, CoverState
     Remark: TimeStamp not supported!
-4. ObservingConditions.cpp refactoring, _getDeviceStateLiszt() - CloudCover, DewPoint, Humidity, Pressure, RainRate,SkyBrightness, SkyQuality, SkyTemperature, StarFWHM, Temperature, WindDirection, WindGust, WindSpeed
+4. ObservingConditions.cpp: refactoring _getDeviceStateList() - CloudCover, DewPoint, Humidity, Pressure, RainRate,SkyBrightness, SkyQuality, SkyTemperature, StarFWHM, Temperature, WindDirection, WindGust, WindSpeed
     Remark: TimeStamp not supported
 
 
