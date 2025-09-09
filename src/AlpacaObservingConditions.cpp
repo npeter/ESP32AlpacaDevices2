@@ -36,7 +36,7 @@ AlpacaObservingConditions::AlpacaObservingConditions()
     strlcpy(_sensors[kOcTemperatureSensorIdx].sensor_name, "Temperature", kMaxSensorName);
     strlcpy(_sensors[kOcWindDirectionSensorIdx].sensor_name, "WindDirection", kMaxSensorName);
     strlcpy(_sensors[kOcWindGuestSensorIdx].sensor_name, "WindGuest", kMaxSensorName);
-    strlcpy(_sensors[kOcWindSpeedSensorIdx].sensor_name, "windSpeed", kMaxSensorName);
+    strlcpy(_sensors[kOcWindSpeedSensorIdx].sensor_name, "WindSpeed", kMaxSensorName);
 
     // adapt the sensor description
     strlcpy(_sensors[kOcCloudCoverSensorIdx].description, "CloudCover Description", kMaxSensorDescription);
