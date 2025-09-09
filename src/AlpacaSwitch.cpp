@@ -669,16 +669,38 @@ bool const AlpacaSwitch::_getDeviceStateList(size_t buf_len, char *buf)
             len = strlen(buf);
             if (buf_len - len > max_json_len) 
             {
-                if (GetIsBool(id))
-                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
-                else
-                    snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitchValue%d\",\"Value\":%f},", id, GetSwitchValue(id));
+                snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
             }
             else
             {
                 snprintf_result = 0;
                 break;
             }
+
+            len = strlen(buf);
+            if (buf_len - len > max_json_len) 
+            {
+                snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitchValue%d\",\"Value\":%f},", id, GetSwitchValue(id));
+            }
+            else
+            {
+                snprintf_result = 0;
+                break;
+            }
+
+
+            // if (buf_len - len > max_json_len) 
+            // {
+            //     if (GetIsBool(id))
+            //         snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitch%d\",\"Value\":%s},", id, GetValue(id) ? "true" : "false");
+            //     else
+            //         snprintf_result = snprintf(buf + len, buf_len - len - 1, "{\"Name\":\"GetSwitchValue%d\",\"Value\":%f},", id, GetSwitchValue(id));
+            // }
+            // else
+            // {
+            //     snprintf_result = 0;
+            //     break;
+            // }
 
             len = strlen(buf); 
             if (buf_len - len > max_json_len) 
