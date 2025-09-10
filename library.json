@@ -1,6 +1,6 @@
 {
     "name": "ESP32AlpacaDevices",
-    "version": "4.2.1",
+    "version": "4.3.0",
     "description": "ESP32 based ASCOM Alpaca Server with support of CoverCalibrator-, ObservingCondition- and Switch devices",
     "keywords": "ascom, alpaca, esp32, covercalibrator, observingcondition, switch",
     "repository": {

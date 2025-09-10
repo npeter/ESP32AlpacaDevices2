@@ -124,7 +124,7 @@
 2. Examples removed. See demo project [ESP32AlpacaDeviceDemo](https://github.com/npeter/)
 3. README.md adapted
 
-## 4.2.1-Dev 2025-09-08
+## 4.3.0 2025-09-10
 
 1. AlpacaFocuser.cpp: refactoring _getDeviceStateList() - IsMoving, Position, Temperature 
     Remark: TimeStamp not supported
