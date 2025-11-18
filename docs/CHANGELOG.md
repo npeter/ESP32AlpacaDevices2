@@ -138,7 +138,8 @@
 
 ## 4.4.0 2025-11-18
 
-1. Support new library versions: ESPAsync 3.9.0 and ArduinoJson 7.4.2
+1. Support new library versions: ESPAsync 3.9.0 and ArduinoJson 7.4.2 
+2. Test with NINA 3.2
 
 
 

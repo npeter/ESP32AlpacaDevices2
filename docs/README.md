@@ -33,7 +33,7 @@ My primary motivation was:
 - Several client connections per device supported
 - Pass ASCOM Conform Universal validation with zero errors and zerro issues (ConformU 3.0.0)
 - Addapted for ArduinoJason V7 
-- Test with N.I.N.A 3.1 HF2 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
+- Test with N.I.N.A 3,2 - with ASCOM Alpaca Discovery (https://nighttime-imaging.eu/)
 - Suported ASCOM devices:
     - CoverCalibrator, ObservingConditions, Switch, Focuser
 - Example Applications
