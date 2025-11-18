@@ -138,7 +138,7 @@
 
 ## 4.4.0-Dev 2025-11-18
 
-1. Changed to ESPAsync 3.9.0
+1. Support new library versions: ESPAsync 3.9.0 and ArduinoJson 7.4.2
 
 
 
