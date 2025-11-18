@@ -136,4 +136,10 @@
     Remark: TimeStamp not supported
 5. Spelling: Guest -> Gust corrected
 
+## 4.4.0-Dev 2025-11-18
+
+1. Changed to ESPAsync 3.9.0
+
+
+
 
